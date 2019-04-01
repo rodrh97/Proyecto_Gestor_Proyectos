@@ -113,7 +113,7 @@
 
 @section('javascriptcode')
 <script>
-	var button = '<a href="{{ route('skills.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Habilidad</button></a>';
-	applyStyleToDatatable(button, 'Buscar en habilidades...');
+	var button = '<a href="{{ route('components.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Componente</button></a>';
+	applyStyleToDatatable(button, 'Buscar en componentes...');
 </script>
 @endsection

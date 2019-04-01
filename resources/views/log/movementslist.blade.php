@@ -12,10 +12,10 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fa fa-history" style="background-color:#7f0000;"></i>
+					<i class="fa fa-history" style="background-color:#4680ff;"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Historial de Movimientos</h4>
-						<span style="text-transform: none;">Muestra el historial de movimientos de los usuarios registrados en la Bolsa de Trabajo.</span>
+						<span style="text-transform: none;">Muestra el historial de movimientos de los usuarios registrados.</span>
 					</div>
 				</div>
 			</div>

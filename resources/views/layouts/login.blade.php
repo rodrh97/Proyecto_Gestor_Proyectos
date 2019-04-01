@@ -12,7 +12,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app2.name', 'Bolsa de Trabajo - UPV') }}</title>
+    <title>{{ config('app2.name', 'Sistema de Gestión de Proyectos - Altamira') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>

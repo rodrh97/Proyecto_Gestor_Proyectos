@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',"Bolsa de Trabajo - Usuarios")
+@section('title',"Sistema de Gestión de Proyectos - Usuarios")
 
 @section('body')
 <!-- Main-body start -->
@@ -10,10 +10,10 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="icofont icofont-table" style="background-color:#ab7967"></i>
+					<i class="icofont icofont-table bg-danger" ></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Listado de Usuarios</h4>
-						<span style="text-transform: none;">Lista de todos los usuarios (administradores, alumnos, profesores y tutores) registrados en el sistema.</span>
+						<span style="text-transform: none;">Lista de todos los usuarios registrados en el sistema.</span>
 					</div>
 				</div>
 			</div>
@@ -48,7 +48,6 @@
 								<thead id="table_header">
 									<tr>
 										<th class="all" scope="col" style="width:10%;">ID</th>
-										<th scope="col" style="width:10%;">Num. Empleado</th>
 										<th scope="col" style="width:20%;">Nombre Completo</th>
 										<th scope="col" style="width:20%;">Email</th>
 										<th scope="col" style="width:10%;">Tipo</th>
@@ -58,84 +57,42 @@
 								<tbody>
 									@foreach ($users as $user)
 									<tr>
-										@if($user->deleted=='0')
+										
 										<th scope="row">{{ $user->id }}</th>
-										<th scope="row">{{ $user->university_id }}</th>
-										<td>{{ $user->title }} {{ $user->first_name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
+										
+										<td> {{ $user->first_name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
 										<td>{{ $user->email }}</td>
 											@switch($user->type)
 												@case(1)
 												<td>Administrador</td>
 												@break
 												@case(2)
-												<td>Empleado</td>
-												@break
-												@case(3)
-												<td>Alumno</td>
-												@break
-												@case(4)
-												<td>Profesor</td>
-												@break
-												@case(5)
-												<td>Tutor</td>
-												@break
-												@case(6)
-												<td>Empleado de Salud</td>
-												@break
-												@case(7)
-												<td>Empleado de Psicología</td>
-												@break
+                        <td>Monitoreo y difusión</td>
+                        @break
+                      @case(3)
+                        <td>Vinculación estratégica</td>
+                        @break
+                      @case(4)
+                        <td>Atención específica</td>
+                        @break
+                      @case(5)
+                        <td>Atención general</td>
+                        @break
 												@endswitch
-										@else
-											<th style="color:red;" scope="row">{{ $user->id }}</th>
-											<th style="color:red;" scope="row">{{ $user->university_id }}</th>
-											<td style="color:red;">{{ $user->title }} {{ $user->first_name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
-											<td style="color:red;">{{ $user->email }}</td>
-												@switch($user->type)
-													@case(1)
-													<td style="color:red;">Administrador</td>
-													@break
-													@case(2)
-													<td style="color:red;">Empleado</td>
-													@break
-													@case(3)
-													<td style="color:red;">Alumno</td>
-													@break
-													@case(4)
-													<td style="color:red;">Profesor</td>
-													@break
-													@case(5)
-													<td style="color:red;">Tutor</td>
-													@break
-													@case(6)
-													<td style="color:red;">Empleado de Salud</td>
-													@break
-													@case(7)
-													<td style="color:red;">Empleado de Psicología</td>
-													@break
-													@endswitch
-										@endif
+										
 											<td>
-												@if($user->deleted=='0')
 												<form id="form" name="form" action="{{ route('users.destroy', ['id' => $user->id])}}" method="POST">
 													{{ csrf_field() }}
 													{{ method_field('DELETE') }}
-												@else
-													<form id="form" name="form" action="{{ route('users.restore', ['id' => $user->id]) }}" method="POST">
-														{{ csrf_field() }}
-												@endif
 													<center>
 														@if ($user->id == Auth::user()->id)
-															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario con el id {{ $user->university_id }}" style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario con el id {{ $user->university_id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
+															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario " style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
 														@else
-															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario con el id {{ $user->university_id }}" style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario con el id {{ $user->university_id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-															@if($user->deleted=='0')
-																<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar el usuario con el id {{ $user->university_id }}"><span class="icofont icofont-ui-delete"></span></button>
-															@else
-																<button type="submit" class="btn btn-success" style="margin: 3px;" id="restaurar" name="restaurar" onclick="restoreFunction()" title="Restaurar el usuario con el id {{ $user->university_id }}"><span class="fas fa-reply"></span></a>
-															@endif
+															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
+															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+																<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar el usuario"><span class="icofont icofont-ui-delete"></span></button>
+															
 														@endif
 													</center>
 												</form>
@@ -152,7 +109,6 @@
 									<tr id="table_footer">
 										<th style="padding-right: 2.8%" scope="col">ID</th>
 										<th style="padding-right: 2.8%" scope="col">Nombre Completo</th>
-										<th style="padding-right: 2.8%" scope="col">Num. Empleado</th>
 										<th style="padding-right: 2.8%" scope="col">Email</th>
 										<th style="padding-right: 2.8%" scope="col">Tipo</th>
 										<th style="padding-left: 3.2%" scope="col" style="width:0%;"></th>
@@ -171,6 +127,6 @@
 @section('javascriptcode')
 <script>
 	var button='<a href="{{ route('users.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-user-plus"></i>Agregar Usuario</button></a>';
-	applyStyleToDatatable(button, 'Buscar en usuarios....');
+	applyStyleToDatatable(button, 'Buscar en usuarios');
 </script>
 @endsection

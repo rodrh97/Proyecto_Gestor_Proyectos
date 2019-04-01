@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',"Bolsa de Trabajo - Historial de Sesiones")
+@section('title',"Sistema de Gestión de Proyectos - Historial de Sesiones")
 
 @switch(Auth::user()->type)
 	@case(1)
@@ -32,7 +32,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="icofont icofont-sign-in" style="background-color:#fc6100;"></i>
+					<i class="icofont icofont-sign-in" style="background-color:#FF5370;"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Historial de Sesiones</h4>
 						<span style="text-transform: none;">Muestra el historial de sesiones.</span>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',"Bolsa de Trabajo - Detalles de la Habilidad: {$skill->name}")
+@section('title',"Bolsa de Trabajo - Detalles de la Habilidad: {$$word->name}")
 
 @section('body')
 <!-- Main-body start -->

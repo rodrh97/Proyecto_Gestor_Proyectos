@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',"Bolsa de Trabajo - Registrar Proyecto")
+@section('title',"Sistema de Gestión de Proyectos")
 
 @section('body')
 <!-- Main-body start -->
@@ -10,10 +10,10 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fa fa-plus bg-c-yellow"></i>
+					<i class="fa fa-plus" style="background-color:#ab7967;"></i>
 					<div class="d-inline">
-						<h4 style="text-transform: none;">Registrar Proyecto</h4>
-						<span style="text-transform: none;">Llene los campos en la parte inferior para registrar un nuevo proyecto.</span>
+						<h4 style="text-transform: none;">Crear Proyecto</h4>
+						<span style="text-transform: none;">Escoge un solicitante y un programa para añadir un nuevo proyecto.</span>
 					</div>
 				</div>
 			</div>
@@ -25,7 +25,9 @@
 								<i class="icofont icofont-home"></i>
 							</a>
 						</li>
-						<li class="breadcrumb-item">Registrar Proyecto
+						<li class="breadcrumb-item"><a href="{{ route('projects.list') }}">Proyectos</a>
+						</li>
+						<li class="breadcrumb-item">Crear Proyecto
 						</li>
 					</ul>
 				</div>
@@ -40,90 +42,130 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-block">
-						<form id="form" method="POST" action="{{ route('projects.list') }}">
+            <center>
+            <!--poner las condiciones al momento que no exista un programa o un solicitante-->
+              @if($count_programs==0 && $count_applicants==0 )
+                    
+                    <label>No existen solicitantes <a href="{{ route('applicants.create') }}" style="color:blue"> Dar click aquí </a>para crear solicitantes</label>
+                    <br>
+                    <label>No existen programas <a href="{{ route('programs.create') }}" style="color:blue"> Dar click aquí </a>para crear programas</label>
+                    
+                    @elseif($count_programs>0 && $count_applicants==0 )
+                    
+                    <label>No existen solicitantes <a href="{{ route('applicants.create') }}" style="color:blue"> Dar click aquí </a>para crear solicitantes</label>
+                    
+                    @elseif($count_programs==0 && $count_applicants>0 )
+                    
+                    <label>No existen programas <a href="{{ route('programs.create') }}" style="color:blue"> Dar click aquí </a>para crear programas</label>
+                    
+                    @else
+              </center>
+						<form id="form" method="POST" action="{{ route('projects.list') }}" enctype="multipart/form-data" >
 							{!! csrf_field() !!}
-
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="id">ID Proyecto:</label>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="applicant">Selecciona al Solicitante:</label>
 								<div class="col-sm-10">
-									<input type="number" class="form-control" id="id" name="id" placeholder="Ej. 10" value="{{ old('id') }}" title="ID del Proyecto">
-									@if ($errors->has('id'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('id')}}</div>
+									<select type="select" class="form-control" name="applicant"  value="{{ old('applicant') }}" title="Nombre de los solicitantes">
+									<option value="0">Seleccionar solicitante</option>
+                    @foreach( $applicants as $applicant)
+                    <option value="{{$applicant->id}}">{{$applicant->first_name}} {{$applicant->last_name}} {{$applicant->second_last_name}}
+                    </option>@endforeach</select>
+                  @if ($errors->has('applicant'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('applicant')}}</div>
 									@endif
-									<div id="error_id" class="col-form-label" style="color:red; display:none;"></div>
 								</div>
-							</div>
-							<div class="form-group row">
-									<label class="col-sm-2 col-form-label" for="matricula">Alumno:</label>
-									<div class="col-sm-10">
-										<select class="form-control" name="matricula" id="matricula">
-											@foreach ($students as $student)
-												<option value="{{ $student->university_id}}"> {{$student->university_id}} {{$student->first_name}} {{$student->last_name}} {{$student->second_last_name}}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="name">Nombre:</label>
+							</div>	
+              <br>
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="program">Selecciona el Programa:</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="name" placeholder="Ej. Diseño e implementación de base de datos Oracle" value="{{ old('name') }}" title="Nombre del Proyecto">
-									@if ($errors->has('name'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('name')}}</div>
+									<select type="select" class="form-control" name="program"  value="{{ old('program') }}" title="Nombre del programa">
+									<option value="0">Seleccionar programa</option>
+                    @foreach( $programs as $program)
+                    <option value="{{$program->id}}">{{$program->name}}</option>@endforeach
+                    </select>
+                  @if ($errors->has('program'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('program')}}</div>
 									@endif
 								</div>
-                            </div>
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="inicio">Fecha Inicio:</label>
-								<div class="col-sm-4">
-									<input class="form-control" type="date" name="inicio" title="Fecha de Inicio del Proyecto" required/>
-									@if ($errors->has('inicio'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('inicio')}}</div>
-									@endif
-								</div>
-
-								<label class="col-sm-2 col-form-label" for="fin">Fecha Finalización:</label>
-								<div class="col-sm-4">
-									<input class="form-control" type="date" name="fin" title="Fecha de Finalización del Proyecto" required/>
-									@if ($errors->has('fin'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('fin')}}</div>
-									@endif
-								</div>
-                            </div>
-
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="description">Descripción:</label>
+							</div>	
+              <br>
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="requested_concept">Concepto de Solicitud:</label>
 								<div class="col-sm-10">
-									<textarea rows="5" class="form-control max-textarea" maxlength="500" name="description" placeholder="Ej. Proyecto donde se tuvo que analizar información que requiere una empresa para asi poder optar por un diseño de base de datos normalizada y proceder a implementarla" value="{{ old('description') }}" title="Descripción del Proyecto"></textarea>
-									@if ($errors->has('description'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('description')}}</div>
+                  <textarea type="text" rows="10" cols="50" class="form-control" name="requested_concept"   placeholder="Ej. El monto máximo de apoyo federal por persona física será de hasta $500,000.00 (Quinientos mil pesos 00/100 M.N.)." title="Concepto de Solicitud ">{{ old('requested_concept') }}</textarea>
+									@if ($errors->has('requested_concept'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('requested_concept')}}</div>
 									@endif
 								</div>
 							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="lider">Líder del Proyecto:</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" name="lider" placeholder="Ej. M.S.I. Mario Humberto Rodriguez" value="{{ old('lider') }}" title="Líder del Proyecto">
-									@if ($errors->has('lider'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('lider')}}</div>
+              <br>
+               <hr>
+              <div class="row"><h5 class="col-sm-3"><strong>Documentación</strong> </h5></div><br>
+            
+             <div class="form-group row">
+								<label class="col-sm-4 col-form-label" >Cantidad de documentos que desea cargar:</label>
+								<div class="col-sm-3">
+                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="form-control">
+                    <option value="0">Seleccionar cantidad</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                  </select>
+                  @if ($errors->has('num_anexos'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('num_anexos')}}</div>
 									@endif
 								</div>
 							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="empresa">Empresa / Institución:</label>
+              
+              <div id="archivos">
+               </div>
+              <br><hr>
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="status_project">Selecciona un estado para el proyecto:</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="empresa" placeholder="Ej. Universidad Politécnica de Victoria" value="{{ old('empresa') }}" title="Empresa o Institución">
-									@if ($errors->has('empresa'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('empresa')}}</div>
+									<select type="select" class="form-control" name="status_project"  value="{{ old('status_project') }}" title="Nombre de los estados del proyecto">
+									<option value="0">Seleccionar estado</option>
+                    @foreach( $status_projects as $status_project)
+                    <option value="{{$status_project->id}}">{{$status_project->name}}
+                    </option>@endforeach</select>
+                  @if ($errors->has('status_project'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('status_project')}}</div>
+									@endif
+								</div>
+							</div>	
+              <br>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="comments">Comentarios:</label>
+								<div class="col-sm-10">
+                  <textarea type="text" rows="10" cols="50" class="form-control" name="comments"   placeholder="Ej. Documentación entregada" title="Concepto de Solicitud ">{{ old('comments') }}</textarea>
+									@if ($errors->has('comments'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('comments')}}</div>
 									@endif
 								</div>
 							</div>
-	
-							<br>
+              
+              <br><br>
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
-								<button type="submit" class="btn btn-success"><i class="icofont icofont-check-circled"></i>Guardar Proyecto</button>
+								<button type="submit" id="guardar" style="display:none;" class="btn btn-success col-sm-3"><i class="icofont icofont-check-circled"></i>Guardar Proyecto</button>
 							</center>
 						</form>
+           @endif
 					</div>
 				</div>
 			</div>
@@ -131,20 +173,68 @@
 	</div>
 </div>
 @endsection
-
 @section('javascriptcode')
 	<script>
-		error_divs = [
-			$('#error_id'),
-		];
-		verify_column($('#id'), 'id', 'projects', null, $('#error_id'),
-			'* El id que esta intentando ingresar no esta disponible.');
-
-		//* Se verifica que no se ingrese un registro repedito para columnas unicas
-		$('#id').keyup(function(e) {
-			verify_column($('#id'), 'id', 'projects', null, $('#error_id'),
-				'* El id que esta intentando ingresar no esta disponible.');
-		});
 		//* Termina verificacion de columnas unicas
+    function cargarAnexos(cantidad){
+      if(cantidad != 0){
+        document.getElementById("guardar").style.display="inline";
+        var i;
+        var div = document.getElementById("archivos");
+        while (div.hasChildNodes()){
+          div.removeChild(div.firstChild);
+          
+        }
+        
+
+        for(i = 0;i < cantidad; i++){
+          var div_group = document.createElement("div");
+          div_group.className = "form-group row";       
+
+          var label = document.createElement("label");
+          label.className = "col-sm-2 col-form-label";
+          label.append("Nombre del Documento:");
+
+          var div_name = document.createElement("div");
+          div_name.className = "col-sm-4"
+
+          var input = document.createElement("input");
+          input.type = "text";
+          input.name = "nombre[]";
+          input.className = "form-control";
+          input.required = "true";
+
+          var label_file = document.createElement("label");
+          label_file.className = "col-sm-1 col-form-label";
+          label_file.append("Archivo:");
+
+          var div_file = document.createElement("div");
+          div_file.className = "col-sm-5"
+
+          var file = document.createElement("input");
+          file.type = "file";
+          file.name = "anexos[]";
+          file.className = "form-control";
+          file.required = "true";
+          div_name.appendChild(input);
+          div_file.appendChild(file);
+          div_group.appendChild(label);
+          div_group.appendChild(div_name);
+          div_group.appendChild(label_file);
+          div_group.appendChild(div_file);
+          div.appendChild(div_group);
+          
+        }
+        
+      }else{
+        document.getElementById("guardar").style.display="none";
+         var div = document.getElementById("archivos");
+          while (div.hasChildNodes()){
+            div.removeChild(div.firstChild);
+          }
+        
+      }
+      
+    }
 	</script>
-@endsection
+@endsection	

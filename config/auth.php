@@ -65,15 +65,15 @@ return [
     */
 
     'providers' => [
-        /*'users' => [
+        'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
-        ],*/
+        ],
 
-         'users' => [
+         /*'users' => [
              'driver' => 'database',
-             'table' => 'siita_db.users',
-         ],
+             'table' => 'users',
+         ],*/
     ],
 
     /*

@@ -11,11 +11,14 @@
                         <div class="auth-box">
                             <div class="row m-b-20">
                                 <div class="col-md-12">
-                                    <img src="assets/images/UP_Victoria.png" alt="UP_Victoria.png" width="200px" height="100px">
-                                    <<h3 class="text-center txt-primary">Bolsa de Trabajo de la Universidad Politécnica de Victoria</h3>
-                                </div>
+                                    <img src="assets/images/favicon.ico"  width="250px" height="250px">
+                                   
+                                </div><br>
                             </div>
                             <hr/>
+                          <div class="input-group">
+                            <h6 style="color:gray;">Ingresar correo y contraseña para acceder al sistema:</h6>
+                          </div>
                             <div class="input-group">
                                 <input id="email" name="email"  class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Correo Electrónico" required autofocus>
                                 @if  ($errors->has('email'))
@@ -37,7 +40,7 @@
                             
                             <div class="row m-t-30">
                                 <div class="col-md-12">
-                                    <button type="submit" id="login" class="btn btn-inverse btn-md btn-block text-center m-b-20">Iniciar Sesión</button>
+                                    <button type="submit" id="login" class="btn btn-primary btn-md btn-block text-center m-b-20">Iniciar Sesión</button>
                                 </div>
                             </div>
                             

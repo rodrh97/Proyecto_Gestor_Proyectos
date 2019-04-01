@@ -16,10 +16,6 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $table = 'siita_db.users';
-    protected $fillable = [
-        'id','university_id', 'username', 'password', 'remember_token','title', 'name', 'first_name', 'last_name', 'second_last_name',
-            'email', 'password', 'type', 'username',
-    ];
+    protected $table = 'users';
 
 }

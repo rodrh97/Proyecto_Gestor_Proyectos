@@ -1,29 +1,15 @@
 @extends('layouts.app')
 
-@section('title',"Bolsa de Trabajo - Detalles: {$log[0]->id}")
+@section('title',"Sistema de Gestión de Proyectos - Detalles: {$log[0]->id}")
 
 @switch(Auth::user()->type)
 	@case(1)
 		@section('body')
 		@break
 	@case(2)
-		@section('bodyUsuario')
+		@section('bodyEmpleado')
 		@break
-	@case(3)
-		@section('bodyStudent')
-		@break
-	@case(4)
-		@section('bodyTeacher')
-		@break
-	@case(5)
-		@section('bodyTutor')
-		@break
-	@case(6)
-		@section('bodyUserSalud')
-		@break
-	@case(7)
-		@section('bodyUserPsicologia')
-		@break
+	
 @endswitch
 <!-- Main-body start -->
 <div class="main-body">
@@ -32,7 +18,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fa fa-history" style="background-color:#7f0000;"></i>
+					<i class="fa fa-history" style="background-color:#4680ff;"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Detalles de Tipo Movimiento</h4>
 						<span style="text-transform: none;">Formulario para la visualización de datos de un movimiento.</span>
@@ -87,14 +73,7 @@
 														<h6 class="m-b-30">{{ $user->id }}</h6>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-id-card"></i>Número de Empleado:</h6>
-													</div>
-													<div class="col-sm-8">
-														<h6 class="m-b-30">{{ $user->university_id }}</h6>
-													</div>
-												</div>
+												
 												<div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre de Usuario:</h6>

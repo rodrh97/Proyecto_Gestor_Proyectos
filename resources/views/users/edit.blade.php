@@ -11,7 +11,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="icofont icofont-ui-edit" style="background-color:#ab7967"></i>
+					<i class="icofont icofont-ui-edit  bg-danger" ></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Editar el Usuario con ID: {{$user->id}}</h4>
 						<span style="text-transform: none;">Ingrese los valores solicitados en la parte inferior para editar el usuario seleccionado.</span>
@@ -47,29 +47,32 @@
 							{{ method_field('PUT') }}
 							{!! csrf_field() !!}
 
-							<input type="hidden" id="type" name="type" value="{{ old('type', $user->type) }}">
+							
 							<input type="hidden" id="id" name="id" value="{{ old('id', $user->id) }}">
 
 							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="user_id">ID Usuario:</label>
+								<label class="col-sm-2 col-form-label" for="type">Tipo de Usuario</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" disabled id="user_id" name="user_id" placeholder="" value="{{ old('user_id', $user->id) }}">
+									<select id="type" name="type" class="form-control">
+                    <option value="1" {{ (old("type") == 1 ? "selected":"") }}>Administrador</option>
+										<option value="2" {{ (old("type") == 2 ? "selected":"") }}>Monitoreo y difusión</option>
+                    <option value="3" {{ (old("type") == 3 ? "selected":"") }}>Vinculación estratégica</option>
+                    <option value="4" {{ (old("type") == 4 ? "selected":"") }}>Atención específica</option>
+                    <option value="5" {{ (old("type") == 5 ? "selected":"") }}>Atención general</option>
+									</select>
 								</div>
 							</div>
 							<div class="form-group row">
-								@if($user->type==3)
-									<label class="col-sm-2 col-form-label" for="university_id">Matricula</label>
-								@else
-									<label class="col-sm-2 col-form-label" for="university_id">Num. Empleado:</label>
-								@endif
+								<label class="col-sm-2 col-form-label" for="oficina">Oficina:</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" id="university_id" name="university_id" placeholder="Ej. 1530001" value="{{ old('university_id', $user->university_id) }}">
-									@if ($errors->has('university_id'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('university_id')}}</div>
+									<input type="text" class="form-control" name="oficina" placeholder="Oficina" title="Oficina" value="{{ old('oficina',$user->office) }}">
+									@if ($errors->has('oficina'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('oficina')}}</div>
 									@endif
-									<div id="error_university_id" class="col-form-label" style="color:red; display:none;"></div>
 								</div>
 							</div>
+							
+							
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="first_name">Nombre:</label>
 								<div class="col-sm-10">
@@ -95,16 +98,7 @@
 									<div class="col-form-label"> * En caso, de solo tener un apellido, solo llene el campo de Apellido Paterno</div>
 								</div>
 							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="username">Username:</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ old('username', $user->username)}}">
-									@if ($errors->has('username'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('username')}}</div>
-									@endif
-									<div id="error_username" class="col-form-label" style="color:red; display:none;"></div>
-								</div>
-							</div>
+							
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="password">Contraseña:</label>
 								<div class="col-sm-10">
@@ -112,37 +106,7 @@
 									<div class="col-form-label"> * Si deja la contraseña en blanco, no se cambiará</div>
 								</div>
 							</div>
-							@if ($user->type == 1 || $user->type == 2 || $user->type == 6 || $user->type == 7)
-								<div class="form-group row" hidden>
-									<label class="col-sm-2 col-form-label" for="career_id">Carrera:</label>
-									<div class="col-sm-10">
-										<select id="career_id" name="career_id" class="select2_basic" title="Carrera a la que pertenecerá el alumno">
-											@foreach ($careers as $career)
-												@if (($user->type == 3 && $student->career_id == $career->id) || (($user->type == 4 || $user->type == 5) && $teacher->career_id == $career->id))
-													<option selected value='{{ $career->id }}'>{{ $career->name }}</option>
-												@else
-													<option value='{{ $career->id }}'>{{ $career->name }}</option>
-												@endif
-											@endforeach
-										</select>
-									</div>
-								</div>
-						@else
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="career_id">Carrera:</label>
-								<div class="col-sm-10">
-									<select id="career_id" name="career_id" class="select2_basic" title="Carrera a la que pertenecerá el alumno">
-										@foreach ($careers as $career)
-											@if (($user->type == 3 && $student->career_id == $career->id) || (($user->type == 4 || $user->type == 5) && $teacher->career_id == $career->id))
-												<option selected value='{{ $career->id }}'>{{ $career->name }}</option>
-											@else
-												<option value='{{ $career->id }}'>{{ $career->name }}</option>
-											@endif
-										@endforeach
-									</select>
-								</div>
-							</div>
-							@endif
+							
 							<br>
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label">Imagen:</label>
@@ -200,34 +164,15 @@
 		//Elementos a verificar sus modificaciones en la vista
 		elements_id = [
 			$('#type'),
-			$('#university_id'),
 			$('#first_name'),
 			$('#last_name'),
 			$('#second_last_name'),
-			$('#username'),
 			$('#password'),
-			$('#career_id'),
-			$('#career_id_2')
+      $('#email')
+			
 		];
-
-		var original_values = [
-			['university_id', $('#university_id').val()],
-			['username', $('#username').val()],
-		];
-
-		unique_elements = [
-			[$('#university_id'), 'university_id', 'users', original_values, $('#error_university_id'),
-				'* La matricula que esta intentando ingresar no esta disponible.'],
-			[$('#username'), 'username', 'users', original_values, $('#error_username'),
-				'* El username que esta intentando ingresar no esta disponible.'],
-		];
-
-		error_divs = [
-			$('#error_university_id'),
-			$('#error_username'),
-		]
-
-		checkIfChangesHaveBeenMadeIn(elements_id, unique_elements);
+		
+    document.ready = document.getElementById("type").value = "{{$user->type}}";
 	});
 </script>
 @endsection

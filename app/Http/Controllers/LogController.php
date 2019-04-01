@@ -18,7 +18,7 @@ class LogController extends Controller
   public function indexSessions()
   {
     $sessions = DB::table('log')
-        ->join('siita_db.users as users', 'log.user_id', '=', 'users.id')
+        ->join('users as users', 'log.user_id', '=', 'users.id')
         ->select('users.*', 'log.*')
         ->where('action', '!=', '3')
         ->where('action', '!=', '4')
@@ -34,14 +34,14 @@ class LogController extends Controller
   {
     if(Auth::user()->type == 5){
         $sessions = DB::table('log')
-        ->join('siita_db.users as users', 'log.user_id', '=', 'users.id')
+        ->join('users as users', 'log.user_id', '=', 'users.id')
         ->select('users.*', 'log.*')
         ->where('action', '!=', '1')
         ->where('action', '!=', '2')
         ->where('user_id',"=",Auth::user()->id)->get(); 
     }else{
       $sessions = DB::table('log')
-        ->join('siita_db.users as users', 'log.user_id', '=', 'users.id')
+        ->join('users as users', 'log.user_id', '=', 'users.id')
         ->select('users.*', 'log.*')
         ->where('action', '!=', '1')
         ->where('action', '!=', '2')->get(); 
@@ -64,7 +64,7 @@ class LogController extends Controller
       $log = DB::select("SELECT * FROM log WHERE id = $id");
       $id_usuario = $log[0]->user_id;
       
-      $usuario = DB::table('siita_db.users')->where('id', '=', $id_usuario)->get();
+      $usuario = DB::table('users')->where('id', '=', $id_usuario)->get();
       $user = $usuario[0];
       //$user = User::find($log[0]->user_id);
     
@@ -83,7 +83,7 @@ class LogController extends Controller
       $log = DB::select("SELECT * FROM log WHERE id = $id");
       $id_usuario = $log[0]->user_id;
       
-      $usuario = DB::table('siita_db.users')->where('id', '=', $id_usuario)->get();
+      $usuario = DB::table('users')->where('id', '=', $id_usuario)->get();
       $user = $usuario[0];
 
       

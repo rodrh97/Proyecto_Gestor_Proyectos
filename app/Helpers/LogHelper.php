@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\DB;
 function insertToLog($user_id, $action, $item_id, $item_name, $cantidad=0)
 {
     //Se trae el tipo del usuario actual
-    $type = DB::select("SELECT type FROM siita_db.users WHERE id = $user_id")[0]->type;
+    $type = DB::select("SELECT type FROM users WHERE id = $user_id")[0]->type;
 
     //Se registra la fecha con hora
     $date = date("Y-m-d H:i:s");

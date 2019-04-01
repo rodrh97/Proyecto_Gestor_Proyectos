@@ -8,7 +8,6 @@ class City extends Model
 {
     protected $table = 'cities';
     protected $fillable = ['name','state_id'];
-
     public static function cities($id){
         return City::where('state_id','=',$id)->get();
     }
