@@ -79,8 +79,8 @@
 								<label class="col-sm-2 col-form-label" for="type">Tipo de Solicitante:</label>
 								<div class="col-sm-10">
                   <select class="form-control" name="type"  value="{{ old('type') }}" title="Tipo de solicitante">
-                    <option value="Fisico">Físico</option>
-                    <option value="Moral">Moral</option>
+                    <option value="Fisico">Persona Físico</option>
+                    <option value="Moral">Persona Moral</option>
                   </select>
 									@if ($errors->has('type'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('type')}}</div>

@@ -65,7 +65,7 @@
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-email"></i>Tipo:</h6>
 													</div>
 													<div class="col-sm-8">
-														<h6 class="m-b-30">{{ $applicant->type }}</h6>
+														<h6 class="m-b-30">Persona {{ $applicant->type }}</h6>
 													</div>
 												</div>
                         

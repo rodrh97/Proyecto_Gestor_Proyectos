@@ -45,9 +45,12 @@
 								@if ($projects->isNotEmpty())
 								<thead id="table_header">
 									<tr>
-										<th class="all" scope="col">Folio Interior</th>
-										<th scope="col">Folio Exterior</th>
-                    <th class="all" style="width:35%;" scope="col">Acciones</th>
+										<th class="all" scope="col">Folio interno</th>
+										<th scope="col">Folio externo</th>
+                    <th scope="col">Nombre del solicitante</th>
+                    <th scope="col">Nombre del programa</th>
+                    <th scope="col">Reglas de operación</th>
+                    <th class="all" style="width:38%;" scope="col"><center>Acciones</center></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -55,13 +58,18 @@
 									<tr>
 											<th scope="row">{{ $project->id }}</th>
                       @if($project->folio==null)
-                      <td><label>Folio exterior no ingresado</label></td>
+                      <td><label>Folio externo no ingresado</label></td>
                       @else
                       <td>{{ $project->folio }}</td>
                       @endif
-											
+											<td>{{ $project->first_name }} {{ $project->last_name }} {{ $project->second_last_name }}</td>
+                      <td>{{ $project->program_name }}</td>
                     
-                    
+                    @if($project->operation_rules==0)
+                      <td><label>No</label></td>
+                      @else
+                      <td><label>Si</label></td>
+                      @endif
 										<td>	
 												<form id="form" name="form" action="{{ route('projects.destroy', ['id' => $project->id])}}" method="POST">
 													{{ csrf_field() }}
@@ -77,7 +85,7 @@
 
 													
 														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar proyecto con el id {{$project->id}}"><span class="icofont icofont-ui-delete"></span></button>
-													
+													<a href="{{ route('reports.generarProject',['id'=>$project->id])}}" class="btn btn-warning" title="Generar PDF del proyecto" style="margin: 3px;"><span class="far fa-file-pdf"></span></a>
 												</center>
 											</form>
 										</td>
@@ -87,8 +95,11 @@
 								</tbody>
 								<tfoot>
 									<tr id="table_footer">
-										<th style="padding-right: 2.8%" scope="col">Folio Interior</th>
-										<th style="padding-right: 2.8%" scope="col">Folio Exterior</th>
+										<th style="padding-right: 2.8%" scope="col">Folio interno</th>
+										<th style="padding-right: 2.8%" scope="col">Folio Externo</th>
+                    <th style="padding-right: 2.8%" scope="col">Nombre del solicitante</th>
+                    <th style="padding-right: 2.8%" scope="col">Nombre del programa</th>
+                    <th style="padding-right: 2.8%" scope="col">Reglas de operación</th>
 										<th style="padding-left: 1.2%" scope="col" style="width:0%;"></th>
 									</tr>
 								</tfoot>

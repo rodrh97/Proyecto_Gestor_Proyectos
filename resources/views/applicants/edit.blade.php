@@ -82,8 +82,8 @@
 								<div class="col-sm-10">
                   <select class="form-control" name="type"  value="{{ old('type',$id->type) }}" title="Tipo de solicitante">
                     @if($id->type=="Fisico")
-                    <option value="Fisico" selected>Físico</option>
-                      <option value="Moral">Moral</option>
+                    <option value="Fisico" selected>Persona Físico</option>
+                      <option value="Moral">Persona Moral</option>
        
                     @else
                       <option value="Fisico">Físico</option>

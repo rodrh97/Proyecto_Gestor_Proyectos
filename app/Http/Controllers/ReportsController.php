@@ -9,7 +9,7 @@ use App\Helpers\DeleteHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-
+use PDF;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -112,4 +112,193 @@ class ReportsController extends Controller
         $result = $query->orderBy("programs.id")->get();
         return response()->json(['response'=>$result]);
     }
+  
+    public function generarProject($id){
+      $fecha_actual=date("d-m-Y");
+      $operation_rules = DB::table("projects")->join("programs","programs.id","=","projects.program_id")
+        ->select("programs.operation_rules")->where("projects.id","=",$id)->first();
+      
+      $conceptos= null;
+      $componente = null;
+      $subcomponente = null;
+      
+      if($operation_rules->operation_rules == 0){
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+                          ->join("status_projects","projects.status_project","=","status_projects.id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                       "applicants.phone",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                    "status_projects.name as status",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+          $documents = DB::table("projects")->join("documents","documents.project_id","=","projects.id")
+                ->select("documents.name as documento")
+                ->where("projects.id","=",$id)->get();
+        
+          $visitas = DB::table("projects")->join("visit_histories","visit_histories.project_id","=","projects.id")
+                ->join("status_projects","status_projects.id","=","visit_histories.status_project_id")
+                 ->select("visit_histories.comments as comentario",
+                        "visit_histories.date as fecha",
+                        "status_projects.name as estatus")
+                ->where("projects.id","=",$id)->get();
+      }else{
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+              ->join("status_projects","projects.status_project","=","status_projects.id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                       "applicants.phone",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                       "status_projects.name as status",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+        
+          $conceptos = DB::table("projects")->join("projects_concepts","projects.id","=","projects_concepts.project_id")
+            ->join("concepts","concepts.id","=","projects_concepts.concept_id")
+            ->select("concepts.name as concepto","concepts.component_id as componente","concepts.sub_component_id as subcomponente")->where("projects.id","=",$id)->get();
+          
+          $temp_componente = null;
+          $temp_subcomponente = null;
+          foreach($conceptos as $concept){
+            $temp_componente = $concept->componente;
+            $temp_subcomponente = $concept->subcomponente;
+            break;
+          }
+          
+          if($temp_componente != null){
+            $componente = DB::table("components")->where("id","=",$temp_componente)->first();
+          }
+          
+          if($temp_subcomponente != null){
+            $subcomponente = DB::table("sub_components")->where("id","=",$temp_subcomponente)->first();
+            $componente = DB::table("components")->where("components.id","=",$subcomponente->component_id)->first();
+          }
+        
+          $documents = DB::table("projects")->join("documents","documents.project_id","=","projects.id")
+                ->select("documents.name as documento")
+                ->where("projects.id","=",$id)->get();
+        
+          $visitas = DB::table("projects")->join("visit_histories","visit_histories.project_id","=","projects.id")
+                ->join("status_projects","status_projects.id","=","visit_histories.status_project_id")
+                ->select("visit_histories.comments as comentario",
+                        "visit_histories.date as fecha",
+                        "status_projects.name as estatus")
+                ->where("projects.id","=",$id)->get();
+      }
+      
+      $pdf = PDF::loadView("pdf.project",compact("fecha_actual","operation_rules","project","documents","visitas","conceptos","componente","subcomponente"));
+      return $pdf->download("project.pdf");
+    }
+  
+  
+  
+  public function generarVisit($idVisita){
+    
+      $visita = DB::table("visit_histories")->join("status_projects","status_projects.id","=","visit_histories.status_project_id")
+        ->select("visit_histories.comments","visit_histories.date","status_projects.name","visit_histories.project_id")->where("visit_histories.id","=",$idVisita)->first();
+      
+      $id = $visita->project_id;
+      $fecha_actual=date("d-m-Y");
+      $operation_rules = DB::table("projects")->join("programs","programs.id","=","projects.program_id")
+        ->select("programs.operation_rules")->where("projects.id","=",$id)->first();
+      
+      $conceptos= null;
+      $componente = null;
+      $subcomponente = null;
+      
+      if($operation_rules->operation_rules == 0){
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+          
+      }else{
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+        
+          $conceptos = DB::table("projects")->join("projects_concepts","projects.id","=","projects_concepts.project_id")
+            ->join("concepts","concepts.id","=","projects_concepts.concept_id")
+            ->select("concepts.name as concepto","concepts.component_id as componente","concepts.sub_component_id as subcomponente")->where("projects.id","=",$id)->get();
+          
+          $temp_componente = null;
+          $temp_subcomponente = null;
+          foreach($conceptos as $concept){
+            $temp_componente = $concept->componente;
+            $temp_subcomponente = $concept->subcomponente;
+            break;
+          }
+          
+          if($temp_componente != null){
+            $componente = DB::table("components")->where("id","=",$temp_componente)->first();
+          }
+          
+          if($temp_subcomponente != null){
+            $subcomponente = DB::table("sub_components")->where("id","=",$temp_subcomponente)->first();
+            $componente = DB::table("components")->where("components.id","=",$subcomponente->component_id)->first();
+          }
+        
+          
+      }
+      
+      $pdf = PDF::loadView("pdf.visit",compact("fecha_actual","operation_rules","project","conceptos","componente","subcomponente","visita"));
+      return $pdf->download("visit.pdf");
+    }
 }
+
+
+
+

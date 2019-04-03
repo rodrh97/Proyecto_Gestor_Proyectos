@@ -163,7 +163,12 @@ return [
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
-        
+      
+        Barryvdh\DomPDF\ServiceProvider::class,
+
+        //Barryvdh\DomPDF\ServiceProvider::class,
+       // Barryvdh\DomPDF\ServiceProvider::class,
+
         
 
     ],
@@ -217,7 +222,10 @@ return [
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        
+        //'PDF' => 'Barryvdh\DomPDF\Facade',
+        //'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
         
 
     ],

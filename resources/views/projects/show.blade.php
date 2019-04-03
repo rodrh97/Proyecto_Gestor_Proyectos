@@ -12,7 +12,7 @@
 				<div class="page-header-title">
 					<i class="icofont icofont-eye-alt" style="background-color:#ab7967"></i>
 					<div class="d-inline">
-						<h4 style="text-transform: none;">@foreach($projects as $project) Detalles del Proyecto:  {{$project->id}} @endforeach</h4>
+						<h4 style="text-transform: none;">Detalles del Proyecto:  {{$project->folio_interno}} </h4>
 						<span style="text-transform: none;">Mostrando todos los detalles del proyecto seleccionado.</span>
 					</div>
 				</div>
@@ -49,32 +49,32 @@
 								<div class="col-md-12 col-xl-12 ">
 									<div class="card-block user-detail-card">
 										<div class="row">
-                      @foreach($projects as $project)
+                      
 											<div class="col-sm-12 user-detail">
                         
 												<div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Folio Interior:</h6>
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-hashtag"></i>Folio Interno:</h6>
 													</div>
 													<div class="col-sm-8">
-														<h6 class="m-b-30">{{$project->id}}</h6>
+														<h6 class="m-b-30">{{$project->folio_interno}}</h6>
 													</div>
 												</div>
 												
                         <div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Folio Exterior:</h6>
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-hashtag"></i>Folio Externo:</h6>
 													</div>
 													<div class="col-sm-8">
-                            @if($project->folio==null)
+                            @if($project->folio_externo==null)
                             <label>Folio exterior no ingresado</label>
                             @else
-                            <h6 class="m-b-30">{{$project->folio}}</h6>
+                            <h6 class="m-b-30">{{$project->folio_externo}}</h6>
                             @endif
 														
 													</div>
 												</div>
-                        
+                       
                         <div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre del solicitante:</h6>
@@ -83,15 +83,69 @@
 														<h6 class="m-b-30">{{$project->first_name}} {{$project->last_name}} {{$project->second_last_name}}</h6>
 													</div>
 												</div>
-                        
+                        @if($operation_rules->operation_rules==0)
                         <div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre del programa:</h6>
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del programa:</h6>
 													</div>
 													<div class="col-sm-8">
 														<h6 class="m-b-30">{{$project->program_name}}</h6>
 													</div>
 												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Monto máximo por persona física:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->p_amount_max}}</h6>
+													</div>
+												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Monto máximo por persona moral:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->m_amount_max}}</h6>
+													</div>
+												</div>
+                        @else
+                           <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del programa:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->program_name}}</h6>
+													</div>
+												</div>
+                        
+                        
+                        @foreach($conceptos as $concepto)
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre del concepto:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$concepto->concepto}}</h6>
+													</div>
+												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Monto máximo por persona física:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$concepto->p_amount_max}}</h6>
+													</div>
+												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Monto máximo por persona moral:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$concepto->m_amount_max}}</h6>
+													</div>
+												</div>
+                        @endforeach
+                        @endif
                         
                         
                           
@@ -103,11 +157,11 @@
 													<hr>
 													<div class="contact-icon">
 														
-															<form id="form" name="form" action="{{ route('projects.destroy', ['id' => $project->id])}}" method="POST">
+															<form id="form" name="form" action="{{ route('projects.destroy', ['id' => $project->folio_interno])}}" method="POST">
 																{{ csrf_field() }}
 																{{ method_field('DELETE') }}
 																<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Regresar"><i class="icofont icofont-arrow-left m-0"></i></button></a>
-																<a href="{{ route('projects.edit', ['id' => $project->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
+																<a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
 																<button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
 															</form>
 														
@@ -115,7 +169,7 @@
                            
 												</center> 
                         </div> 
-                       @endforeach
+                       
                       <br>
                       <br>
                       
@@ -141,7 +195,7 @@
 									@foreach($documents as $document)
 									<tr>
 											
-                      <td>{{ $document->name }}</td>
+                      <td>{{ $document->documento}}</td>
                       <td><center><a target="_blank" href="{{asset($document->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar documento" ><span class="fas fa-eye"></span></a> </center></td>
                       <td><center><a href="{{url('/documents/download',['id'=>$document->id])}}" class="btn btn-warning col-lg-5" title="Descargar documento"><span class="fas fa-download"></span></a></center></td>
 											
@@ -180,7 +234,7 @@
 					<div class="card-block">
 						<div class="dt-responsive table-responsive">
 							<table style="width:100%;" id="custom_datatable" class="table table-striped table-bordered">
-								@if ($projects->isNotEmpty())
+								@if ($visitas->isNotEmpty())
 								<thead id="table_header">
 									<tr>
 										
@@ -191,12 +245,12 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($visit_histories as $visit_history)
+									@foreach ($visitas as $visit_history)
 									<tr>
 											
-                      <td>{{ $visit_history->name }}</td>
-                      <td>{{ $visit_history->comments }}</td>
-                      <td>{{ $visit_history->created_at }}</td>
+                      <td>{{ $visit_history->estatus }}</td>
+                      <td>{{ $visit_history->comentario }}</td>
+                      <td>{{ $visit_history->fecha}}</td>
 											
                     
                     
@@ -206,10 +260,10 @@
 												<center>
                           
 												
-                          <a href="{{ route('projects.show', ['id' => $project->id]) }}" class="btn btn-success" title="Ver el proyecto con el id {{ $project->id }}" style="margin: 3px;"><span class="fas fa-eye"></span></a>
+                         
                           
-													<a href="{{ route('projects.edit', ['id' => $project->id]) }}" class="btn btn-primary" title="Editar proyecto con el id {{ $project->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-
+													<a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}" class="btn btn-primary" title="Editar proyecto con el id {{ $project->folio_interno }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+                          <a href="{{ route('reports.generarVisit',['id'=>$visit_history->id])}}" class="btn btn-warning" title="Generar PDF de la visita" style="margin: 3px;"><span class="far fa-file-pdf"></span></a>
 													
 														
 													

@@ -11,6 +11,8 @@
 Route::get('/', 'Auth\LoginController@index')->name('main');
 Auth::routes();
 
+
+
 /******************************************
             Rutas para el sistema         *
  ******************************************/
@@ -82,7 +84,9 @@ Route::group(['middleware'=>['auth']], function () {
         Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
         Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
       
-        
+        Route::get("/reporte/proyecto/{id}","ReportsController@generarProject")->name("reports.generarProject");
+        Route::get("/reporte/visita/{idVisita}","ReportsController@generarVisit")->name("reports.generarVisit");
+      
         Route::get('/applicants', 'ApplicantsController@index')->name('applicants.list');
         Route::get('/applicants/{id}', 'ApplicantsController@show')->where('id', '[0-9]+')->name('applicants.show');
         Route::get('/applicants/new', 'ApplicantsController@create')->name('applicants.create');
@@ -186,7 +190,7 @@ Route::group(['middleware'=>['auth']], function () {
         Route::get('/subcomponents/getSubComponents/{id}', 'ProjectsController@getSubComponents');
         Route::get('/concepts/getConcepts/{id}', 'ProjectsController@getConcepts');
         Route::get('/programs/getPrograms/{id}', 'ProjectsController@getPrograms');
-
+        Route::get('/concepts/getConcepts_com/{id}', 'ProjectsController@getConcepts_com');
     });
 
     

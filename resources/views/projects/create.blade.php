@@ -98,10 +98,10 @@
 								<label class="col-sm-2 col-form-label" for="program" id="labelprogram" style="display:none;">Selecciona el Programa:</label>
 								<div class="col-sm-10">
                   
-									{!! Form::select('program',$programs,null,['id'=>'program','class'=>'form-control','style'=>'display:none;']) !!}
+									{!! Form::select('program_0',$programs_0,null,['id'=>'program_0','class'=>'form-control','style'=>'display:none;']) !!}
                   
-									{!! Form::select('program',$programs_1,null,['id'=>'program_1','class'=>'form-control','style'=>'display:none;']) !!}
-                  @if ($errors->has('program'))
+									{!! Form::select('program_1',$programs_1,null,['id'=>'program_1','class'=>'form-control','style'=>'display:none;']) !!}
+                  @if ($errors->has('program_0'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('program')}}</div>
 									@endif
                   @if ($errors->has('program_1'))
@@ -115,6 +115,7 @@
 								<div class="col-sm-10">
                   
 									{!! Form::select('component',['placeholder'=>'Favor de seleccionar un programa'],null,['id'=>'component','class'=>'form-control','style'=>'display:none;']) !!}
+                  {!! Form::select('component',['placeholder'=>'Favor de seleccionar un programa'],null,['id'=>'component1','class'=>'form-control','style'=>'display:none;']) !!}
                   @if ($errors->has('component'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('component')}}</div>
 									@endif
@@ -214,7 +215,7 @@
               <br><br>
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
-								<button type="submit" id="guardar" style="display:none;" class="btn btn-success col-sm-3"><i class="icofont icofont-check-circled"></i>Guardar Proyecto</button>
+								<button type="submit" id="guardar" style="display:none;" class="btn btn-success"><i class="icofont icofont-check-circled"></i>Guardar Proyecto</button>
 							</center>
 						</form>
            @endif

@@ -31,7 +31,7 @@ class ProjectsController extends Controller
         $projects = DB::table('projects as p')
         ->join('applicants as a','a.id','p.applicant_id')
         ->join('programs as pr','pr.id','p.program_id')
-        ->select('p.*','a.first_name','a.last_name','a.second_last_name','pr.name as program_name')
+        ->select('p.*','a.first_name','a.last_name','a.second_last_name','pr.name as program_name','pr.operation_rules')
         ->get();
         $count_programs=DB::table('programs')
           ->count();
@@ -63,11 +63,11 @@ class ProjectsController extends Controller
       ->where("operation_rules","=",1)
       ->orWhere("operation_rules","=",0)  
       ->get();*/
-      $programs=DB::table('programs as p')
+      $programs_1=DB::table('programs as p')
       ->where('operation_rules',1)
       ->pluck('p.name','p.id','p.operation_rules');
       
-      $programs_1=DB::table('programs as p')
+      $programs_0=DB::table('programs as p')
       ->where('operation_rules',0)
       ->pluck('p.name','p.id','p.operation_rules');
       
@@ -79,7 +79,7 @@ class ProjectsController extends Controller
           
         return view('projects.create')->with('count_programs',$count_programs)
           ->with('count_applicants',$count_applicants)->with('applicants',$applicants)->with('status_projects',$status_projects)->with("id",$id)
-          ->with('programs',$programs)->with('programs_1',$programs_1);
+          ->with('programs_0',$programs_0)->with('programs_1',$programs_1);
     }
   
     /*public function Components(Request $request, $id){
@@ -100,10 +100,13 @@ class ProjectsController extends Controller
     }
     
     public function getSubComponents(Request $request, $id){
-        if($request->ajax()){
+      
+      
+      if($request->ajax()){
             $subcomponent = Sub_Components::sub_components($id);
             return response()->json($subcomponent);
-        }
+          
+      }
     }
     
     public function getConcepts(Request $request, $id){
@@ -112,6 +115,15 @@ class ProjectsController extends Controller
             return response()->json($concept);
         }
     }
+  
+    public function getConcepts_com(Request $request, $id){
+        if($request->ajax()){
+            $concept = Concepts::concepts_com($id);
+            return response()->json($concept);
+        }
+    }
+  
+    
   
     /**
      * Store a newly created resource in storage.
@@ -130,30 +142,37 @@ class ProjectsController extends Controller
         $programs=DB::table('programs')
           ->get();
       $status_projects=DB::table('status_projects')->get();
-          
+           $programs_1=DB::table('programs as p')
+      ->where('operation_rules',1)
+      ->pluck('p.name','p.id','p.operation_rules');
+      
+      $programs_0=DB::table('programs as p')
+      ->where('operation_rules',0)
+      ->pluck('p.name','p.id','p.operation_rules');
         return view('projects.create')->with('count_programs',$count_programs)
           ->with('count_applicants',$count_applicants)->with('programs',$programs)
-          ->with('applicants',$applicants)->with('status_projects',$status_projects)->with("id",$id);
+          ->with('programs_1',$programs_1)
+          ->with('programs_0',$programs_0)->with('applicants',$applicants)->with('status_projects',$status_projects)->with("id",$id);
   }
     public function store(Request $request)
     {
              
         $data = request()->validate([
             'applicant'=>'required',
-            'program'=>'required',
+            
             'requested_concept'=>'required',
             'comments' =>'required',
             'status_project'=>'required',
-            'program'=>'required',
+            
             'component'=>'required',
             
           ],[
             'applicant.required'=>'* Este campo es obligatorio.',
-            'program.required'=>'* Este campo es obligatorio.',
+            
             'requested_concept.required'=>'* Este campo es obligatorio.',
             'comments.required' =>'* Este campo es obligatorio',
             'status_project.required'=>'* Este campo es obligatorio',
-            'program.required'=>'* Este campo es obligatorio',
+            
             'component.required'=>'* Este campo es obligatorio',
           ]);
           
@@ -161,7 +180,12 @@ class ProjectsController extends Controller
           $fecha_actual=date("Y-m-d");
           $projects= new Projects;
           $projects->applicant_id=Input::get('applicant');
-          $projects->program_id=Input::get('program');
+          if(Input::get('selection')==0){
+            $projects->program_id=Input::get('program_0');
+          }else if(Input::get('selection')==1){
+            $projects->program_id=Input::get('program_1');
+          }
+          
           $projects->requested_concept=Input::get('requested_concept');
           $projects->status_project=Input::get('status_project');
           $projects->status_date=$fecha_actual;
@@ -212,12 +236,12 @@ class ProjectsController extends Controller
           $i++;
         }
             }
-            Alert::success('Exitosamente','Proyecto Registrado')->autoclose(4000);
+            
             $visit_history->project_id=$projects->id;
             $visit_history->save();
             insertToLog(Auth::user()->id, 'added', $projects->id, "proyecto");
             insertToLog(Auth::user()->id, 'added', $visit_history->id, "historial");
-  
+            Alert::success('Exitosamente','Proyecto Registrado')->autoclose(4000);
             return redirect()->route('projects.list');
           } else {
             Alert::error('No se registro el proyecto', 'Error')->autoclose(4000);
@@ -233,23 +257,100 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-      $projects=DB::table('projects as p')
-        ->join('applicants as a','a.id','p.applicant_id')
-        ->join('programs as pr','pr.id','p.program_id')
-        ->select('p.*','a.first_name','a.last_name','a.second_last_name','pr.name as program_name')
-        ->where('p.id',$id)
-        ->get();
-      $documents=DB::table('documents as d')
-        ->where('d.project_id',$id)
-        ->get();
-      $visit_histories=DB::table('visit_histories as vh')
-        ->join('status_projects as sp','sp.id','vh.status_project_id')
-        ->select('vh.*','sp.name')
-        ->where('vh.project_id',$id)
-        ->orderBy('vh.created_at', 'desc')
-        ->get();
-        return view('projects.show')->with('projects',$projects)->with('documents',$documents)
-          ->with('visit_histories',$visit_histories);
+      $operation_rules = DB::table("projects")->join("programs","programs.id","=","projects.program_id")
+        ->select("programs.operation_rules")->where("projects.id","=",$id)->first();
+      
+      $conceptos= null;
+      $componente = null;
+      $subcomponente = null;
+      
+      if($operation_rules->operation_rules == 0){
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                      "programs.p_amount_max",
+                      "programs.m_amount_max",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+          $documents = DB::table("projects")->join("documents","documents.project_id","=","projects.id")
+                ->select("documents.name as documento","documents.path","documents.id")
+                ->where("projects.id","=",$id)->get();
+        
+          $visitas = DB::table("projects")->join("visit_histories","visit_histories.project_id","=","projects.id")
+                ->join("status_projects","status_projects.id","=","visit_histories.status_project_id")
+                 ->select("visit_histories.comments as comentario",
+                        "visit_histories.date as fecha",
+                        "status_projects.name as estatus",
+                         "visit_histories.id as id")
+                ->where("projects.id","=",$id)->get();
+      }else{
+          $project = DB::table("projects")
+              ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("programs","programs.id","=","projects.program_id")
+              ->select("projects.id as folio_interno",
+                      "projects.folio as folio_externo",
+                      "applicants.first_name",
+                      "applicants.last_name",
+                      "applicants.second_last_name",
+                      "applicants.type",
+                      "applicants.ejido",
+                      "applicants.colony",
+                      "applicants.street",
+                      "applicants.number",
+                      "applicants.zip",
+                      "programs.name as program_name",
+                      "programs.responsable_unit",
+                      "programs.executing_unit",
+                      "projects.requested_concept")->where("projects.id","=",$id)->first();
+        
+          $conceptos = DB::table("projects")->join("projects_concepts","projects.id","=","projects_concepts.project_id")
+            ->join("concepts","concepts.id","=","projects_concepts.concept_id")
+            ->select("concepts.name as concepto","concepts.component_id as componente","concepts.sub_component_id as subcomponente","concepts.p_amount_max","concepts.m_amount_max")->where("projects.id","=",$id)->get();
+          
+          $temp_componente = null;
+          $temp_subcomponente = null;
+          foreach($conceptos as $concept){
+            $temp_componente = $concept->componente;
+            $temp_subcomponente = $concept->subcomponente;
+            break;
+          }
+          
+          if($temp_componente != null){
+            $componente = DB::table("components")->where("id","=",$temp_componente)->first();
+          }
+          
+          if($temp_subcomponente != null){
+            $subcomponente = DB::table("sub_components")->where("id","=",$temp_subcomponente)->first();
+            $componente = DB::table("components")->where("components.id","=",$subcomponente->component_id)->first();
+          }
+        
+          $documents = DB::table("projects")->join("documents","documents.project_id","=","projects.id")
+                ->select("documents.name as documento","documents.path","documents.id")
+                ->where("projects.id","=",$id)->get();
+        
+          $visitas = DB::table("projects")->join("visit_histories","visit_histories.project_id","=","projects.id")
+                ->join("status_projects","status_projects.id","=","visit_histories.status_project_id")
+                ->select("visit_histories.comments as comentario",
+                        "visit_histories.date as fecha",
+                        "status_projects.name as estatus",
+                        "visit_histories.id as id")
+                ->where("projects.id","=",$id)->get();
+      }
+        return view('projects.show')->with('project',$project)->with('documents',$documents)
+          ->with('visitas',$visitas)->with('conceptos',$conceptos)->with('operation_rules',$operation_rules)->with('componente',$componente);
     }
     
     public function create_folio($id)
@@ -370,7 +471,7 @@ class ProjectsController extends Controller
             insertToLog(Auth::user()->id, 'updated', $id, "proyecto");
             insertToLog(Auth::user()->id, 'added', $visit_history->id, "historial");
   
-            return redirect()->route('projects.list');
+            return redirect()->route('projects.show',['id'=>$id]);
           } else {
             Alert::error('No se modifico proyecto', 'Error')->autoclose(4000);
             return redirect()->route('projects.list');
@@ -385,6 +486,9 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     { 
+       $concepts_count=DB::table('projects_concepts')
+        ->where('project_id',$id)
+        ->count();
        $concepts=DB::table('projects_concepts')
         ->where('project_id',$id)
         ->first();
@@ -398,7 +502,12 @@ class ProjectsController extends Controller
         ->where('id',$id)
         ->first();
       Alert::success('Exitosamente','Proyecto Eliminado')->autoclose(4000);
+      if ($concepts_count!=0){
       insertToLog(Auth::user()->id, 'deleted', $concepts->project_id, "conceptos del proyecto");
+      $concepts=DB::table('projects_concepts')
+        ->where('project_id',$id)
+        ->delete();
+      }
       insertToLog(Auth::user()->id, 'deleted', $documents->project_id, "documentos del proyecto");
       insertToLog(Auth::user()->id, 'deleted', $project->id, "proyecto");
       insertToLog(Auth::user()->id, 'deleted', $visit_history->project_id, "historial del proyecto");
@@ -411,9 +520,7 @@ class ProjectsController extends Controller
         $project=DB::table('projects')
         ->where('id',$id)
         ->delete();
-      $concepts=DB::table('projects_concepts')
-        ->where('project_id',$id)
-        ->delete();
+      
       return redirect()->route('projects.list');
       
     }

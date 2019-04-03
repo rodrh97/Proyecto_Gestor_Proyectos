@@ -10,6 +10,10 @@ class Concepts extends Model
         'id', 'name','specific_requirements'
     ];
     public static function concepts($id){
-        return Concepts::where('program_id','=',$id)->orWhere('component_id','=',$id)->orWhere('sub_component_id','=',$id)->get();
+        return Concepts::where('sub_component_id','=',$id)->get();
+    }
+  
+    public static function concepts_com($id){
+        return Concepts::where('component_id','=',$id)->get();
     }
 }

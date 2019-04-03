@@ -120,7 +120,7 @@
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
 								
-							  <button type="submit"  class="btn btn-success col-sm-3"><i class="icofont icofont-refresh"></i>Actualizar Proyecto</button>
+							  <button type="submit"  class="btn btn-success"><i class="icofont icofont-refresh"></i>Actualizar Proyecto</button>
               </center>
 						</form>
            
