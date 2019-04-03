@@ -163,6 +163,8 @@ return [
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
+        
+        
 
     ],
 
@@ -178,7 +180,7 @@ return [
     */
 
     'aliases' => [
-
+         
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -215,6 +217,8 @@ return [
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        
+        
 
     ],
 

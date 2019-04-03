@@ -52,6 +52,12 @@ $.ajax({
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css">
 
+  
+  
+  <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/jstree/css/style.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/pages/treeview/treeview.css') }}">
+  
+  
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
     <!-- Google font-->
@@ -261,7 +267,12 @@ $.ajax({
 
     @include('sweet::alert')
     <?php Session::forget('sweet_alert'); ?>
-
+  
+  
+<script type="text/javascript" src="{{ asset('bower_components/jstree/js/jstree.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/pages/treeview/jquery.tree.js') }}"></script>
+  
+  
     <!-- Scripts -->
 
     <script type="text/javascript" src="{{ asset('bower_components/jquery-ui/js/jquery-ui.min.js') }}"></script>

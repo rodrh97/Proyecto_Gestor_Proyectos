@@ -21,10 +21,15 @@ class ConceptsController extends Controller
           ->count();
         $count_sub_components=DB::table('sub_components')
           ->count();
+        
+        $components = DB::table("components")->get();
+        $subcomponents = DB::table("sub_components")->get();
         return view('concepts.list')
           ->with('concepts',$concepts)
           ->with('count_components',$count_components)
           ->with('count_sub_components',$count_sub_components)
+          ->with('components',$components)
+          ->with('subcomponents',$subcomponents)
           ->with('title', 'Listado de Conceptos');
     }
   

@@ -10,7 +10,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="icofont icofont-eye-alt" style="background-color:#ab7967"></i>
+					<i class="icofont icofont-eye-alt bg-success" ></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Detalles del Concepto: {{ $concept->name }} </h4>
 						<span style="text-transform: none;">Mostrando todos los detalles del concepto seleccionado.</span>

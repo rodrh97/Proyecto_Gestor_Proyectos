@@ -48,7 +48,7 @@
 										<th class="all" scope="col">ID</th>
 										<th scope="col">Nombre Completo</th>
                     <th scope="col">Tipo de solicitante</th>
-										<th class="all" style="width:35%;" scope="col">Acciones</th>
+										<th class="all" style="width:40%;" scope="col">Acciones</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -70,6 +70,7 @@
 
 													
 														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar solicitante con el id {{ $applicant->id }}"><span class="icofont icofont-ui-delete"></span></button>
+                          <a href="{{route('applicants.createProject',['id'=>$applicant->id])}}" class="btn btn-warning col-lg-4">Crear proyecto</a>
 													
 												</center>
 											</form>

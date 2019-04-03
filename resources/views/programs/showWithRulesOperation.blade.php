@@ -70,7 +70,7 @@
 														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>Descripción:</h6>
 													</div>
 													<div class="col-sm-8">
-														<h6 class="m-b-30">{{ $program->description }}</h6>
+                            <textarea style="border:none;" readonly class="m-b-30" cols="80" rows="10">{{ $program->description }}</textarea>
 													</div>
 												</div>
                         
@@ -119,6 +119,16 @@
                             <a href="{{url('/programs/downloadConvocatoria',['id'=>$program->id])}}" class="btn btn-warning col-lg-2" title="Descargar convocatoria"><span class="fas fa-download"></span></a>
 													</div>
 												</div>
+                        
+                         <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>URL de la convocatoria:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{ $program->vinculo }}</h6>
+													</div>
+												</div>
+                        
                         <br><br>
                         <h6><strong> Anexos</strong></h6><br>
                         
@@ -160,9 +170,93 @@
                           </div>
                         </center>
                         @endif
-
-
-												
+    
+                        <br><hr><br>
+                        <h6><strong> Reglas de Operación</strong></h6><br>
+                        <div>
+                        
+                         <div class="card-block tree-view">
+                            <div id="basicTree">
+                                <ul>
+                                    <li data-jstree='{"icon":"fas fa-cube"}'>{{$program->name}}
+                                        <ul>
+                                          @foreach($components as $component)
+                                            <li data-jstree='{"icon":"fas fa-cube"}'>Componente: {{$component->name}}
+                                                <ul>
+                                                  @foreach($subcomponents as $subcomponent)
+                                                    @if($subcomponent->component_id == $component->id)
+                                                      <li data-jstree='{"icon":"fas fa-cube"}'>Subcomponente: {{$subcomponent->name}}
+                                                          <ul>
+                                                            @foreach($concepts as $concept)
+                                                              @if($concept->sub_component_id == $subcomponent->id)
+                                                                <li data-jstree='{"icon":"fas fa-cube"}'>Concepto: {{$concept->name}}</li>
+                                                              @endif
+                                                            @endforeach
+                                                          </ul>
+                                                      </li>
+                                                    @endif
+                                                  @endforeach
+                                                  @foreach($concepts as $concept)
+                                                    @if($concept->component_id == $component->id)
+                                                      <li data-jstree='{"icon":"fas fa-cube"}'>Concepto: {{$concept->name}}</li>
+                                                    @endif
+                                                  @endforeach
+                                                </ul>
+                                            </li>
+                                          @endforeach
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>                          
+												<br><br>
+                          <br><h6><strong>Requerimientos específicos</strong></h6><br>
+                           <div class="card-block table-border-style">
+                            <div class="table-responsive">
+                                <table style="width:100%;" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Regla de operación</th>
+                                            <th>Ver</th>
+                                            <th>Descargar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      @foreach($components as $component)
+                                        <tr>
+                                          <td>Componente: {{$component->name}}</td>
+                                          <td><center><a target="_blank" href="{{asset($component->path)}}" class="btn btn-inverse col-lg-10" title="Visualizar requerimientos específicos" ><span class="fas fa-eye"></span></a> </center></td>
+                                          <td><center><a href="{{url('/component/download',['id'=>$component->id])}}" class="btn btn-warning col-lg-10" title="Descargar requerimientos específicos"><span class="fas fa-download"></span></a></center></td>
+                                        </tr>
+                                      @endforeach
+                                      @foreach($subcomponents as $subcomponent)
+                                        <tr>
+                                          <td>Subcomponente: {{$subcomponent->name}}</td>
+                                          <td><center><a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-inverse col-lg-10" title="Visualizar requerimientos específicos" ><span class="fas fa-eye"></span></a> </center></td>
+                                          <td><center><a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-warning col-lg-10" title="Descargar requerimientos específicos"><span class="fas fa-download"></span></a></center></td>
+                                        </tr>
+                                      @endforeach
+                                      @foreach($concepts as $concept)
+                                        <tr>
+                                          <td>Concepto: {{$concept->name}}</td>
+                                          <td><center><a target="_blank" href="{{asset($concept->specific_requirements)}}" class="btn btn-inverse col-lg-10" title="Visualizar requerimientos específicos" ><span class="fas fa-eye"></span></a> </center></td>
+                                          <td><center><a href="{{url('/concept/download',['id'=>$concept->id])}}" class="btn btn-warning col-lg-10" title="Descargar requerimientos específicos"><span class="fas fa-download"></span></a></center></td>
+                                        </tr>
+                                      @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                          </div>
+                       
+                        
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
 											</div>
                       
                       <div class="col-sm-12"><br><br>

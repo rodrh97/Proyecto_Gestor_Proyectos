@@ -66,7 +66,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="applicant">Selecciona al Solicitante:</label>
 								<div class="col-sm-10">
-									<select type="select" class="form-control" name="applicant"  value="{{ old('applicant') }}" title="Nombre de los solicitantes">
+									<select type="select" class="form-control" name="applicant"  id="applicant" value="{{ old('applicant') }}" title="Nombre de los solicitantes">
 									<option value="0">Seleccionar solicitante</option>
                     @foreach( $applicants as $applicant)
                     <option value="{{$applicant->id}}">{{$applicant->first_name}} {{$applicant->last_name}} {{$applicant->second_last_name}}
@@ -78,21 +78,73 @@
 							</div>	
               <br>
               <div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="program">Selecciona el Programa:</label>
+								<label class="col-sm-2 col-form-label" for="selection">Progama tiene reglas de operación:</label>
 								<div class="col-sm-10">
-									<select type="select" class="form-control" name="program"  value="{{ old('program') }}" title="Nombre del programa">
-									<option value="0">Seleccionar programa</option>
-                    @foreach( $programs as $program)
-                    <option value="{{$program->id}}">{{$program->name}}</option>@endforeach
-                    </select>
+									<select id="selection" name="selection" onchange="seleccion(this.value)" class="form-control">
+                    <option value="2">Seleccionar una opción</option>
+                    <option value="0">Sin reglas de operación</option>
+                    <option value="1">Con reglas de operación</option>
+                  </select>
+                  
+									
+                  @if ($errors->has('selection'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('selection')}}</div>
+									@endif
+								</div>
+							</div>	
+              <br>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="program" id="labelprogram" style="display:none;">Selecciona el Programa:</label>
+								<div class="col-sm-10">
+                  
+									{!! Form::select('program',$programs,null,['id'=>'program','class'=>'form-control','style'=>'display:none;']) !!}
+                  
+									{!! Form::select('program',$programs_1,null,['id'=>'program_1','class'=>'form-control','style'=>'display:none;']) !!}
                   @if ($errors->has('program'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('program')}}</div>
+									@endif
+                  @if ($errors->has('program_1'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('program_1')}}</div>
 									@endif
 								</div>
 							</div>	
               <br>
               <div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="requested_concept">Concepto de Solicitud:</label>
+								<label class="col-sm-2 col-form-label" for="component" id="labelcomponent" style="display:none;">Selecciona el Componente:</label>
+								<div class="col-sm-10">
+                  
+									{!! Form::select('component',['placeholder'=>'Favor de seleccionar un programa'],null,['id'=>'component','class'=>'form-control','style'=>'display:none;']) !!}
+                  @if ($errors->has('component'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('component')}}</div>
+									@endif
+								</div>
+							</div>	
+              <br>
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="subcomponent" id="labelsubcomponent" style="display:none;">Selecciona el Sub-Componente:</label>
+								<div class="col-sm-10">
+									{!! Form::select('subcomponent',['placeholder'=>'Favor de seleccionar un componente'],null,['id'=>'subcomponent','class'=>'form-control','style'=>'display:none;']) !!}
+                  @if ($errors->has('subcomponent'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('subcomponent')}}</div>
+									@endif
+								</div>
+							</div>	
+              <br>
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="concept" id="labelconcept" style="display:none;">Selecciona el(los) Concepto(s):</label>
+								<div id="concept" class="col-sm-10" style="display:none;">
+									 
+                  </div>
+                  @if ($errors->has('concept'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('concept')}}</div>
+									@endif
+								
+							</div>	
+              <br>
+               
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="requested_concept">Concepto Requerido:</label>
 								<div class="col-sm-10">
                   <textarea type="text" rows="10" cols="50" class="form-control" name="requested_concept"   placeholder="Ej. El monto máximo de apoyo federal por persona física será de hasta $500,000.00 (Quinientos mil pesos 00/100 M.N.)." title="Concepto de Solicitud ">{{ old('requested_concept') }}</textarea>
 									@if ($errors->has('requested_concept'))
@@ -176,9 +228,16 @@
 @section('javascriptcode')
 	<script>
 		//* Termina verificacion de columnas unicas
+    
+    var solicitante_id = "{{$id}}";
+    if(solicitante_id != "indefinido"){
+          document.ready = document.getElementById("applicant").value = solicitante_id;
+    }
+
+    
     function cargarAnexos(cantidad){
       if(cantidad != 0){
-        document.getElementById("guardar").style.display="inline";
+        //document.getElementById("guardar").style.display="inline";
         var i;
         var div = document.getElementById("archivos");
         while (div.hasChildNodes()){
@@ -214,6 +273,7 @@
           var file = document.createElement("input");
           file.type = "file";
           file.name = "anexos[]";
+          file.accept = ".pdf,image/*";
           file.className = "form-control";
           file.required = "true";
           div_name.appendChild(input);
@@ -227,7 +287,7 @@
         }
         
       }else{
-        document.getElementById("guardar").style.display="none";
+        //document.getElementById("guardar").style.display="none";
          var div = document.getElementById("archivos");
           while (div.hasChildNodes()){
             div.removeChild(div.firstChild);
@@ -236,5 +296,21 @@
       }
       
     }
+    
+  /*$(document).ready(function(){
+    $("#programs").change(function(){
+      var programa = $(this).val();
+      $.get('../getComponents/'+programa, function(data){
+//esta el la peticion get, la cual se divide en tres partes. ruta,variables y funcion
+        console.log(data);
+          var producto_select = '<option value="">Selecciona un componente</option>'
+            for (var i=0; i<data.length;i++)
+              producto_select+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+
+            $("#campanas").html(producto_select);
+
+      });
+    });
+  });*/
 	</script>
 @endsection	

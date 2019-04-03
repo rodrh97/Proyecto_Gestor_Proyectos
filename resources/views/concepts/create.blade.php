@@ -10,7 +10,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fa fa-plus" style="background-color:#ac7c64;"></i>
+					<i class="fa fa-plus bg-success"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Crear Concepto</h4>
 						<span style="text-transform: none;">Llene los campos en la parte inferior para registrar un nuevo concepto.</span>
@@ -79,7 +79,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="name">Elija componente o subcomponente:</label>
 								<div class="col-sm-10">
-									<select class="form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
+									<select class="select2_basic form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
                     @foreach($components as $component)
                     <option value="component {{$component->id}}">Componente - {{$component->name}}</option>
                     @endforeach

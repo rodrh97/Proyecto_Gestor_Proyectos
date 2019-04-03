@@ -120,7 +120,7 @@
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
 								
-							  <button type="submit" id="guardar" style="display:none;" class="btn btn-success col-sm-3"><i class="icofont icofont-refresh"></i>Actualizar Proyecto</button>
+							  <button type="submit"  class="btn btn-success col-sm-3"><i class="icofont icofont-refresh"></i>Actualizar Proyecto</button>
               </center>
 						</form>
            
@@ -137,7 +137,7 @@
 		//* Termina verificacion de columnas unicas
     function cargarAnexos(cantidad){
       if(cantidad != 0){
-        document.getElementById("guardar").style.display="inline";
+        //document.getElementById("guardar").style.display="inline";
         var i;
         var div = document.getElementById("archivos");
         while (div.hasChildNodes()){
@@ -173,6 +173,7 @@
           var file = document.createElement("input");
           file.type = "file";
           file.name = "anexos[]";
+          file.accept = ".pdf,image/*";
           file.className = "form-control";
           file.required = "true";
           div_name.appendChild(input);
@@ -186,7 +187,7 @@
         }
         
       }else{
-        document.getElementById("guardar").style.display="none";
+        //document.getElementById("guardar").style.display="none";
          var div = document.getElementById("archivos");
           while (div.hasChildNodes()){
             div.removeChild(div.firstChild);

@@ -67,6 +67,7 @@ class ProgramsController extends Controller
       $program->responsable_unit = Input::get('unit_responsable');
       $program->executing_unit = Input::get('unit_ejecutora');
       $program->operation_rules = 1;
+      $program->vinculo = Input::get("vinculo");
       
       $path=$request->file('file3')->store('/public/programs');
       $program->general_requirements = 'storage/programs/'.$request->file('file3')->hashName();
@@ -119,7 +120,7 @@ class ProgramsController extends Controller
       $program->start_date = Input::get('start_date');
       $program->finish_date = Input::get('finish_date');
       $program->operation_rules = 0;
-      
+      $program->vinculo = Input::get("vinculo");
       
       $path=$request->file('file3')->store('/public/programs');
       $program->general_requirements = 'storage/programs/'.$request->file('file3')->hashName();
@@ -194,7 +195,13 @@ class ProgramsController extends Controller
         if($program->operation_rules == 0){
           return view("programs.showWithoutRulesOperation")->with("program",$program)->with("anexos",$anexos);
         }else{
-          return view("programs.showWithRulesOperation")->with("program",$program)->with("anexos",$anexos);
+          $components = DB::table("components")->where("program_id","=",$id)->get();
+          $subcomponents = DB::table("sub_components")->where("program_id","=",$id)->get();
+          $concepts = DB::table("concepts")->where("program_id","=",$id)->get();
+          return view("programs.showWithRulesOperation")->with("program",$program)->with("anexos",$anexos)
+            ->with("components",$components)
+            ->with("subcomponents",$subcomponents)
+            ->with("concepts",$concepts);
         }
     }
 
@@ -232,7 +239,7 @@ class ProgramsController extends Controller
           $program->start_date = Input::get('start_date');
           $program->finish_date = Input::get('finish_date');
           $program->operation_rules = 0;
-
+          $program->vinculo = Input::get("vinculo");
           
           if(Input::file("file3") != null){
             unlink(public_path()."/".$program->general_requirements);
@@ -295,7 +302,7 @@ class ProgramsController extends Controller
           $program->responsable_unit = Input::get('unit_responsable');
           $program->executing_unit = Input::get('unit_ejecutora');
           $program->operation_rules = 1;
-          
+          $program->vinculo = Input::get("vinculo");
          if(Input::file("file3") != null){
             unlink(public_path()."/".$program->general_requirements);
             $path=$request->file('file3')->store('/public/programs');

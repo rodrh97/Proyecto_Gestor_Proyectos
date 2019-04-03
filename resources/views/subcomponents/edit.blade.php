@@ -47,9 +47,18 @@
 							{{ method_field('PUT') }}
 							{!! csrf_field() !!}
 
-							
+							 <div class="form-group row">
+								<label class="col-sm-2 col-form-label" >Pertenece al componente:</label>
+								<div class="col-sm-10">
+                  <select name="component" id="component" class="form-control" title="Componente">
+                    @foreach($components as $component)
+                      <option value="{{$component->id}}">{{$component->name}}</option>
+                    @endforeach
+                  </select>
+								</div>
+							</div>
 							<div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="name">Nombre:</label>
+								<label class="col-sm-2 col-form-label" for="name">Nombre del subcomponente:</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" name="name" placeholder="Ej. Subcomponente 1" value="{{ old('name',$subcomponent->name) }}" title="Nombre del subcomponente">
 									@if ($errors->has('name'))
@@ -58,16 +67,7 @@
 								</div>
 							</div>
               
-              <div class="form-group row">
-								<label class="col-sm-2 col-form-label" >Componente:</label>
-								<div class="col-sm-10">
-                  <select name="component" id="component" class="form-control" title="Componente">
-                    @foreach($components as $component)
-                      <option value="{{$component->id}}">{{$component->name}}</option>
-                    @endforeach
-                  </select>
-								</div>
-							</div>	<br>
+             	<br>
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="name">Fecha de inicio:</label>
 								<div class="col-sm-10">

@@ -142,13 +142,13 @@
 									<tr>
 											
                       <td>{{ $document->name }}</td>
-                      <td><center><a target="_blank" href="{{asset($document->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar anexo" ><span class="fas fa-eye"></span></a> </center></td>
-                      <td><center><a href="{{url('/documents/download',['id'=>$document->id])}}" class="btn btn-warning col-lg-5" title="Descargar anexo"><span class="fas fa-download"></span></a></center></td>
+                      <td><center><a target="_blank" href="{{asset($document->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar documento" ><span class="fas fa-eye"></span></a> </center></td>
+                      <td><center><a href="{{url('/documents/download',['id'=>$document->id])}}" class="btn btn-warning col-lg-5" title="Descargar documento"><span class="fas fa-download"></span></a></center></td>
 											
                     
                     
 										<td>	
-											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" title="Borrar anexo" ><span class="icofont icofont-ui-delete"></span></a> </center>
+											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" title="Borrar documento" ><span class="icofont icofont-ui-delete"></span></a> </center>
 										</td>
                     
 									</tr>
@@ -159,7 +159,7 @@
 									<center>
 										<div class="alert alert-warning icons-alert">
 											<strong>Atención</strong>
-											<p>No existe historial de anexos registrado en el sistema.</p>
+											<p>Aún no tienes registrado documentos.</p>
 										</div>
 									</center>
 								@endif

@@ -42,7 +42,8 @@ Route::group(['middleware'=>['auth']], function () {
     /*******************************************
      * Rutas para para las operaciones AJAX    *
      *******************************************/
-    
+     Route::post('/operations/ajax/reports/ObtenerDatosSin', 'ReportsController@ObtenerDatosSin')->name('reports.ObtenerDatosSin');
+     Route::post('/operations/ajax/reports/ObtenerDatosCon', 'ReportsController@ObtenerDatosCon')->name('reports.ObtenerDatosCon');
     /**************  Termina operaciones AJAX  ***************/
 
     /**
@@ -78,11 +79,14 @@ Route::group(['middleware'=>['auth']], function () {
         /**************  Termina usuarios  ***************/
 
         
+        Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
+        Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
       
         
         Route::get('/applicants', 'ApplicantsController@index')->name('applicants.list');
         Route::get('/applicants/{id}', 'ApplicantsController@show')->where('id', '[0-9]+')->name('applicants.show');
         Route::get('/applicants/new', 'ApplicantsController@create')->name('applicants.create');
+        Route::get('/applicants/createProject/{id}', 'ProjectsController@createProject')->where('id', '[0-9]+')->name('applicants.createProject');
         Route::get('/applicants/{id}/edit', 'ApplicantsController@edit')->where('id', '[0-9]+')->name('applicants.edit');
         Route::post('/applicants', 'ApplicantsController@store');
         Route::delete('/applicants/{applicant}', 'ApplicantsController@destroy')->name('applicants.destroy');
@@ -127,6 +131,7 @@ Route::group(['middleware'=>['auth']], function () {
       
       
         Route::get('/components', 'ComponentController@index')->name('components.list');
+        Route::get('/components/{id}', 'ComponentController@show')->where('id', '[0-9]+')->name('components.show');
         Route::get('/components/new', 'ComponentController@create')->name('components.create');
         Route::get('/components/{component}/edit', 'ComponentController@edit')->where('id', '[0-9]+')->name('components.edit');
         Route::post('/components', 'ComponentController@store');
@@ -134,6 +139,7 @@ Route::group(['middleware'=>['auth']], function () {
         Route::put('/components/{component}', 'ComponentController@update')->name('components.update');
       
         Route::get('/subcomponents', 'SubcomponentController@index')->name('subcomponents.list');
+        Route::get('/subcomponents/{id}', 'SubcomponentController@show')->where('id', '[0-9]+')->name('subcomponents.show');
         Route::get('/subcomponents/new', 'SubcomponentController@create')->name('subcomponents.create');
         Route::get('/subcomponents/{subcomponent}/edit', 'SubcomponentController@edit')->where('id', '[0-9]+')->name('subcomponents.edit');
         Route::post('/subcomponents', 'SubcomponentController@store');
@@ -176,6 +182,10 @@ Route::group(['middleware'=>['auth']], function () {
     Route::group(['middleware'=>['access:1,2']], function(){
         
         Route::get('/cities/{id}', 'ApplicantsController@getCities');
+        Route::get('/components/getComponents/{id}', 'ProjectsController@getComponents');
+        Route::get('/subcomponents/getSubComponents/{id}', 'ProjectsController@getSubComponents');
+        Route::get('/concepts/getConcepts/{id}', 'ProjectsController@getConcepts');
+        Route::get('/programs/getPrograms/{id}', 'ProjectsController@getPrograms');
 
     });
 

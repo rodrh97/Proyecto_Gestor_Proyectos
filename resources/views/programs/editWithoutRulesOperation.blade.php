@@ -13,7 +13,7 @@
 				<div class="page-header-title">
 					<i class="icofont icofont-ui-edit" style="background:#ac7c64;"></i>
 					<div class="d-inline">
-						<h4 style="text-transform: none;">Editar el programa: {{$program->id}}</h4>
+						<h4 style="text-transform: none;">Editar el programa sin reglas de operación: {{$program->id}}</h4>
 						<span style="text-transform: none;">Formulario para la modificación de programas.</span>
 					</div>
 				</div>
@@ -220,6 +220,16 @@
 										<div class="col-form-label" style="color:red;">{{$errors->first('file2')}}</div>
 									@endif
                   <div class="col-form-label" style="align:justify;"> * Si desea cambiarlo, agregue un nuevo archivo.</div>
+								</div>
+							</div>
+              
+               <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="vinculo">URL de la convocatoria:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="vinculo" placeholder="Link" value="{{ old('vinculo',$program->vinculo) }}" title="Link" required>
+									@if ($errors->has('vinculo'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('vinculo')}}</div>
+									@endif
 								</div>
 							</div>
               <br><hr>

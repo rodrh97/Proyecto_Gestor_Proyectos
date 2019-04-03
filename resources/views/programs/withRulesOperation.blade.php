@@ -12,7 +12,7 @@
 				<div class="page-header-title">
 					<i class="fa fa-plus bg-success"></i>
 					<div class="d-inline">
-						<h4 style="text-transform: none;">Añadir Programa</h4>
+						<h4 style="text-transform: none;">Añadir programa sujeto a reglas de operación</h4>
 						<span style="text-transform: none;">Llene los campos en la parte inferior para registrar un nuevo programa.</span>
 					</div>
 				</div>
@@ -99,8 +99,8 @@
 								<div class="col-sm-10">
 									<div class="file-upload">
 										<div id="image-upload-wrap3" class="image-upload-wrap">
-											<input id="image_input_3" class="file-upload-input" type='file' name="file3" onchange="readURLForComponents3(this);" accept="image/*" required/>
-											<div style="padding-top:40px" onclick="$('.file-upload-input').trigger('click' )">
+											<input id="image_input_3" class="file-upload-input" type='file' name="file3" onchange="readURLForComponents3(this);" accept="file/*" required/>
+											<div style="padding-top:40px" onclick="$('#image_input_3').trigger('click' )">
 												<center>
 													<i style="font-size: 60px;" class="fas fa-cloud-upload-alt drag-icon"></i>
 												</center>
@@ -120,7 +120,7 @@
 										<div class="col-form-label" style="color:red;">{{$errors->first('file3')}}</div>
 									@endif
 								</div>
-							</div>
+							</div><br>
               
               
               <div class="form-group row">
@@ -128,8 +128,8 @@
 								<div class="col-sm-10">
 									<div class="file-upload">
 										<div id="image-upload-wrap2" class="image-upload-wrap">
-											<input id="image_input_2" class="file-upload-input" type='file' name="file2" onchange="readURLForComponents2(this);" accept="image/*" required/>
-											<div style="padding-top:40px" onclick="$('.file-upload-input').trigger('click' )">
+											<input id="image_input_2" class="file-upload-input" type='file' name="file2" onchange="readURLForComponents2(this);" accept="file/*" required/>
+											<div style="padding-top:40px" onclick="$('#image_input_2').trigger('click' )">
 												<center>
 													<i style="font-size: 60px;" class="fas fa-cloud-upload-alt drag-icon"></i>
 												</center>
@@ -147,6 +147,17 @@
 									</div>
                   @if ($errors->has('file2'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('file2')}}</div>
+									@endif
+								</div>
+							</div>
+              
+               
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="vinculo">URL de la convocatoria:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="vinculo" placeholder="Link" value="{{ old('vinculo') }}" title="Link" required>
+									@if ($errors->has('vinculo'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('vinculo')}}</div>
 									@endif
 								</div>
 							</div>
@@ -490,7 +501,9 @@
           file.type = "file";
           file.name = "anexos[]";
           file.className = "form-control";
+          file.accept = ".pdf,image/*";
           file.required = "true";
+          file.id = "file"+i;
           div_name.appendChild(input);
           div_file.appendChild(file);
           div_group.appendChild(label);
@@ -498,6 +511,7 @@
           div_group.appendChild(label_file);
           div_group.appendChild(div_file);
           div.appendChild(div_group);
+          
         }
 
       }else{
@@ -509,7 +523,16 @@
       
     }
   
-  
+  function read(input){
+    var split = input.files[0]['name'].split(".");
+    var extension = split[split.length - 1];
+    var accepted_extentions = ['pdf', 'PDF', 'jpeg', 'JPEG', 'png', 'PNG', 'jpg', 'JPG', 'bmp', 'BMP'];
+    var accepted_file = false;
+    if (accepted_extentions.includes(extension)) {
+        accepted_file = true; 
+    }
+    console.log("Hola");
+  }
   
     function readURLForComponents3(input) {
     

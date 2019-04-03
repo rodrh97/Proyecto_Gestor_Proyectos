@@ -78,8 +78,9 @@
 													{{ method_field('DELETE') }}
 
 												<center>
-                          <a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-inverse" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
-                          <a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-warning" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>
+                          <a href="{{ route('subcomponents.show', ['id' => $subcomponent->id]) }}" class="btn btn-warning" title="Ver detalles del subcomponente " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
+                          <!--<a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-inverse" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
+                          <a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-warning" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>-->
 													<a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}" class="btn btn-primary" title="Editar subcomponente con el id {{ $subcomponent->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
 
 													

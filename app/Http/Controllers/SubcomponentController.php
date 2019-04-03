@@ -7,6 +7,7 @@ use App\Sub_Components;
 use App\Components;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Concepts;
 use App\Helpers\DeleteHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -120,7 +121,15 @@ class SubcomponentController extends Controller
     }
 
   
+  public function show($id){
+      $subcomponent = DB::table('sub_components')->join('components','sub_components.component_id','=','components.id')
+                            ->select("sub_components.*","components.name as component")->where("sub_components.id","=",$id)->first();
+
+        return view('subcomponents.show')
+          ->with('subcomponent',$subcomponent);
+    }
     /**
+    
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -218,7 +227,15 @@ class SubcomponentController extends Controller
      */
     public function destroy(Sub_Components $subcomponent)
     {
-        
+         
+        $concepts2 =  DB::table("concepts")->get();
+       foreach($concepts2 as $concept2){
+          if($concept2->sub_component_id == $subcomponent->id){
+            $borrarConcept2 = Concepts::find($concept2->id);
+            $borrarConcept2->delete();
+          }
+        }
+      
         Alert::success('Exitosamente','Subcomponente Eliminado')->autoclose(4000);
 
         insertToLog(Auth::user()->id, 'deleted', $subcomponent->id, "subcomponente");

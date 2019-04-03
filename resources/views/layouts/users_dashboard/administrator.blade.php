@@ -33,7 +33,7 @@
             
         </ul>
     </li>
-    <li  id="students_li" class="pcoded-hasmenu {{ explode('.', $view_name)[0]=='programs' ? 'active pcoded-trigger' : '' }}">
+    <li  id="students_li" class="pcoded-hasmenu {{ explode('.', $view_name)[0]=='programs' ? 'active pcoded-trigger' : '' }} {{ explode('.', $view_name)[0]=='components' ? 'active pcoded-trigger' : '' }} {{ explode('.', $view_name)[0]=='subcomponents' ? 'active pcoded-trigger' : '' }} {{ explode('.', $view_name)[0]=='concepts' ? 'active pcoded-trigger' : '' }}">
         <a href="javascript:void(0)">
             <span class="pcoded-micon"><i class="fas fa-th-list"></i><b>A</b></span>
             <span class="pcoded-mtext" data-i18n="nav.social.main">Programas</span>
@@ -177,12 +177,38 @@
             </li>
         </ul>
     </li>
-    <li class="{{ Route::currentRouteNamed('reports.list') ? 'active' : '' }}">
-        <a href="#">
-            <span class="pcoded-micon" ><i class="fas fa-copy"></i><b>R</b></span>
+    
+   <!-- <li  id="students_li" class="pcoded-hasmenu {{ explode('.', $view_name)[0]=='reports' ? 'active pcoded-trigger' : '' }}">
+        <a href="javascript:void(0)">
+            <span class="pcoded-micon"><i class="fas fa-copy"></i><b>A</b></span>
+            <span class="pcoded-mtext" data-i18n="nav.social.main">Reportes</span>
+            <span class="pcoded-mcaret"></span>
+        </a>
+        <ul class="pcoded-submenu">
+            <li class="{{ Route::currentRouteNamed('reports.createSin') ? 'active' : '' }}">
+                <a href="">
+                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                    <span class="pcoded-mtext" data-i18n="nav.social.fb-wall">Sin reglas de operación</span>
+                    <span class="pcoded-mcaret"></span>
+                </a>
+            </li>
+            
+            <li class="{{ Route::currentRouteNamed('reports.createCon') ? 'active' : '' }}">
+                <a href="">
+                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                    <span class="pcoded-mtext" data-i18n="nav.social.fb-wall">Con reglas de operación</span>
+                    <span class="pcoded-mcaret"></span>
+                </a>
+            </li>
+            
+        </ul>
+    </li>-->
+    <li class="{{ Route::currentRouteNamed('reports.createCon') ? 'active' : '' }}">
+        <a href="{{ route('reports.createCon') }}">
+            <span class="pcoded-micon" ><i class="fas fa-copy"></i><b>HS</b></span>
             <span class="pcoded-mtext" data-i18n="nav.job-search.main">Reportes</span>
-            <!--<span class="pcoded-badge label label-danger">NEW</spanstyle="background-color:#7f0000;">-->
-           <span class="pcoded-mcaret"></span>
+            <!--<span class="pcoded-badge label label-danger">NEW</span style="background-color:#fc6100;">-->
+            <span class="pcoded-mcaret"></span>
         </a>
     </li>
     <li class="{{ Route::currentRouteNamed('log.sessionlist') ? 'active' : '' }}">

@@ -10,7 +10,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fas fa-cube " style="background-color:#ac7c64;"></i>
+					<i class="fas fa-cube bg-success"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Listado de Conceptos</h4>
 						<span style="text-transform: none;">Lista de todos los conceptos registrados en el sistema.</span>
@@ -46,7 +46,9 @@
 								<thead id="table_header">
 									<tr>
 										<th class="all" scope="col">ID</th>
-										<th scope="col">Nombre</th>
+										<th scope="col">Nombre del concepto</th>
+                    <th scope="col">Pertenece al subcomponente</th>
+                    <th scope="col">Pertenece al componente</th>
                     <th class="all" style="width:35%;" scope="col">Acciones</th>
 									</tr>
 								</thead>
@@ -55,16 +57,34 @@
 									<tr>
 											<th scope="row">{{ $concept->id }}</th>
 											<td>{{ $concept->name }}</td>
-                    
-                    
+                      @if($concept->component_id == null)
+                          @foreach($subcomponents as $subcomponent)
+                              @if($concept->sub_component_id == $subcomponent->id)
+                                <td>{{$subcomponent->name}}</td>
+                                @foreach($components as $component)
+                                  @if($subcomponent->component_id == $component->id)
+                                    <td>{{$component->name}}</td>
+                                  @endif
+                                @endforeach
+                              @endif
+                          @endforeach
+                      @else
+                          <td> ------- </td>
+                          @foreach($components as $component)
+                              @if($concept->component_id == $component->id)
+                                <td>{{$component->name}}</td>
+                              @endif
+                          @endforeach
+                      @endif
+                         
 										<td>	
 												<form id="form" name="form" action="{{ route('concepts.destroy', ['id' => $concept->id])}}" method="POST">
 													{{ csrf_field() }}
 													{{ method_field('DELETE') }}
 
 												<center>
-                          <a target="_blank" href="{{asset($concept->specific_requirements)}}" class="btn btn-inverse" title="Visualizar archivo" ><span class="fas fa-eye"></span></a> 
-                          <a href="{{url('/concept/download',['id'=>$concept->id])}}" class="btn btn-warning" title="Descargar archivo de requerimientos especificos"><span class="fas fa-download"></span></a>
+                          <!--<a target="_blank" href="{{asset($concept->specific_requirements)}}" class="btn btn-inverse" title="Visualizar archivo" ><span class="fas fa-eye"></span></a> 
+                          <a href="{{url('/concept/download',['id'=>$concept->id])}}" class="btn btn-warning" title="Descargar archivo de requerimientos especificos"><span class="fas fa-download"></span></a>-->
 													<a href="{{ route('concepts.show', ['id' => $concept->id]) }}" class="btn btn-success" title="Ver el concepto con el id {{ $concept->id }}" style="margin: 3px;"><span class="fas fa-eye"></span></a>
                           
 													<a href="{{ route('concepts.edit', ['id' => $concept->id]) }}" class="btn btn-primary" title="Editar concepto con el id {{ $concept->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
@@ -82,7 +102,9 @@
 								<tfoot>
 									<tr id="table_footer">
 										<th style="padding-right: 2.8%" scope="col">ID</th>
-										<th style="padding-right: 2.8%" scope="col">Nombre</th>
+										<th style="padding-right: 2.8%" scope="col">Nombre del concepto</th>
+                    <th style="padding-right: 2.8%" scope="col">Pertenece al subcomponente</th>
+                    <th style="padding-right: 2.8%" scope="col">Pertenece al componente</th>
 										<th style="padding-left: 1.2%" scope="col" style="width:0%;"></th>
 									</tr>
 								</tfoot>

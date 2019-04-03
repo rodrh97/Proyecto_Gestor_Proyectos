@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use App\projects_concepts;
+use App\Sub_Components;
+use App\Concepts;
+use App\Programs;
 use App\Projects;
 use App\Visit_History;
 use App\Documents;
+use App\Components;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Helpers\DeleteHelper;
@@ -23,7 +28,11 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $projects = DB::table('projects')->get();
+        $projects = DB::table('projects as p')
+        ->join('applicants as a','a.id','p.applicant_id')
+        ->join('programs as pr','pr.id','p.program_id')
+        ->select('p.*','a.first_name','a.last_name','a.second_last_name','pr.name as program_name')
+        ->get();
         $count_programs=DB::table('programs')
           ->count();
         $count_applicants=DB::table('applicants')
@@ -42,7 +51,77 @@ class ProjectsController extends Controller
      */
     public function create()
     {
+        $id = "indefinido";
         $count_programs=DB::table('programs')
+          ->count();
+        $count_applicants=DB::table('applicants')
+          ->count();
+      
+        $applicants=DB::table('applicants')
+          ->get();
+      /*$programs=DB::table('programs')
+      ->where("operation_rules","=",1)
+      ->orWhere("operation_rules","=",0)  
+      ->get();*/
+      $programs=DB::table('programs as p')
+      ->where('operation_rules',1)
+      ->pluck('p.name','p.id','p.operation_rules');
+      
+      $programs_1=DB::table('programs as p')
+      ->where('operation_rules',0)
+      ->pluck('p.name','p.id','p.operation_rules');
+      
+      //$programs=DB::table('programs')->where("operation_rules","=",0)->get();
+        //$programs_without_operation_rules=DB::table('programs')->where("operation_rules","=",0)->get();
+      //$programs_without_operation_rules=DB::table('programs')->where("operation_rules","=",0)->get();
+      
+      $status_projects=DB::table('status_projects')->get();
+          
+        return view('projects.create')->with('count_programs',$count_programs)
+          ->with('count_applicants',$count_applicants)->with('applicants',$applicants)->with('status_projects',$status_projects)->with("id",$id)
+          ->with('programs',$programs)->with('programs_1',$programs_1);
+    }
+  
+    /*public function Components(Request $request, $id){
+        return Components::where('program_id','=',$id)->get();
+    }*/
+  public function getPrograms(Request $request, $id){
+        if($request->ajax()){
+            $program = Programs::programs($id);
+            return response()->json($program);
+        }
+    }
+  
+    public function getComponents(Request $request, $id){
+        if($request->ajax()){
+            $component = Components::components($id);
+            return response()->json($component);
+        }
+    }
+    
+    public function getSubComponents(Request $request, $id){
+        if($request->ajax()){
+            $subcomponent = Sub_Components::sub_components($id);
+            return response()->json($subcomponent);
+        }
+    }
+    
+    public function getConcepts(Request $request, $id){
+        if($request->ajax()){
+            $concept = Concepts::concepts($id);
+            return response()->json($concept);
+        }
+    }
+  
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    
+  public function createProject($id){
+     $count_programs=DB::table('programs')
           ->count();
         $count_applicants=DB::table('applicants')
           ->count();
@@ -54,24 +133,19 @@ class ProjectsController extends Controller
           
         return view('projects.create')->with('count_programs',$count_programs)
           ->with('count_applicants',$count_applicants)->with('programs',$programs)
-          ->with('applicants',$applicants)->with('status_projects',$status_projects);
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-  
+          ->with('applicants',$applicants)->with('status_projects',$status_projects)->with("id",$id);
+  }
     public function store(Request $request)
     {
-     
+             
         $data = request()->validate([
             'applicant'=>'required',
             'program'=>'required',
             'requested_concept'=>'required',
             'comments' =>'required',
             'status_project'=>'required',
+            'program'=>'required',
+            'component'=>'required',
             
           ],[
             'applicant.required'=>'* Este campo es obligatorio.',
@@ -79,13 +153,18 @@ class ProjectsController extends Controller
             'requested_concept.required'=>'* Este campo es obligatorio.',
             'comments.required' =>'* Este campo es obligatorio',
             'status_project.required'=>'* Este campo es obligatorio',
+            'program.required'=>'* Este campo es obligatorio',
+            'component.required'=>'* Este campo es obligatorio',
           ]);
-        
+          
+          
           $fecha_actual=date("Y-m-d");
           $projects= new Projects;
           $projects->applicant_id=Input::get('applicant');
           $projects->program_id=Input::get('program');
           $projects->requested_concept=Input::get('requested_concept');
+          $projects->status_project=Input::get('status_project');
+          $projects->status_date=$fecha_actual;
           $projects->folio=null;
           
           $visit_history= new Visit_History;
@@ -99,9 +178,11 @@ class ProjectsController extends Controller
           
           //Se almacena y se muestran mensajes en caos de registro exitoso
           if ($projects->save()) {
-            $anexos_programs = $request->anexos;
+           $anexos_programs = $request->anexos;
             $nombres_anexos = $request->nombre;
             $i = 0;
+            if($anexos_programs!=null){
+            
         foreach ($anexos_programs as $anexos) {
           
           $project_anexos = new Documents();
@@ -115,6 +196,22 @@ class ProjectsController extends Controller
           insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
           $i++;
         }
+            }
+            $concepts= $request->concepts;
+            $i = 0;
+            if(Input::get('selection')==1){
+            
+          foreach ($concepts  as $id) {
+          
+          $project_concept = new projects_concepts();
+          $project_concept->concept_id = $id;
+                                                    
+          $project_concept->project_id = $projects->id;
+          $project_concept->save();
+          insertToLog(Auth::user()->id, 'added', $project_concept->id, "conceptos");
+          $i++;
+        }
+            }
             Alert::success('Exitosamente','Proyecto Registrado')->autoclose(4000);
             $visit_history->project_id=$projects->id;
             $visit_history->save();
@@ -124,7 +221,7 @@ class ProjectsController extends Controller
             return redirect()->route('projects.list');
           } else {
             Alert::error('No se registro el proyecto', 'Error')->autoclose(4000);
-            return redirect()->route('projects.list',[]);
+            return redirect()->route('projects.list');
           }
     }
 
@@ -234,7 +331,7 @@ class ProjectsController extends Controller
       
         $projects=DB::table('projects')
           ->where('id',$id)
-          ->update(['requested_concept'=>Input::get('requested_concept')]);
+          ->update(['requested_concept'=>Input::get('requested_concept'),'status_project'=>Input::get('status_project'),'status_date'=>$fecha_actual]);
           
           $visit_history= new Visit_History;
           
@@ -251,19 +348,23 @@ class ProjectsController extends Controller
             $anexos_programs = $request->anexos;
             $nombres_anexos = $request->nombre;
             $i = 0;
+            if($anexos_programs!=null){
+            
         foreach ($anexos_programs as $anexos) {
           
-          $project_anexos = new Documents();
-          $project_anexos->name = $nombres_anexos[$i];
+              $project_anexos = new Documents();
+              $project_anexos->name = $nombres_anexos[$i];
           
-          $path=$anexos->store('/public/documents');
-          $project_anexos->path = 'storage/documents/'.$anexos->hashName();
+              $path=$anexos->store('/public/documents');
+              $project_anexos->path = 'storage/documents/'.$anexos->hashName();
                                                     
-          $project_anexos->project_id = $id;
-          $project_anexos->save();
-          insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
-          $i++;
-        }
+              $project_anexos->project_id = $id;
+              $project_anexos->save();
+              insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
+              $i++;
+          }
+        
+            }
             Alert::success('Exitosamente','Proyecto Modificado')->autoclose(4000);
             
             insertToLog(Auth::user()->id, 'updated', $id, "proyecto");
@@ -284,7 +385,9 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     { 
-      
+       $concepts=DB::table('projects_concepts')
+        ->where('project_id',$id)
+        ->first();
         $documents=DB::table('documents')
         ->where('project_id',$id)
         ->first();
@@ -295,6 +398,7 @@ class ProjectsController extends Controller
         ->where('id',$id)
         ->first();
       Alert::success('Exitosamente','Proyecto Eliminado')->autoclose(4000);
+      insertToLog(Auth::user()->id, 'deleted', $concepts->project_id, "conceptos del proyecto");
       insertToLog(Auth::user()->id, 'deleted', $documents->project_id, "documentos del proyecto");
       insertToLog(Auth::user()->id, 'deleted', $project->id, "proyecto");
       insertToLog(Auth::user()->id, 'deleted', $visit_history->project_id, "historial del proyecto");
@@ -306,6 +410,9 @@ class ProjectsController extends Controller
         ->delete();      
         $project=DB::table('projects')
         ->where('id',$id)
+        ->delete();
+      $concepts=DB::table('projects_concepts')
+        ->where('project_id',$id)
         ->delete();
       return redirect()->route('projects.list');
       

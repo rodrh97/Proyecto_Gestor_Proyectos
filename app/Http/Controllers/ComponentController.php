@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Alert;
 use App\Components;
+use App\Concepts;
+use App\Sub_Components;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Helpers\DeleteHelper;
@@ -15,7 +17,7 @@ class ComponentController extends Controller
 {
     public function index()
     {
-        $components = DB::table('components')->get();
+        $components = DB::table('components')->join("programs","components.program_id","=","programs.id")->select("components.*","programs.name as program")->get();
 
         return view('components.list')
           ->with('components',$components)
@@ -32,6 +34,12 @@ class ComponentController extends Controller
       }else{
         return view('components.create')->with("programs",$programs);
       }
+    }
+  
+    public function show($id){
+      $component = DB::table("components")->join("programs","components.program_id","=","programs.id")
+                  ->select("components.*","programs.name as program")->where("components.id","=",$id)->first();
+      return view("components.show")->with("component",$component);
     }
   
     public function store(Request $request)
@@ -127,10 +135,10 @@ class ComponentController extends Controller
             $component->name = Input::get('name');
             $component->start_date = Input::get('start_date');
             $component->finish_date = Input::get('finish_date');
-            $components->program_id = Input::get("program");
+            $component->program_id = Input::get("program");
           }else{
             $component->name = Input::get('name');
-            $components->program_id = Input::get("program");
+            $component->program_id = Input::get("program");
           }
           //Imagen nueva(mandada atraves del file input)
           $image = Input::file('image');
@@ -150,7 +158,7 @@ class ComponentController extends Controller
               //Se realiza la nueva actualizacion al registro del usuario actual con el
               //nombre de la nueva imagen
             
-              DB::update('UPDATE components SET specific_requirements = ? WHERE id = ?', [$image_url, $component->id]);
+              DB::update('UPDATE components SET path = ? WHERE id = ?', [$image_url, $component->id]);
           }
 
           
@@ -167,13 +175,34 @@ class ComponentController extends Controller
   
      public function destroy(Components $component)
     {
+         
+        $subcomponents = DB::table("sub_components")->get();
+        $concepts = DB::table("concepts")->get();
+        foreach($subcomponents as $subcomponent){
+          if($subcomponent->component_id == $component->id){
+            foreach($concepts as $concept){
+              if($concept->sub_component_id == $subcomponent->id){
+                $borrarConcept = Concepts::find($concept->id);
+                $borrarConcept->delete();
+              }
+            }
+            $borrarSubcomponente = Sub_Components::find($subcomponent->id);
+            $borrarSubcomponente->delete();
+          }
+        }
        
-
+        $concepts2 =  DB::table("concepts")->get();
+       foreach($concepts2 as $concept2){
+          if($concept2->component_id == $component->id){
+            $borrarConcept2 = Concepts::find($concept2->id);
+            $borrarConcept2->delete();
+          }
+        }
         Alert::success('Exitosamente','Componente Eliminado')->autoclose(4000);
 
         insertToLog(Auth::user()->id, 'deleted', $component->id, "componente");
        
-       unlink(public_path()."/".$component->specific_requirements);
+       unlink(public_path()."/".$component->path);
        
         $component->delete();
 
@@ -200,10 +229,10 @@ class ComponentController extends Controller
   
   public function download($id){
     $path=DB::table('components')
-      ->select('specific_requirements')
+      ->select('path')
       ->where('id',$id)
       ->first();
-    if(!$this->downloadFile($path->specific_requirements)){
+    if(!$this->downloadFile($path->path)){
       return redirect()->back();
     }
   }

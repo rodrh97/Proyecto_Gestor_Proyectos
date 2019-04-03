@@ -49,6 +49,7 @@
 										<th scope="col">Nombre</th>
                     <th scope="col">Fecha de inicio</th>
                     <th scope="col">Fecha de cierre</th>
+                    <th scope="col">Pertenece al programa</th>
 										<th class="all" style="width:30%;" scope="col">Acciones</th>
 									</tr>
 								</thead>
@@ -69,6 +70,7 @@
                     @else
                       <td>{{ $component->finish_date}}</td>
                     @endif
+                    <td>{{$component->program}}</td>
 										<td>
 											
 												<form id="form" name="form" action="{{ route('components.destroy', ['id' => $component->id])}}" method="POST">
@@ -76,8 +78,7 @@
 													{{ method_field('DELETE') }}
 
 												<center>
-                          <a target="_blank" href="{{asset($component->path)}}" class="btn btn-inverse" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
-                          <a href="{{url('/component/download',['id'=>$component->id])}}" class="btn btn-warning" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>
+                          <a href="{{ route('components.show', ['id' => $component->id]) }}" class="btn btn-warning" title="Ver detalles del componente " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
 													<a href="{{ route('components.edit', ['id' => $component->id]) }}" class="btn btn-primary" title="Editar componente con el id {{ $component->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
 
 													
@@ -96,6 +97,7 @@
 										<th style="padding-right: 2.8%" scope="col">Nombre</th>
                     <th style="padding-right: 2.8%" scope="col">Fecha de Inicio</th>
                     <th style="padding-right: 2.8%" scope="col">Fecha de Cierre</th>
+                    <th style="padding-right: 2.8%" scope="col">Pertenece al programa</th>
 										<th style="padding-left: 1.2%" scope="col" style="width:0%;"></th>
 									</tr>
 								</tfoot>

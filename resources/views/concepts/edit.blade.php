@@ -10,7 +10,7 @@
 		<div class="row align-items-end">
 			<div class="col-lg-8">
 				<div class="page-header-title">
-					<i class="fa fa-plus" style="background-color:#ab7967;"></i>
+					<i class="fa fa-plus bg-success"></i>
 					<div class="d-inline">
 						<h4 style="text-transform: none;">Crear Concepto</h4>
 						<span style="text-transform: none;">Llene los campos en la parte inferior para registrar un nuevo concepto.</span>

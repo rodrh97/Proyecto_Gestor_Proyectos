@@ -50,6 +50,7 @@
                     <th scope="col">Población objetivo</th>
                     <th scope="col">Unidad responsable</th>
                     <th scope="col">Unidad ejecutora</th>
+                    <th scope="col">Reglas de operación</th>
 										<th class="all" style="width:25%;" scope="col">Acciones</th>
 									</tr>
 								</thead>
@@ -62,6 +63,12 @@
                     <td>{{$program->target_population}}</td>
                     <td>{{$program->responsable_unit}}</td>
                     <td>{{$program->executing_unit}}</td>
+                    
+                    @if($program->operation_rules == 0)
+                      <td>No</td>
+                    @else
+                      <td>Si</td>
+                    @endif
 										
 										<td>
 										
@@ -87,6 +94,7 @@
                     <th style="padding-right: 2.8%" scope="col">Población objetivo</th>
                     <th style="padding-right: 2.8%" scope="col">Unidad responsable</th>
                     <th style="padding-right: 2.8%" scope="col">Unidad ejecutora</th>
+                     <th style="padding-right: 2.8%" scope="col">Reglas de operación</th>
 										<th style="padding-left: 1.2%" scope="col" style="width:0%;"></th>
 									</tr>
 								</tfoot>
