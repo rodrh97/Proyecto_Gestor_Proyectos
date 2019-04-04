@@ -54,7 +54,7 @@
 							<div class="row">
 								<div class="col-sm-12 col-xl-6">
 									<p>Programas: </p>
-									<select id="program_id" name="program_id" class="select2_basic" title="Seleccione un programa">
+									<select id="program_id" name="program_id" class="select2_basic" title="Seleccione un programa" data-toggle="tooltip" data-placement="top">
 										<option value="">Todos</option>
 										@foreach ($programs as $program)
 											<option value="{{ $program->id }}" {{ (old("program_id") == $program->id ? "selected":"") }}>{{ $program->name }} </option>
@@ -63,7 +63,7 @@
 								</div>
                 <div class="col-sm-12 col-xl-6">
 										<p>Solicitantes: </p>
-										<select id="solicitante_id" name="solicitante_id" class="select2_basic" title="Seleccione un solicitante">
+										<select id="solicitante_id" name="solicitante_id" class="select2_basic" title="Seleccione un solicitante"data-toggle="tooltip" data-placement="top">
 											<option value="">Todos</option>
 											@foreach ($solicitantes as $solicitante)
 												<option value="{{ $solicitante->id }}" {{ (old("solicitante_id") == $solicitante->id ? "selected":"") }}>{{ $solicitante->first_name }} {{ $solicitante->last_name }} {{ $solicitante->second_last_name }}</option>
@@ -75,7 +75,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xl-6">
 										<p>Proyectos: </p>
-										<select id="project_id" name="project_id" class="select2_basic" title="Seleccione un proyecto">
+										<select id="project_id" name="project_id" class="select2_basic" title="Seleccione un proyecto" data-toggle="tooltip" data-placement="top">
 											<option value="">Todos</option>
 											@foreach ($projects as $project)
 												<option value="{{ $project->id }}" {{ (old("project_id") == $project->id ? "selected":"") }}>{{ $project->id }}</option>
@@ -84,7 +84,7 @@
 									</div>
                   <div class="col-sm-12 col-xl-6">
 									<p>Estado de proyecto: </p>
-									<select id="status_id" name="status_id" class="select2_basic" title="Seleccione el estado del proyecto">
+									<select id="status_id" name="status_id" class="select2_basic" title="Seleccione el estado del proyecto" data-toggle="tooltip" data-placement="top">
 										<option value="" selected>Todos</option>
 										<option value="1" {{ (old("status_id") == 1 ? "selected":"") }}>Incompleto</option>
 										<option value="2" {{ (old("status_id") == 2 ? "selected":"") }}>Información completa sin proyecto</option>
@@ -108,7 +108,7 @@
 										<input type="date" autocomplete="off" style="height: 46px;" class="input-sm form-control" id="start" name="start" />
 										<span class="input-group-addon" id="al_btn" style="background-color:gray">al</span>
 										<input type="date" autocomplete="off" style="height: 46px;" class="input-sm form-control" id="end" name="end" />
-										<span class="input-group-addon" id="reset_btn" title="Borrar fechas seleccionadas" style="background-color:#c34242">x</span>
+										<span class="input-group-addon" id="reset_btn" title="Borrar fechas seleccionadas" style="background-color:#c34242" data-toggle="tooltip" data-placement="top">x</span>
 
 									</div>
 								</div>
@@ -172,25 +172,23 @@
 								@if ((!empty($asesorias)))
 									<thead id="table_header">
 										<tr>
-											<th scope="col" style="width: 25%">Programa</th>
-                      <th scope="col" style="width: 10%">Posee reglas de operación</th>
-                      <th scope="col" style="width: 25%">Solicitante</th>
-                      <th scope="col" style="width: 25%">Tipo</th>
-											<th scope="col" style="width: 20%">Proyecto</th>
-											<th scope="col" style="width: 10%">Estado de proyecto</th>
-											<th scope="col" style="width: 15%">Fecha</th>
+                      <th scope="col" style="width: 10%">Folio interno de proyecto</th>
+                      <th scope="col" style="width: 20%">Solicitante</th>
+											<th scope="col" style="width: 20%">Programa</th>
+                      <th scope="col" style="width: 20%">Concepto solicitado</th>
+											<th scope="col" style="width: 10%">Estatus del proyecto</th>
+											<th scope="col" style="width: 20%">Fecha</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
 								@endif
 								<tfoot>
 									<tr id="table_footer">
-										<th style="padding-right: 2.8%" scope="col">Programa</th>
-										<th style="padding-right: 2.8%" scope="col">Posee reglas de operación</th>
-                    <th style="padding-right: 2.8%" scope="col">Solicitante</th>
-                    <th style="padding-right: 2.8%" scope="col">Tipo</th>
-                    <th style="padding-right: 2.8%" scope="col">Proyecto</th>
-                    <th style="padding-right: 2.8%" scope="col">Estado de proyecto</th>
+										<th style="padding-right: 2.8%" scope="col">Folio interno de proyecto</th>
+										<th style="padding-right: 2.8%" scope="col">Solicitante</th>
+                    <th style="padding-right: 2.8%" scope="col">Programa</th>
+                    <th style="padding-right: 2.8%" scope="col">Concepto solicitado</th>
+                    <th style="padding-right: 2.8%" scope="col">Estatus del proyecto</th>
                     <th style="padding-right: 2.8%" scope="col">Fecha</th>
                     
 									</tr>
@@ -266,12 +264,11 @@
 
 		dt_reports = $('#datatable_reports').DataTable({
 			columns: [
-				{title: "Programa"},
-        {title: "Posee reglas de operación"},
+				{title: "Folio interno del proyecto"},
         {title: "Solicitante"},
-        {title: "Tipo"},
-        {title: "Proyecto"},
-        {title: "Estado de proyecto"},
+        {title: "Programa"},
+        {title: "Concepto solicitado"},
+        {title: "Estatus del proyecto"},
         {title: "Fecha"},
 			],
 			responsive: true,
@@ -591,14 +588,56 @@
             }else{
               reglas_operacion = "No";
             }
+            
+            var date_split = asesoria[i]["status_date"].split('-');
+
+            switch(date_split[1]){
+              case '01':
+                  date_split[1] = "Enero";
+                  break;
+              case '02':
+                  date_split[1] = "Febrero";
+                  break;
+              case '03':
+                  date_split[1] = "Marzo";
+                  break;
+              case '04':
+                  date_split[1] = "Abril";
+                  break;
+              case '05':
+                  date_split[1] = "Mayo";
+                  break;
+              case '06':
+                  date_split[1] = "Junio";
+                  break;
+              case '07':
+                  date_split[1] = "Julio";
+                  break;
+              case '08':
+                  date_split[1] = "Agosto";
+                  break;
+              case '09':
+                  date_split[1] = "Septiembre";
+                  break;
+              case '10':
+                  date_split[1] = "Octubre";
+                  break;
+              case '11':
+                  date_split[1] = "Noviembre";
+                  break;
+              case '12':
+                  date_split[1] = "Diciembre";
+                  break;
+            }
 						dt_reports.row.add([
-								asesoria[i]["name"],
-                reglas_operacion,
-              asesoria[i]["first_name"]+" "+asesoria[i]["last_name"]+" "+asesoria[i]["second_last_name"],
-              asesoria[i]["type"],
+              
               asesoria[i]["project_id"],
+              asesoria[i]["first_name"]+" "+asesoria[i]["last_name"]+" "+asesoria[i]["second_last_name"],
+								asesoria[i]["name"],
+              asesoria[i]["requested_concept"],
               asesoria[i]["status_name"],
-              asesoria[i]["status_date"]
+              date_split[2]+" de "+date_split[1]+" del "+date_split[0]
+              //asesoria[i]["status_date"]
 								
 						]).draw();
 					}

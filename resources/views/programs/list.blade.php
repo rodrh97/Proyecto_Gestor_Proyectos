@@ -2,7 +2,20 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Programas")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -76,12 +89,15 @@
 													{{ csrf_field() }}
 													{{ method_field('DELETE') }}
 												<center>
-													<a href="{{ route('programs.show', ['id' => $program->id]) }}" class="btn btn-warning" title="Ver detalles del programa con el id {{ $program->id }}" style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-													<a href="{{ route('programs.edit', ['id' => $program->id]) }}" class="btn btn-primary" title="Editar programa con el id {{ $program->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-
+													<a href="{{ route('programs.show', ['id' => $program->id]) }}" class="btn btn-warning" title="Detalles del programa" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
+													 @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+                          <a href="{{ route('programs.edit', ['id' => $program->id]) }}" class="btn btn-primary" title="Editar programa " style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
+                            @endif
+													@if(Auth::user()->type == 1 )
 										
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar programa con el id {{ $program->id }}"><span class="icofont icofont-ui-delete"></span></button>
-												</center>
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar programa" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
+												  @endif
+                          </center>
 											</form>
 										</td>
 									</tr>
@@ -104,8 +120,10 @@
 											<strong>Atención</strong>
 											<p>No hay ningún programa registrado.</p>
 										</div>
+                     @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
 										<a href="{{ route('programs.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Programa</button></a>
-									</center>
+								     @endif	
+                </center>
 								@endif
 
 							</table>
@@ -118,9 +136,49 @@
 </div>
 @endsection
 
-@section('javascriptcode')
+
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('javascriptcode')
 <script>
 	var button = '<a href="{{ route('programs.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Programa</button></a>';
 	applyStyleToDatatable(button, 'Buscar en programas');
 </script>
 @endsection
+
+
+		@break
+	@case(2)
+		@section('javascriptcode')
+<script>
+	var button = '<a href="{{ route('programs.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Programa</button></a>';
+	applyStyleToDatatable(button, 'Buscar en programas');
+</script>
+@endsection
+
+
+		@break
+	
+	@case(4)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+@endswitch
+
+
+

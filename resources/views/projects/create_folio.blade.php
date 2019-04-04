@@ -49,7 +49,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="folio">Folio:</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" id="folio" name="folio" placeholder="Ej. 10" value="{{ old('folio') }}" title="Folio del Proyecto">
+									<input type="text" class="form-control" id="folio" name="folio" placeholder="Ej. 10" value="{{ old('folio',$project->folio) }}" title="Folio del Proyecto">
 									@if ($errors->has('folio'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('folio')}}</div>
 									@endif
@@ -62,7 +62,7 @@
               <br><br>
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
-								<button id="guardar"type="submit" class="btn btn-success"><i class="icofont icofont-plus"></i>Guardar Folio</button>
+								<button id="guardar" type="submit" class="btn btn-success" style="display:inline;"><i class="icofont icofont-plus"></i>Guardar Folio</button>
 							</center>
 						</form>
            
@@ -78,10 +78,12 @@
 	<script>
 		error_divs = [
 			$('#error_folio'),
+      
 		];
+    
 		verify_column($('#folio'), 'folio', 'projects', null, $('#error_folio'),
 			'* El folio que esta intentando ingresar esta disponible.');
-
+    
 		//* Se verifica que no se ingrese un registro repedito para columnas unicas
 		$('#folio').keyup(function(e) {
 			verify_column($('#folio'), 'folio', 'projects', null, $('#error_folio'),

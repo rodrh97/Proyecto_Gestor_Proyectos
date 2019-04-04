@@ -2,7 +2,20 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -78,14 +91,16 @@
 													{{ method_field('DELETE') }}
 
 												<center>
-                          <a href="{{ route('subcomponents.show', ['id' => $subcomponent->id]) }}" class="btn btn-warning" title="Ver detalles del subcomponente " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
+                          <a href="{{ route('subcomponents.show', ['id' => $subcomponent->id]) }}" class="btn btn-warning" title="Detalles del subcomponente " style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
                           <!--<a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-inverse" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-warning" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>-->
-													<a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}" class="btn btn-primary" title="Editar subcomponente con el id {{ $subcomponent->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-
+													@if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+                          <a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}" class="btn btn-primary" title="Editar subcomponente" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
+                          @endif
+													@if(Auth::user()->type == 1 )
 													
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar subcomponente con el id {{ $subcomponent->id }}"><span class="icofont icofont-ui-delete"></span></button>
-													
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar subcomponente" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
+													@endif
 												</center>
 											</form>
 										</td>
@@ -109,7 +124,9 @@
 											<strong>Atención</strong>
 											<p>No existe ningún subcomponente registrado en el sistema.</p>
 										</div>
+                    @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
 										<a href="{{ route('subcomponents.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Subcomponentes</button></a>
+                     @endif
 									</center>
 								@endif
 
@@ -123,9 +140,47 @@
 </div>
 @endsection
 
-@section('javascriptcode')
+
+
+@switch(Auth::user()->type)
+	@case(1)
+	@section('javascriptcode')
 <script>
 	var button = '<a href="{{ route('subcomponents.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Subcomponente</button></a>';
 	applyStyleToDatatable(button, 'Buscar en subcomponentes');
 </script>
 @endsection
+
+
+		@break
+	@case(2)
+		@section('javascriptcode')
+<script>
+	var button = '<a href="{{ route('subcomponents.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Subcomponente</button></a>';
+	applyStyleToDatatable(button, 'Buscar en subcomponentes');
+</script>
+@endsection
+
+		@break
+	
+	@case(4)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en subcomponentes');
+</script>
+@endsection
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en subcomponentes');
+</script>
+@endsection
+
+		@break
+@endswitch
+
+

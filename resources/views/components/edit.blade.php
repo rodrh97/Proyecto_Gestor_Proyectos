@@ -88,7 +88,7 @@
 							</div>
               
 							<div class="form-group row">
-								<label class="col-sm-2 col-form-label">Archivo de Requerimientos Especificos:</label>
+								<label class="col-sm-2 col-form-label">Archivo de Requerimientos Específicos:</label>
 								
 								<div style="margin-top:10px" class="col-sm-10">
 									<div class="file-upload">

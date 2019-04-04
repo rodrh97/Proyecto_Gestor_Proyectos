@@ -2,7 +2,18 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Detalles del Solicitante")
 
-@section('body')
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -71,7 +82,7 @@
                         
                         <div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="fas fa-phone"></i>Telefono:</h6>
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-phone"></i>Teléfono:</h6>
 													</div>
 													<div class="col-sm-8">
 														<h6 class="m-b-30">{{ $applicant->phone }}</h6>
@@ -117,7 +128,7 @@
                         
                         <div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="fas fa-map-marked-alt"></i>Numero de casa:</h6>
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-map-marked-alt"></i>Número de casa:</h6>
 													</div>
 													<div class="col-sm-8">
 														<h6 class="m-b-30">{{ $applicant->number }}</h6>
@@ -145,8 +156,12 @@
 																{{ csrf_field() }}
 																{{ method_field('DELETE') }}
 																<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Regresar"><i class="icofont icofont-arrow-left m-0"></i></button></a>
-																<a href="{{ route('applicants.edit', ['id' => $applicant->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
-																<button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+																@if(Auth::user()->type == 1 || Auth::user()->type == 4 )
+                                <a href="{{ route('applicants.edit', ['id' => $applicant->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
+																 @endif
+                                @if(Auth::user()->type == 1 || Auth::user()->type == 4)
+                                <button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+                                @endif
 															</form>
 														
 													</div>

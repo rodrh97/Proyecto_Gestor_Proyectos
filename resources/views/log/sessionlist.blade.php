@@ -81,7 +81,7 @@
 											<td>{{ $session->date }}</td>
 											<td>
 											<center>
-												<a href="{{ route('sessions.show', ['id' => $session->id]) }}" class="btn btn-warning" title="Ver Detalles" style="margin: 5px;"><span class="icofont icofont-eye-alt"></span></a>
+												<a href="{{ route('sessions.show', ['id' => $session->id]) }}" class="btn btn-warning" title="Ver Detalles" style="margin: 5px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
 											</center>
 											</td>
 									</tr>

@@ -61,8 +61,9 @@
             
              <div class="form-group row">
 								<label class="col-sm-4 col-form-label" >Cantidad de documentos que desea cargar:</label>
+                
 								<div class="col-sm-3">
-                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="form-control">
+                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="select2_basic form-control">
                     <option value="0">Seleccionar cantidad</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -85,15 +86,23 @@
 									@endif
 								</div>
 							</div>
-              
+               @if($documents_count==0)
+               <label><b>* No tienes registrado ningún documento</b></label>
+               @else
+               <label>Documentos registrados {{$documents_count}}</label>
+               <br>
+               @foreach($documents as $document)
+                <label><b>* {{$document->name}}</b></label><br>
+               @endforeach
+               @endif
               <div id="archivos">
                </div>
               <br><hr>
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="status_project">Selecciona un estado para el proyecto:</label>
 								<div class="col-sm-10">
-									<select type="select" class="form-control" name="status_project"  value="{{ old('status_project') }}" title="Nombre de los estados del proyecto">
-									<option value="0">Seleccionar estado</option>
+									<select type="select" class="select2_basic form-control" name="status_project"  value="{{ old('status_project') }}" title="Nombre de los estados del proyecto">
+									<option value="1">Seleccionar estado</option>
                     @foreach( $status_projects as $status_project)
                     <option value="{{$status_project->id}}">{{$status_project->name}}
                     </option>@endforeach</select>

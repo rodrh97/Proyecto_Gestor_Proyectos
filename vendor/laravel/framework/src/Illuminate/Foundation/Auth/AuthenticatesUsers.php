@@ -133,7 +133,15 @@ trait AuthenticatesUsers
           case 2:
                 $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." ha iniciado sesión";
             break;
-         
+         case 3:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." ha iniciado sesión";
+            break;
+            case 4:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." ha iniciado sesión";
+            break;
+            case 5:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." ha iniciado sesión";
+            break;
          
         }
 
@@ -184,6 +192,15 @@ trait AuthenticatesUsers
                 $message = "El administrador ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." cerró sesión";
             break;
           case 2:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." cerró sesión";
+            break;
+            case 3:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." cerró sesión";
+            break;
+            case 4:
+                $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." cerró sesión";
+            break;
+            case 5:
                 $message = "El empleado ".Auth::user()->first_name." ".Auth::user()->last_name." ".Auth::user()->second_last_name." cerró sesión";
             break;
         }

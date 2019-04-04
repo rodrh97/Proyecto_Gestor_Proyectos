@@ -25,7 +25,7 @@ class UserController extends Controller
     public function index()
     {
         //Consulta de todos usuarios a la BD(excluyendo al tipo de usuario 99)
-        $users = DB::table('users')->where('type', '!=', '99')->get();
+        $users = DB::table('users')->where('id', '!=', 1)->get();
 
         return view('users.list')
           ->with('users', $users);
@@ -139,7 +139,7 @@ class UserController extends Controller
             Alert::success('Exitosamente', 'Administrador Registrado');
             insertToLog(Auth::user()->id, 'added', Input::get('user_id'), "usuario");
             return redirect()->route('users.list');
-        } elseif ($user->type == 2) {   //En caso de que sea usuario(depto. tutorias)
+        } elseif ($user->type == 2 || $user->type == 3 || $user->type == 4 || $user->type == 5 ) {   //En caso de que sea usuario(depto. tutorias)
             $user->save();
             Alert::success('Exitosamente', 'Empleado Registrado');
             insertToLog(Auth::user()->id, 'added', Input::get('user_id'), "usuario");
@@ -239,7 +239,7 @@ class UserController extends Controller
             Alert::success('Exitosamente', 'Administrador Modificado');
             insertToLog(Auth::user()->id, 'updated', Input::get('id'), "usuario");
             return redirect()->route('users.list');
-        } elseif ($user->type == 2) {        
+        } elseif ($user->type == 2 || $user->type == 3 || $user->type == 4 || $user->type == 5) {        
             Alert::success('Exitosamente', 'Empleado Modificado');
             insertToLog(Auth::user()->id, 'updated', Input::get('id'), "usuario");
             return redirect()->route('users.list');
@@ -318,7 +318,7 @@ class UserController extends Controller
         if ($user->type == 1) {             //En caso de que el usuario sea administrador
             Alert::success('Exitosamente', 'Perfil Modificado');
             return redirect()->route('profile.show_own_profile');
-        } elseif ($user->type == 2) {        //En caso de que sea usuario(depto. tutorias)
+        } else{        //En caso de que sea usuario(depto. tutorias)
             Alert::success('Exitosamente', 'Perfil Modificado');
             return redirect()->route('profile.show_own_profile');
         }
@@ -337,7 +337,7 @@ class UserController extends Controller
             insertToLog(Auth::user()->id, 'deleted', $user->id, "usuario");
             $user->delete();
             return redirect()->route('users.list');
-        } else if($user->type == 2) {
+        } else{
             Alert::success('Exitosamente', 'Empleado Eliminado');
             insertToLog(Auth::user()->id, 'deleted', $user->id, "usuario");
             $user->delete();

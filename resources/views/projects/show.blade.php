@@ -2,7 +2,20 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Detalles del Proyecto")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(3)
+		@section('bodyVinculacion')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -83,6 +96,15 @@
 														<h6 class="m-b-30">{{$project->first_name}} {{$project->last_name}} {{$project->second_last_name}}</h6>
 													</div>
 												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-retweet"></i>Estado del proyecto:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->status}}</h6>
+													</div>
+												</div>
+                        
                         @if($operation_rules->operation_rules==0)
                         <div class="row">
 													<div class="col-sm-4">
@@ -108,6 +130,15 @@
 														<h6 class="m-b-30">{{$project->m_amount_max}}</h6>
 													</div>
 												</div>
+                        
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Concepto solicitado:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->requested_concept}}</h6>
+													</div>
+												</div>
                         @else
                            <div class="row">
 													<div class="col-sm-4">
@@ -118,11 +149,39 @@
 													</div>
 												</div>
                         
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del componente:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$componente->name}}</h6>
+													</div>
+												</div>
+                        @if($subcomponente!=null)
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del subcomponente:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$subcomponente->name}}</h6>
+													</div>
+												</div>
+                        @else
+                          <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del subcomponente:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">Ninguno</h6>
+													</div>
+												</div>
+                        @endif
+
                         
                         @foreach($conceptos as $concepto)
                         <div class="row">
 													<div class="col-sm-4">
-														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre del concepto:</h6>
+                            <h6 class="f-w-400 m-b-30"><i class="fas fa-th-list"></i>Nombre del concepto:</h6>
 													</div>
 													<div class="col-sm-8">
 														<h6 class="m-b-30">{{$concepto->concepto}}</h6>
@@ -145,6 +204,14 @@
 													</div>
 												</div>
                         @endforeach
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-dollar-sign"></i>Concepto solicitado:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{$project->requested_concept}}</h6>
+													</div>
+												</div>
                         @endif
                         
                         
@@ -161,8 +228,12 @@
 																{{ csrf_field() }}
 																{{ method_field('DELETE') }}
 																<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Regresar"><i class="icofont icofont-arrow-left m-0"></i></button></a>
-																<a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
-																<button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+																@if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+                                <a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
+																@endif
+                                @if(Auth::user()->type == 1 || Auth::user()->type == 4)
+                                <button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+                                @endif
 															</form>
 														
 													</div>
@@ -196,13 +267,13 @@
 									<tr>
 											
                       <td>{{ $document->documento}}</td>
-                      <td><center><a target="_blank" href="{{asset($document->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar documento" ><span class="fas fa-eye"></span></a> </center></td>
-                      <td><center><a href="{{url('/documents/download',['id'=>$document->id])}}" class="btn btn-warning col-lg-5" title="Descargar documento"><span class="fas fa-download"></span></a></center></td>
+                      <td><center><a target="_blank" href="{{asset($document->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar documento" data-toggle="tooltip" data-placement="top"><span class="fas fa-eye"></span></a> </center></td>
+                      <td><center><a href="{{url('/documents/download',['id'=>$document->id])}}" class="btn btn-warning col-lg-5" title="Descargar documento" data-toggle="tooltip" data-placement="top"><span class="fas fa-download"></span></a></center></td>
 											
                     
                     
 										<td>	
-											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" title="Borrar documento" ><span class="icofont icofont-ui-delete"></span></a> </center>
+											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" title="Borrar documento" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></a> </center>
 										</td>
                     
 									</tr>
@@ -262,10 +333,13 @@
 												
                          
                           
-													<a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}" class="btn btn-primary" title="Editar proyecto con el id {{ $project->folio_interno }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-                          <a href="{{ route('reports.generarVisit',['id'=>$visit_history->id])}}" class="btn btn-warning" title="Generar PDF de la visita" style="margin: 3px;"><span class="far fa-file-pdf"></span></a>
-													
-														
+													<!--<a href="{{ route('projects.edit', ['id' => $project->folio_interno]) }}" class="btn btn-primary" title="Editar proyecto con el id {{ $project->folio_interno }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>-->
+                         @if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+                          <a href="{{ route('reports.generarVisit',['id'=>$visit_history->id])}}" class="btn btn-warning " title="Generar PDF de la visita" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="far fa-file-pdf"></span></a>
+													@endif
+												@if(Auth::user()->type == 5 )
+                          <a href="{{ route('reports.generarVisit',['id'=>$visit_history->id])}}" class="btn btn-disabled disabled " title="Generar PDF de la visita" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="far fa-file-pdf"></span></a>
+													@endif
 													
 												</center>
 											
@@ -313,9 +387,51 @@
 	</div>
 </div>
 @endsection
-@section('javascriptcode')
+
+
+
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('javascriptcode')
 <script>
 	
 	applyStyleToDatatable();
 </script>
 @endsection
+
+
+		@break
+	@case(3)
+		@section('javascriptcode')
+<script>
+	
+	applyStyleToDatatable();
+</script>
+@endsection
+
+		@break
+	
+	@case(4)
+	@section('javascriptcode')
+<script>
+	
+	applyStyleToDatatable();
+</script>
+@endsection
+
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	
+	applyStyleToDatatable();
+</script>
+@endsection
+
+		@break
+@endswitch
+
+
+

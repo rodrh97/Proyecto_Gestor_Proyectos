@@ -66,8 +66,8 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="applicant">Selecciona al Solicitante:</label>
 								<div class="col-sm-10">
-									<select type="select" class="form-control" name="applicant"  id="applicant" value="{{ old('applicant') }}" title="Nombre de los solicitantes">
-									<option value="0">Seleccionar solicitante</option>
+									<select type="select" class="select2_basic form-control" name="applicant"  id="applicant" value="{{ old('applicant') }}" title="Nombre de los solicitantes">
+									<option value="1">Seleccionar solicitante</option>
                     @foreach( $applicants as $applicant)
                     <option value="{{$applicant->id}}">{{$applicant->first_name}} {{$applicant->last_name}} {{$applicant->second_last_name}}
                     </option>@endforeach</select>
@@ -80,7 +80,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="selection">Progama tiene reglas de operación:</label>
 								<div class="col-sm-10">
-									<select id="selection" name="selection" onchange="seleccion(this.value)" class="form-control">
+									<select id="selection" name="selection" onchange="seleccion(this.value)" class="select2_basic form-control">
                     <option value="2">Seleccionar una opción</option>
                     <option value="0">Sin reglas de operación</option>
                     <option value="1">Con reglas de operación</option>
@@ -98,7 +98,7 @@
 								<label class="col-sm-2 col-form-label" for="program" id="labelprogram" style="display:none;">Selecciona el Programa:</label>
 								<div class="col-sm-10">
                   
-									{!! Form::select('program_0',$programs_0,null,['id'=>'program_0','class'=>'form-control','style'=>'display:none;']) !!}
+									{!! Form::select('program_0',$programs_0,null,['id'=>'program_0','style'=>'display:none;','class'=>'form-control']) !!}
                   
 									{!! Form::select('program_1',$programs_1,null,['id'=>'program_1','class'=>'form-control','style'=>'display:none;']) !!}
                   @if ($errors->has('program_0'))
@@ -115,7 +115,7 @@
 								<div class="col-sm-10">
                   
 									{!! Form::select('component',['placeholder'=>'Favor de seleccionar un programa'],null,['id'=>'component','class'=>'form-control','style'=>'display:none;']) !!}
-                  {!! Form::select('component',['placeholder'=>'Favor de seleccionar un programa'],null,['id'=>'component1','class'=>'form-control','style'=>'display:none;']) !!}
+                  
                   @if ($errors->has('component'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('component')}}</div>
 									@endif
@@ -145,7 +145,7 @@
               <br>
                
               <div class="form-group row">
-								<label class="col-sm-2 col-form-label" for="requested_concept">Concepto Requerido:</label>
+								<label class="col-sm-2 col-form-label" for="requested_concept">Concepto Solicitado:</label>
 								<div class="col-sm-10">
                   <textarea type="text" rows="10" cols="50" class="form-control" name="requested_concept"   placeholder="Ej. El monto máximo de apoyo federal por persona física será de hasta $500,000.00 (Quinientos mil pesos 00/100 M.N.)." title="Concepto de Solicitud ">{{ old('requested_concept') }}</textarea>
 									@if ($errors->has('requested_concept'))
@@ -160,7 +160,7 @@
              <div class="form-group row">
 								<label class="col-sm-4 col-form-label" >Cantidad de documentos que desea cargar:</label>
 								<div class="col-sm-3">
-                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="form-control">
+                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="select2_basic form-control">
                     <option value="0">Seleccionar cantidad</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -189,9 +189,9 @@
               <br><hr>
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="status_project">Selecciona un estado para el proyecto:</label>
-								<div class="col-sm-10">
-									<select type="select" class="form-control" name="status_project"  value="{{ old('status_project') }}" title="Nombre de los estados del proyecto">
-									<option value="0">Seleccionar estado</option>
+								<div class="col-sm-4">
+									<select type="select" class="select2_basic form-control" name="status_project"  value="{{ old('status_project') }}" title="Nombre de los estados del proyecto">
+									<option value="1">Seleccionar estado</option>
                     @foreach( $status_projects as $status_project)
                     <option value="{{$status_project->id}}">{{$status_project->name}}
                     </option>@endforeach</select>

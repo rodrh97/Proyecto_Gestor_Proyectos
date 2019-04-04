@@ -54,7 +54,7 @@
 							<div class="row">
 								<div class="col-sm-12 col-xl-6">
 									<p>Programas: </p>
-									<select id="program_id" name="program_id" class="select2_basic" title="Seleccione un programa">
+									<select id="program_id" name="program_id" class="select2_basic" title="Seleccione un programa" data-toggle="tooltip" data-placement="top">
 										<option value="">Todos</option>
 										@foreach ($programs as $program)
 											<option value="{{ $program->id }}" {{ (old("program_id") == $program->id ? "selected":"") }}>{{ $program->name }} </option>
@@ -63,7 +63,7 @@
 								</div>
                 <div class="col-sm-12 col-xl-6">
 										<p>Solicitantes: </p>
-										<select id="solicitante_id" name="solicitante_id" class="select2_basic" title="Seleccione un solicitante">
+										<select id="solicitante_id" name="solicitante_id" class="select2_basic" title="Seleccione un solicitante" data-toggle="tooltip" data-placement="top">
 											<option value="">Todos</option>
 											@foreach ($solicitantes as $solicitante)
 												<option value="{{ $solicitante->id }}" {{ (old("solicitante_id") == $solicitante->id ? "selected":"") }}>{{ $solicitante->first_name }} {{ $solicitante->last_name }} {{ $solicitante->second_last_name }}</option>
@@ -76,7 +76,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xl-6">
 										<p>Proyectos: </p>
-										<select id="project_id" name="project_id" class="select2_basic" title="Seleccione un proyecto">
+										<select id="project_id" name="project_id" class="select2_basic" title="Seleccione un proyecto" data-toggle="tooltip" data-placement="top">
 											<option value="">Todos</option>
 											@foreach ($projects as $project)
 												<option value="{{ $project->id }}" {{ (old("project_id") == $project->id ? "selected":"") }}>{{ $project->id }}</option>
@@ -96,7 +96,7 @@
 										<input type="text" autocomplete="off" style="height: 46px;" class="input-sm form-control" id="start" name="start" />
 										<span class="input-group-addon" id="al_btn" style="background-color:gray">al</span>
 										<input type="text" autocomplete="off" style="height: 46px;" class="input-sm form-control" id="end" name="end" />
-										<span class="input-group-addon" id="reset_btn" title="Borrar fechas seleccionadas" style="background-color:#c34242">x</span>
+										<span class="input-group-addon" id="reset_btn" title="Borrar fechas seleccionadas" style="background-color:#c34242" data-toggle="tooltip" data-placement="top">x</span>
 
 									</div>
 								</div>

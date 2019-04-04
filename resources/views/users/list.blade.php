@@ -86,12 +86,12 @@
 													{{ method_field('DELETE') }}
 													<center>
 														@if ($user->id == Auth::user()->id)
-															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario " style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Detalles de usuario " style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
+															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar usuario " style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
 														@else
-															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Ver detalles del usuario " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar el usuario" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-																<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar el usuario"><span class="icofont icofont-ui-delete"></span></button>
+															<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-warning" title="Detalles de usuario " style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
+															<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-primary" title="Editar usuario" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
+																<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar usuario" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
 															
 														@endif
 													</center>

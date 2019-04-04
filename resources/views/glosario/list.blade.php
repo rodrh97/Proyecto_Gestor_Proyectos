@@ -63,10 +63,10 @@
 													{{ method_field('DELETE') }}
 											
 												<center>
-													<a href="{{ route('glosario.show', ['id' => $word->id]) }}" class="btn btn-warning" title="Ver detalles de la habilidad con el id {{ $word->id }}" style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-													<a href="{{ route('glosario.edit', ['id' => $word->id]) }}" class="btn btn-primary" title="Editar habilidad con el id {{ $word->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+													<a href="{{ route('glosario.show', ['id' => $word->id]) }}" class="btn btn-warning" title="Detalle de la palabra" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt"></span></a>
+													<a href="{{ route('glosario.edit', ['id' => $word->id]) }}" class="btn btn-primary" title="Editar palabra" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
 
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar habilidad con el id {{ $word->id }}"><span class="icofont icofont-ui-delete"></span></button>
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar palabra" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
 													
 												</center>
 											</form>

@@ -17,7 +17,7 @@ class ApplicantsController extends Controller
 {
     public function index()
     {
-        $applicants = DB::table('applicants')->get();
+        $applicants = DB::table('applicants')->join("cities","cities.id","=","applicants.city")->select("applicants.*","cities.name as Ciudad")->get();
 
         return view('applicants.list')
           ->with('applicants',$applicants)

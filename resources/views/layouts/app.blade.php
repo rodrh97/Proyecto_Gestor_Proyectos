@@ -235,7 +235,16 @@ $.ajax({
                                             <span> Administrador </span>
                                             @break
                                             @case(2)
-                                            <span> Empleado </span>
+                                            <span> Monitoreo y difusión </span>
+                                            @break
+                                      @case(3)
+                                            <span> Vinculación estratégica </span>
+                                            @break
+                                      @case(4)
+                                            <span> Atención específica </span>
+                                            @break
+                                      @case(5)
+                                            <span> Atención general </span>
                                             @break
                                             @endswitch
                                     </div>
@@ -250,7 +259,16 @@ $.ajax({
                                 @include('layouts.users_dashboard.administrator')
                                 @break
                                 @case(2)
-                                @include('layouts.users_dashboard.employee')
+                                @include('layouts.users_dashboard.monitoreo')
+                                @break
+                           @case(3)
+                                @include('layouts.users_dashboard.vinculacion')
+                                @break
+                           @case(4)
+                                @include('layouts.users_dashboard.atencionE')
+                                @break
+                           @case(5)
+                                @include('layouts.users_dashboard.atencionG')
                                 @break
                                 @default
                                 <span></span>

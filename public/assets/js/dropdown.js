@@ -24,22 +24,27 @@ function seleccion(cantidad){
         
         
       }else if(cantidad == 0){
-       document.getElementById("program_1").style.display="none";
+       
         document.getElementById("program_0").style.display="inline";
+        document.getElementById("labelprogram").style.display="inline";
         document.getElementById("component").style.display="none";
-        document.getElementById("component1").style.display="none";
-        document.getElementById("subcomponent").style.display="none";
         document.getElementById("concept").style.display="none";
+        document.getElementById("labelconcept").style.display="none";
+        document.getElementById("subcomponent").style.display="none";
+        document.getElementById("program_1").style.display="none";
         document.getElementById("guardar").style.display="none";
         document.getElementById("labelcomponent").style.display="none";
         document.getElementById("labelsubcomponent").style.display="none";
-        document.getElementById("labelconcept").style.display="none";
-        document.getElementById("labelprogram").style.display="inline";
+       
+        
       
        $("#program_0").change(event =>{
     $.get(`/programs/getPrograms/${event.target.value}`,function(res,program_0){
         $("#concept").empty();
-        
+        var barrer=document.getElementById("concept");
+            while(barrer.hasChildNodes()){
+                    barrer.removeChild(barrer.firstChild);
+                  }
         res.forEach(element => {
             $("#concept").append(`<div class=col-sm-10><label>*Cantidad Máxima por Persona Física</label> <textarea style=border:none; rows="4" cols="50" disabled> ${element.p_amount_max} </textarea></div>
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Moral</label> <textarea style=border:none; rows="4" cols="50" disabled> ${element.m_amount_max} </textarea></div>
@@ -74,8 +79,6 @@ function seleccion(cantidad){
         document.getElementById("labelsubcomponent").style.display="none";
         document.getElementById("concept").style.display="none";
         document.getElementById("labelconcept").style.display="none";
-      document.getElementById("concept").style.display="none";
-     document.getElementById("labelconcept").style.display="none";
      document.getElementById("guardar").style.display="none";
         
 

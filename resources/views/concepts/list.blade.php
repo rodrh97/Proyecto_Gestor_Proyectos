@@ -2,7 +2,21 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -85,13 +99,14 @@
 												<center>
                           <!--<a target="_blank" href="{{asset($concept->specific_requirements)}}" class="btn btn-inverse" title="Visualizar archivo" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/concept/download',['id'=>$concept->id])}}" class="btn btn-warning" title="Descargar archivo de requerimientos especificos"><span class="fas fa-download"></span></a>-->
-													<a href="{{ route('concepts.show', ['id' => $concept->id]) }}" class="btn btn-success" title="Ver el concepto con el id {{ $concept->id }}" style="margin: 3px;"><span class="fas fa-eye"></span></a>
-                          
-													<a href="{{ route('concepts.edit', ['id' => $concept->id]) }}" class="btn btn-primary" title="Editar concepto con el id {{ $concept->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
+													<a href="{{ route('concepts.show', ['id' => $concept->id]) }}" class="btn btn-success" title="Detalles del concepto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="fas fa-eye"></span></a>
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+													<a href="{{ route('concepts.edit', ['id' => $concept->id]) }}" class="btn btn-primary" title="Editar concepto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
 
-													
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar concepto con el id {{$concept->id}}"><span class="icofont icofont-ui-delete"></span></button>
-													
+													 @endif
+													@if(Auth::user()->type == 1 )
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar concepto" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
+													@endif
 												</center>
 											</form>
 										</td>
@@ -114,12 +129,13 @@
 											<strong>Atención</strong>
 											<p>No existe ningún concepto registrado en el sistema.</p>
 										</div>
-                    @if($count_sub_components==0 && $count_components==0 )
-                    <label>No existen componentes y subcomponentes <a href="{{ route('components.create') }}" style="color:blue"> Dar click aquí </a>para crear componentes</label>
-                    @else
-                      <a href="{{ route('concepts.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Conceptos</button></a>
-                    @endif
-										
+                     @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+                        @if($count_sub_components==0 && $count_components==0 )
+                        <label>No existen componentes y subcomponentes <a href="{{ route('components.create') }}" style="color:blue"> Dar click aquí </a>para crear componentes</label>
+                        @else
+                          <a href="{{ route('concepts.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Conceptos</button></a>
+                        @endif
+										@endif
 									</center>
 								@endif
 
@@ -133,9 +149,46 @@
 </div>
 @endsection
 
-@section('javascriptcode')
+
+@switch(Auth::user()->type)
+	@case(1)
+	@section('javascriptcode')
 <script>
 	var button = '<a href="{{ route('concepts.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Concepto</button></a>';
 	applyStyleToDatatable(button, 'Buscar en conceptos');
 </script>
 @endsection
+
+
+		@break
+	@case(2)
+		@section('javascriptcode')
+<script>
+	var button = '<a href="{{ route('concepts.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Concepto</button></a>';
+	applyStyleToDatatable(button, 'Buscar en conceptos');
+</script>
+@endsection
+
+		@break
+	
+	@case(4)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+@endswitch
+
+

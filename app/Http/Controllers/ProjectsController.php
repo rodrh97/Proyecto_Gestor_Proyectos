@@ -242,7 +242,7 @@ class ProjectsController extends Controller
             insertToLog(Auth::user()->id, 'added', $projects->id, "proyecto");
             insertToLog(Auth::user()->id, 'added', $visit_history->id, "historial");
             Alert::success('Exitosamente','Proyecto Registrado')->autoclose(4000);
-            return redirect()->route('projects.list');
+            return redirect()->route('projects.show',['id'=>$projects->id]);
           } else {
             Alert::error('No se registro el proyecto', 'Error')->autoclose(4000);
             return redirect()->route('projects.list');
@@ -267,6 +267,7 @@ class ProjectsController extends Controller
       if($operation_rules->operation_rules == 0){
           $project = DB::table("projects")
               ->join("applicants","projects.applicant_id","=","applicants.id")
+            ->join("status_projects","projects.status_project","=","status_projects.id")
               ->join("programs","programs.id","=","projects.program_id")
               ->select("projects.id as folio_interno",
                       "projects.folio as folio_externo",
@@ -279,6 +280,7 @@ class ProjectsController extends Controller
                       "applicants.street",
                       "applicants.number",
                       "applicants.zip",
+                       "status_projects.name as status",
                       "programs.name as program_name",
                       "programs.responsable_unit",
                       "programs.executing_unit",
@@ -299,6 +301,7 @@ class ProjectsController extends Controller
       }else{
           $project = DB::table("projects")
               ->join("applicants","projects.applicant_id","=","applicants.id")
+              ->join("status_projects","projects.status_project","=","status_projects.id")
               ->join("programs","programs.id","=","projects.program_id")
               ->select("projects.id as folio_interno",
                       "projects.folio as folio_externo",
@@ -311,6 +314,7 @@ class ProjectsController extends Controller
                       "applicants.street",
                       "applicants.number",
                       "applicants.zip",
+                       "status_projects.name as status",
                       "programs.name as program_name",
                       "programs.responsable_unit",
                       "programs.executing_unit",
@@ -349,8 +353,9 @@ class ProjectsController extends Controller
                         "visit_histories.id as id")
                 ->where("projects.id","=",$id)->get();
       }
+      
         return view('projects.show')->with('project',$project)->with('documents',$documents)
-          ->with('visitas',$visitas)->with('conceptos',$conceptos)->with('operation_rules',$operation_rules)->with('componente',$componente);
+          ->with('visitas',$visitas)->with('conceptos',$conceptos)->with('operation_rules',$operation_rules)->with('componente',$componente)->with('subcomponente',$subcomponente);
     }
     
     public function create_folio($id)
@@ -399,13 +404,20 @@ class ProjectsController extends Controller
      */
     public function edit($id)
     {
-        $project=DB::table('projects')
-          ->where('id',$id)
+        $project=DB::table('projects as p')
+          ->where('p.id',$id)
           ->first();
+      $documents=DB::table('documents')
+        ->where('project_id',$id)
+        ->get();
+      $documents_count=DB::table('documents')
+        ->where('project_id',$id)
+        ->count();
       $status_projects=DB::table('status_projects')
           ->get();
         
-       return view('projects.edit')->with('project',$project)->with('status_projects',$status_projects);
+       return view('projects.edit')->with('project',$project)->with('status_projects',$status_projects)->with('documents',$documents)
+         ->with('documents_count',$documents_count);
     }
 
     /**
@@ -474,7 +486,7 @@ class ProjectsController extends Controller
             return redirect()->route('projects.show',['id'=>$id]);
           } else {
             Alert::error('No se modifico proyecto', 'Error')->autoclose(4000);
-            return redirect()->route('projects.list');
+            return redirect()->route('projects.show',['id'=>$id]);
           }
     }
 
@@ -495,6 +507,9 @@ class ProjectsController extends Controller
         $documents=DB::table('documents')
         ->where('project_id',$id)
         ->first();
+      $documents_count=DB::table('documents')
+        ->where('project_id',$id)
+        ->count();
       $visit_history=DB::table('visit_histories')
         ->where('project_id',$id)
         ->first();      
@@ -508,12 +523,16 @@ class ProjectsController extends Controller
         ->where('project_id',$id)
         ->delete();
       }
+      if ($documents_count!=0){
       insertToLog(Auth::user()->id, 'deleted', $documents->project_id, "documentos del proyecto");
-      insertToLog(Auth::user()->id, 'deleted', $project->id, "proyecto");
-      insertToLog(Auth::user()->id, 'deleted', $visit_history->project_id, "historial del proyecto");
-       $documents=DB::table('documents')
+      $documents=DB::table('documents')
         ->where('project_id',$id)
         ->delete();
+      }
+      
+      insertToLog(Auth::user()->id, 'deleted', $project->id, "proyecto");
+      insertToLog(Auth::user()->id, 'deleted', $visit_history->project_id, "historial del proyecto");
+       
         $visit_history=DB::table('visit_histories')
         ->where('project_id',$id)
         ->delete();      

@@ -2,7 +2,20 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Detalles del Subcomponente")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -111,10 +124,14 @@
 																{{ csrf_field() }}
 																{{ method_field('DELETE') }}
 																<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Regresar"><i class="icofont icofont-arrow-left m-0"></i></button></a>
-																<a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
+																@if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+                                <a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
+                                @endif
                                 <a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-default" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>
-																<button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+																@if(Auth::user()->type == 1 )
+                                <button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
+                                @endif
 															</form>
 														
 													</div>

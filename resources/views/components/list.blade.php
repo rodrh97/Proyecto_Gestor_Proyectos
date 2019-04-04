@@ -2,8 +2,20 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
-<!-- Main-body start -->
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch<!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
 	<div class="page-header card">
@@ -78,12 +90,13 @@
 													{{ method_field('DELETE') }}
 
 												<center>
-                          <a href="{{ route('components.show', ['id' => $component->id]) }}" class="btn btn-warning" title="Ver detalles del componente " style="margin: 3px;"><span class="icofont icofont-eye-alt"></span></a>
-													<a href="{{ route('components.edit', ['id' => $component->id]) }}" class="btn btn-primary" title="Editar componente con el id {{ $component->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-
-													
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar componente con el id {{ $component->id }}"><span class="icofont icofont-ui-delete"></span></button>
-													
+                          <a href="{{ route('components.show', ['id' => $component->id]) }}" class="btn btn-warning" title="Detalles del componente" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-eye-alt" data-toggle="tooltip" data-placement="top"></span></a>
+													 @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
+                          <a href="{{ route('components.edit', ['id' => $component->id]) }}" class="btn btn-primary" title="Editar componente" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
+                            @endif
+													@if(Auth::user()->type == 1)
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar componente" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
+													@endif
 												</center>
 											</form>
 										</td>
@@ -107,7 +120,9 @@
 											<strong>Atención</strong>
 											<p>No existe ningún componente registrado en el sistema.</p>
 										</div>
+                    @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
 										<a href="{{ route('components.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Componentes</button></a>
+                    @endif
 									</center>
 								@endif
 
@@ -121,9 +136,44 @@
 </div>
 @endsection
 
-@section('javascriptcode')
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('javascriptcode')
 <script>
 	var button = '<a href="{{ route('components.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Componente</button></a>';
 	applyStyleToDatatable(button, 'Buscar en componentes');
 </script>
 @endsection
+
+		@break
+	@case(2)
+		@section('javascriptcode')
+<script>
+	var button = '<a href="{{ route('components.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Componente</button></a>';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+	
+	@case(4)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en componentes');
+</script>
+@endsection
+
+		@break
+@endswitch
+

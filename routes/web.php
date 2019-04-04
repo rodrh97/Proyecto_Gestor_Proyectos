@@ -46,6 +46,41 @@ Route::group(['middleware'=>['auth']], function () {
      *******************************************/
      Route::post('/operations/ajax/reports/ObtenerDatosSin', 'ReportsController@ObtenerDatosSin')->name('reports.ObtenerDatosSin');
      Route::post('/operations/ajax/reports/ObtenerDatosCon', 'ReportsController@ObtenerDatosCon')->name('reports.ObtenerDatosCon');
+   
+        Route::get('/cities/{id}', 'ApplicantsController@getCities');
+        Route::get('/components/getComponents/{id}', 'ProjectsController@getComponents');
+        Route::get('/subcomponents/getSubComponents/{id}', 'ProjectsController@getSubComponents');
+        Route::get('/concepts/getConcepts/{id}', 'ProjectsController@getConcepts');
+        Route::get('/programs/getPrograms/{id}', 'ProjectsController@getPrograms');
+        Route::get('/concepts/getConcepts_com/{id}', 'ProjectsController@getConcepts_com');
+  
+          
+        Route::get('programs/downloadAnexo/{id}','ProgramsController@downloadAnexo');      
+        Route::get('programs/downloadGeneral/{id}','ProgramsController@downloadGeneral');
+        Route::get('programs/downloadSpecific/{id}','ProgramsController@downloadSpecific');
+        Route::get('programs/downloadConvocatoria/{id}','ProgramsController@downloadConvocatoria'); 
+        Route::get('component/download/{id}','ComponentController@download');
+        Route::get('subcomponent/download/{id}','SubcomponentController@download');
+        Route::get('applicant/download/{id}','ApplicantsController@download');
+        Route::get('concept/download/{id}','ConceptsController@download');
+        Route::get('/cities/{id}', 'ApplicantsController@getCities');
+        Route::get('/documents/download/{id}','ProjectsController@download');
+
+        Route::get('/glosario', 'GlosarioController@index')->name('glosario.list');
+        Route::get('/glosario/{id}', 'GlosarioController@show')->where('id', '[0-9]+')->name('glosario.show');
+        Route::get('/glosario/new', 'GlosarioController@create')->name('glosario.create');
+        Route::get('/glosario/{word}/edit', 'GlosarioController@edit')->where('id', '[0-9]+')->name('glosario.edit');
+        Route::post('/glosario', 'GlosarioController@store');
+        Route::delete('/glosario/{word}', 'GlosarioController@destroy')->name('glosario.destroy');
+        Route::put('/glosario/{word}', 'GlosarioController@update')->name('glosario.update');
+      
+  
+          Route::get("/reporte/proyecto/{id}","ReportsController@generarProject")->name("reports.generarProject");
+        Route::get("/reporte/visita/{idVisita}","ReportsController@generarVisit")->name("reports.generarVisit");
+
+        Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
+        Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
+
     /**************  Termina operaciones AJAX  ***************/
 
     /**
@@ -57,37 +92,26 @@ Route::group(['middleware'=>['auth']], function () {
          ***************************************************/
         //Ver el listado de usuarios
         Route::get('/users', 'UserController@index')->name('users.list');
-
-        //Mostrar los detalles del usuario mandado usuario
         Route::get('/users/{id}', 'UserController@show')->where('id', '[0-9]+')->name('users.show');
-
-        //Crear un usuario
         Route::get('/users/new', 'UserController@create')->name('users.create');
-
-        //Editar un usuario
         Route::get('/users/{user}/edit', 'UserController@edit')->where('id', '[0-9]+')->name('users.edit');
-
-        //Almacenar los datos del usuario
         Route::post('/users', 'UserController@store')->name('users.store');
-
-        //Eliminar un usuario
         Route::delete('/users/{user}', 'UserController@destroy')->name('users.destroy');
-
-        //Actualizar un usuario
         Route::put('/users/{user}', 'UserController@update')->name('users.update');
-
-        //Restaurar un usuario
         Route::post('/users/restore', 'UserController@restore')->name('users.restore');
         /**************  Termina usuarios  ***************/
+      
+      
+       
+        Route::get('/sessions', 'LogController@indexSessions')->name('log.sessionlist');
+        Route::get('/sessions/{id}', 'LogController@showSession')->where('id', '[0-9]+')->name('sessions.show');
+        Route::get('/movements', 'LogController@indexMovements')->name('log.movementslist');
+        Route::get('/movements/{id}', 'LogController@showMovement')->where('id', '[0-9]+')->name('movements.show');
+      
+    });
 
-        
-        Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
-        Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
-      
-        Route::get("/reporte/proyecto/{id}","ReportsController@generarProject")->name("reports.generarProject");
-        Route::get("/reporte/visita/{idVisita}","ReportsController@generarVisit")->name("reports.generarVisit");
-      
-        Route::get('/applicants', 'ApplicantsController@index')->name('applicants.list');
+  Route::group(['middleware'=>['access:1,4,5']], function(){
+       Route::get('/applicants', 'ApplicantsController@index')->name('applicants.list');
         Route::get('/applicants/{id}', 'ApplicantsController@show')->where('id', '[0-9]+')->name('applicants.show');
         Route::get('/applicants/new', 'ApplicantsController@create')->name('applicants.create');
         Route::get('/applicants/createProject/{id}', 'ProjectsController@createProject')->where('id', '[0-9]+')->name('applicants.createProject');
@@ -97,18 +121,10 @@ Route::group(['middleware'=>['auth']], function () {
         Route::put('/applicants/{applicant}', 'ApplicantsController@update')->name('applicants.update');
         
       
-        Route::get('/projects', 'ProjectsController@index')->name('projects.list');
-        Route::get('/projects/{id}', 'ProjectsController@show')->where('id', '[0-9]+')->name('projects.show');
-        Route::get('/projects/new', 'ProjectsController@create')->name('projects.create');
-        Route::get('/projects/{id}/create_folio', 'ProjectsController@create_folio')->where('id', '[0-9]+')->name('projects.create_folio');
-        Route::put('/projects/{id}/new_folio', 'ProjectsController@store_create_folio')->name('projects.store_create_folio');
-        Route::get('/projects/{id}/edit', 'ProjectsController@edit')->where('id', '[0-9]+')->name('projects.edit');
-        Route::post('/projects', 'ProjectsController@store');
-        Route::delete('/projects/{project}', 'ProjectsController@destroy')->name('projects.destroy');
-        Route::put('/projects/{id}', 'ProjectsController@update')->name('projects.update');
-        Route::get('/projects/{id}/deleteDocument', 'ProjectsController@deleteDocumento')->name('projects.deleteDocumento');
-      
-        Route::get('/programs', 'ProgramsController@index')->name('programs.list');  
+    });
+  
+Route::group(['middleware'=>['access:1,2,4,5']], function(){
+       Route::get('/programs', 'ProgramsController@index')->name('programs.list');  
         Route::get('/programs/{id}', 'ProgramsController@show')->where('id', '[0-9]+')->name('programs.show');
         Route::get('/programs/new', 'ProgramsController@create')->name('programs.create');
         
@@ -150,49 +166,25 @@ Route::group(['middleware'=>['auth']], function () {
         Route::delete('/subcomponents/{subcomponent}', 'SubcomponentController@destroy')->name('subcomponents.destroy');
         Route::put('/subcomponents/{subcomponent}', 'SubcomponentController@update')->name('subcomponents.update');
        
-        Route::get('/glosario', 'GlosarioController@index')->name('glosario.list');
-        Route::get('/glosario/{id}', 'GlosarioController@show')->where('id', '[0-9]+')->name('glosario.show');
-        Route::get('/glosario/new', 'GlosarioController@create')->name('glosario.create');
-        Route::get('/glosario/{word}/edit', 'GlosarioController@edit')->where('id', '[0-9]+')->name('glosario.edit');
-        Route::post('/glosario', 'GlosarioController@store');
-        Route::delete('/glosario/{word}', 'GlosarioController@destroy')->name('glosario.destroy');
-        Route::put('/glosario/{word}', 'GlosarioController@update')->name('glosario.update');
-      
-        Route::get('/sessions', 'LogController@indexSessions')->name('log.sessionlist');
-        Route::get('/sessions/{id}', 'LogController@showSession')->where('id', '[0-9]+')->name('sessions.show');
-        Route::get('/movements', 'LogController@indexMovements')->name('log.movementslist');
-        Route::get('/movements/{id}', 'LogController@showMovement')->where('id', '[0-9]+')->name('movements.show');
-      
         
-        Route::get('programs/downloadAnexo/{id}','ProgramsController@downloadAnexo');      
-        Route::get('programs/downloadGeneral/{id}','ProgramsController@downloadGeneral');
-        Route::get('programs/downloadSpecific/{id}','ProgramsController@downloadSpecific');
-        Route::get('programs/downloadConvocatoria/{id}','ProgramsController@downloadConvocatoria'); 
-        Route::get('component/download/{id}','ComponentController@download');
-        Route::get('subcomponent/download/{id}','SubcomponentController@download');
-        Route::get('applicant/download/{id}','ApplicantsController@download');
-        Route::get('concept/download/{id}','ConceptsController@download');
-        Route::get('/cities/{id}', 'ApplicantsController@getCities');
-        Route::get('/documents/download/{id}','ProjectsController@download');
-    });
-
-
-    Route::group(['middleware'=>['access:1,2']], function(){
-       
-      Route::get('/movements', 'LogController@indexMovements')->name('log.movementslist');
       
     });
-
-    Route::group(['middleware'=>['access:1,2']], function(){
-        
-        Route::get('/cities/{id}', 'ApplicantsController@getCities');
-        Route::get('/components/getComponents/{id}', 'ProjectsController@getComponents');
-        Route::get('/subcomponents/getSubComponents/{id}', 'ProjectsController@getSubComponents');
-        Route::get('/concepts/getConcepts/{id}', 'ProjectsController@getConcepts');
-        Route::get('/programs/getPrograms/{id}', 'ProjectsController@getPrograms');
-        Route::get('/concepts/getConcepts_com/{id}', 'ProjectsController@getConcepts_com');
-    });
-
+  
     
-
+Route::group(['middleware'=>['access:1,3,4,5']], function(){
+        
+       Route::get('/projects', 'ProjectsController@index')->name('projects.list');
+        Route::get('/projects/{id}', 'ProjectsController@show')->where('id', '[0-9]+')->name('projects.show');
+        Route::get('/projects/new', 'ProjectsController@create')->name('projects.create');
+        Route::get('/projects/{id}/create_folio', 'ProjectsController@create_folio')->where('id', '[0-9]+')->name('projects.create_folio');
+        Route::put('/projects/{id}/new_folio', 'ProjectsController@store_create_folio')->name('projects.store_create_folio');
+        Route::get('/projects/{id}/edit', 'ProjectsController@edit')->where('id', '[0-9]+')->name('projects.edit');
+        Route::post('/projects', 'ProjectsController@store');
+        Route::delete('/projects/{project}', 'ProjectsController@destroy')->name('projects.destroy');
+        Route::put('/projects/{id}', 'ProjectsController@update')->name('projects.update');
+        Route::get('/projects/{id}/deleteDocument', 'ProjectsController@deleteDocumento')->name('projects.deleteDocumento');
+      
+    });
+  
+    
 });

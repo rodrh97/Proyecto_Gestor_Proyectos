@@ -2,7 +2,21 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(3)
+		@section('bodyVinculacion')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	@case(5)
+		@section('bodyAtencionG')
+		@break
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -77,15 +91,27 @@
 
 												<center>
                           @if($project->folio==null)
-                          <a href="{{ route('projects.create_folio', ['id' => $project->id]) }}" class="btn btn-inverse" title="Agregar folio al proyecto {{ $project->id }}" style="margin: 3px;"><span class="icofont icofont-plus"></span></a>
-													@endif
-                          <a href="{{ route('projects.show', ['id' => $project->id]) }}" class="btn btn-success" title="Ver el proyecto con el id {{ $project->id }}" style="margin: 3px;"><span class="fas fa-eye"></span></a>
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+                          <a href="{{ route('projects.create_folio', ['id' => $project->id]) }}" class="btn btn-inverse" title="Agregar folio externo" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-plus"></span></a>
+                          @endif
+													@else
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+                          <a href="{{ route('projects.create_folio', ['id' => $project->id]) }}" class="btn btn-inverse" title="Editar folio externo" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-refresh"></span></a>
+                          @endif
+                          @endif
                           
-													<a href="{{ route('projects.edit', ['id' => $project->id]) }}" class="btn btn-primary" title="Editar proyecto con el id {{ $project->id }}" style="margin: 3px;"><span class="icofont icofont-ui-edit"></span></a>
-
-													
-														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar proyecto con el id {{$project->id}}"><span class="icofont icofont-ui-delete"></span></button>
-													<a href="{{ route('reports.generarProject',['id'=>$project->id])}}" class="btn btn-warning" title="Generar PDF del proyecto" style="margin: 3px;"><span class="far fa-file-pdf"></span></a>
+                          
+                          <a href="{{ route('projects.show', ['id' => $project->id]) }}" class="btn btn-success" title="Detalles del proyecto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="fas fa-eye"></span></a>
+                          
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+													<a href="{{ route('projects.edit', ['id' => $project->id]) }}" class="btn btn-primary" title="Editar proyecto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
+                            @endif
+													  @if(Auth::user()->type == 1 || Auth::user()->type == 4 )
+														<button type="submit" class="btn btn-danger" style="margin: 3px;" id="eliminar" name="eliminar" onclick="archiveFunction()" title="Eliminar proyecto" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></button>
+                          @endif
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 4 || Auth::user()->type == 3 )
+													<a href="{{ route('reports.generarProject',['id'=>$project->id])}}" class="btn btn-warning" title="Generar PDF" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="far fa-file-pdf"></span></a>
+                          @endif
 												</center>
 											</form>
 										</td>
@@ -110,23 +136,29 @@
 											<p>No existe ningún proyecto registrado en el sistema.</p>
 										</div>
                     @if($count_programs==0 && $count_applicants==0 )
-                    
+                    @if(Auth::user()->type == 1 || Auth::user()->type == 4 )
                     <label>No existen solicitantes <a href="{{ route('applicants.create') }}" style="color:blue"> Dar click aquí </a>para crear solicitantes</label>
+                    @endif
                     <br>
+                    @if(Auth::user()->type == 1 )
                     <label>No existen programas <a href="{{ route('programs.create') }}" style="color:blue"> Dar click aquí </a>para crear programas</label>
-                    
+                    @endif
                     @elseif($count_programs>0 && $count_applicants==0 )
                     
+                    @if(Auth::user()->type == 1 || Auth::user()->type == 4 )
                     <label>No existen solicitantes <a href="{{ route('applicants.create') }}" style="color:blue"> Dar click aquí </a>para crear solicitantes</label>
+                    @endif
                     
                     @elseif($count_programs==0 && $count_applicants>0 )
                     
+                    @if(Auth::user()->type == 1 )
                     <label>No existen programas <a href="{{ route('programs.create') }}" style="color:blue"> Dar click aquí </a>para crear programas</label>
-                    
+                    @endif
                     @else
                     
+                    @if(Auth::user()->type == 1 || Auth::user()->type == 4 )
                     <a href="{{ route('projects.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Proyectos</button></a>
-                    
+                    @endif
                     @endif
                     
 									</center>
@@ -142,9 +174,48 @@
 </div>
 @endsection
 
-@section('javascriptcode')
+
+@switch(Auth::user()->type)
+	@case(1)
+		@section('javascriptcode')
 <script>
 	var button = '<a href="{{ route('projects.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Proyecto</button></a>';
 	applyStyleToDatatable(button, 'Buscar en proyectos');
 </script>
 @endsection
+
+
+		@break
+	@case(3)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en proyectos');
+</script>
+@endsection
+
+
+		@break
+	
+	@case(4)
+		@section('javascriptcode')
+<script>
+	var button = '<a href="{{ route('projects.create') }}"><button class="btn btn-success" style="float:right;width:100%; min-width:150px"><i class="fa fa-plus"></i>Agregar Proyecto</button></a>';
+	applyStyleToDatatable(button, 'Buscar en proyectos');
+</script>
+@endsection
+
+
+		@break
+	@case(5)
+		@section('javascriptcode')
+<script>
+	var button = '';
+	applyStyleToDatatable(button, 'Buscar en proyectos');
+</script>
+@endsection
+
+		@break
+@endswitch
+
+

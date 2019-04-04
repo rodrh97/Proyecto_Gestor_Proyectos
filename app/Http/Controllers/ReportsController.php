@@ -78,7 +78,7 @@ class ReportsController extends Controller
       $query = DB::table("programs")->join("projects","projects.program_id","=","programs.id")
         ->join("applicants","applicants.id","=","projects.applicant_id")
         ->join("status_projects","projects.status_project","=","status_projects.id")
-        ->select("programs.*","projects.id as project_id","applicants.type","applicants.first_name","applicants.last_name","applicants.second_last_name","status_projects.name as status_name","projects.status_date");
+        ->select("programs.*","projects.requested_concept","projects.id as project_id","applicants.type","applicants.first_name","applicants.last_name","applicants.second_last_name","status_projects.name as status_name","projects.status_date");
       
         if (!is_null($request->program_id)) { 
             $query->where('programs.id', '=', $request->program_id);
@@ -234,6 +234,7 @@ class ReportsController extends Controller
           $project = DB::table("projects")
               ->join("applicants","projects.applicant_id","=","applicants.id")
               ->join("programs","programs.id","=","projects.program_id")
+                          ->join("status_projects","projects.status_project","=","status_projects.id")
               ->select("projects.id as folio_interno",
                       "projects.folio as folio_externo",
                       "applicants.first_name",
@@ -242,18 +243,22 @@ class ReportsController extends Controller
                       "applicants.type",
                       "applicants.ejido",
                       "applicants.colony",
+                      "applicants.phone",
                       "applicants.street",
                       "applicants.number",
                       "applicants.zip",
                       "programs.name as program_name",
                       "programs.responsable_unit",
                       "programs.executing_unit",
+                                              "status_projects.name as status",
                       "projects.requested_concept")->where("projects.id","=",$id)->first();
           
       }else{
           $project = DB::table("projects")
               ->join("applicants","projects.applicant_id","=","applicants.id")
               ->join("programs","programs.id","=","projects.program_id")
+                          ->join("status_projects","projects.status_project","=","status_projects.id")
+
               ->select("projects.id as folio_interno",
                       "projects.folio as folio_externo",
                       "applicants.first_name",
@@ -261,6 +266,7 @@ class ReportsController extends Controller
                       "applicants.second_last_name",
                       "applicants.type",
                       "applicants.ejido",
+                      "applicants.phone",
                       "applicants.colony",
                       "applicants.street",
                       "applicants.number",
@@ -268,6 +274,7 @@ class ReportsController extends Controller
                       "programs.name as program_name",
                       "programs.responsable_unit",
                       "programs.executing_unit",
+                                              "status_projects.name as status",
                       "projects.requested_concept")->where("projects.id","=",$id)->first();
         
           $conceptos = DB::table("projects")->join("projects_concepts","projects.id","=","projects_concepts.project_id")
@@ -293,7 +300,6 @@ class ReportsController extends Controller
         
           
       }
-      
       $pdf = PDF::loadView("pdf.visit",compact("fecha_actual","operation_rules","project","conceptos","componente","subcomponente","visita"));
       return $pdf->download("visit.pdf");
     }
