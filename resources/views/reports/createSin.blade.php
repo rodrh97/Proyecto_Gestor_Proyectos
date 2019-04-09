@@ -7,7 +7,7 @@
 		@section('body')
 		@break
 	@case(2)
-		@section('bodyEmpleado')
+		@section('bodyMonitoreo')
 		@break
 @endswitch
 <!-- Main-body start -->
@@ -173,11 +173,13 @@
 									<thead id="table_header">
 										<tr>
                       <th scope="col" style="width: 10%">Folio interno de proyecto</th>
+                      <th scope="col" style="width: 20%">Folio externo de proyecto</th>
                       <th scope="col" style="width: 20%">Solicitante</th>
 											<th scope="col" style="width: 20%">Programa</th>
                       <th scope="col" style="width: 20%">Concepto solicitado</th>
 											<th scope="col" style="width: 10%">Estatus del proyecto</th>
 											<th scope="col" style="width: 20%">Fecha</th>
+                      
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -185,6 +187,7 @@
 								<tfoot>
 									<tr id="table_footer">
 										<th style="padding-right: 2.8%" scope="col">Folio interno de proyecto</th>
+                    <th style="padding-right: 2.8%" scope="col">Folio externo de proyecto</th>
 										<th style="padding-right: 2.8%" scope="col">Solicitante</th>
                     <th style="padding-right: 2.8%" scope="col">Programa</th>
                     <th style="padding-right: 2.8%" scope="col">Concepto solicitado</th>
@@ -265,6 +268,7 @@
 		dt_reports = $('#datatable_reports').DataTable({
 			columns: [
 				{title: "Folio interno del proyecto"},
+        {title: "Folio externo del proyecto"},
         {title: "Solicitante"},
         {title: "Programa"},
         {title: "Concepto solicitado"},
@@ -629,9 +633,16 @@
                   date_split[1] = "Diciembre";
                   break;
             }
+            
+            if(asesoria[i]["folio"] == null){
+                folio_externo = "No ingresado";
+              }else{
+                folio_externo = asesoria[i]["folio"];
+                }
 						dt_reports.row.add([
               
               asesoria[i]["project_id"],
+              folio_externo,
               asesoria[i]["first_name"]+" "+asesoria[i]["last_name"]+" "+asesoria[i]["second_last_name"],
 								asesoria[i]["name"],
               asesoria[i]["requested_concept"],

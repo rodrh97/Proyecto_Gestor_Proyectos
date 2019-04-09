@@ -57,7 +57,7 @@
                     <option value="1" {{ (old("type") == 1 ? "selected":"") }}>Administrador</option>
 										<option value="2" {{ (old("type") == 2 ? "selected":"") }}>Monitoreo y difusión</option>
                     <option value="3" {{ (old("type") == 3 ? "selected":"") }}>Vinculación estratégica</option>
-                    <option value="4" {{ (old("type") == 4 ? "selected":"") }}>Atención específica</option>
+                    <option value="4" {{ (old("type") == 4 ? "selected":"") }}>Atención especializada</option>
                     <option value="5" {{ (old("type") == 5 ? "selected":"") }}>Atención general</option>
 									</select>
 								</div>

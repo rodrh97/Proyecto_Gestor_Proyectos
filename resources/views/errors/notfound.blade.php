@@ -22,7 +22,7 @@
 
 	<!-- Logo de la Universidad -->
 	<a href="{{route('dashboard')}}" class="logo-link" title="back home">
-        <img src="{{ asset('img/logoupv.png') }}" class="logo" style="width:150px;" alt="UPV" />
+        <img src="{{ asset('assets/images/SGP.jpg') }}" class="logo" style="width:150px;" alt="Sistema de Gestión de Proyectos" />
     </a>
 
 	<div class="content">

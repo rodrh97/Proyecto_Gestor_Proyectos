@@ -17,19 +17,10 @@
     {{--
     @switch(Auth::user()->type)
         @case(0)
-            <li><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li><a href="{{ route('users.list') }}">Usuarios</a></li>
-            <li><a href="{{ route('careers.list') }}">Carreras</a></li>
-            <li><a href="{{ route('tutorias.list') }}">Tutorias</a></li>
-            <li><a href="{{ route('students.list') }}">Estudiantes</a></li>
-            <li><a href="{{ route('tutors.list') }}">tutores</a></li>
+         
             @break
         @case(1)
-            <li><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li><a href="{{ route('users.list') }}">Usuarios</a></li>
-            <li><a href="{{ route('careers.list') }}">Carreras</a></li>
-            <li><a href="{{ route('students.list') }}">Estudiantes</a></li>
-            <li><a href="{{ route('tutors.list') }}">tutores</a></li>
+         
             @break
         @case(2)
             <span> Usuario </span>

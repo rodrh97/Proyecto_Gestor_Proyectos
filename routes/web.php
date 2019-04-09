@@ -78,9 +78,7 @@ Route::group(['middleware'=>['auth']], function () {
           Route::get("/reporte/proyecto/{id}","ReportsController@generarProject")->name("reports.generarProject");
         Route::get("/reporte/visita/{idVisita}","ReportsController@generarVisit")->name("reports.generarVisit");
 
-        Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
-        Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
-
+       
     /**************  Termina operaciones AJAX  ***************/
 
     /**
@@ -186,5 +184,9 @@ Route::group(['middleware'=>['access:1,3,4,5']], function(){
       
     });
   
-    
+    Route::group(['middleware'=>['access:1,2']], function(){
+       Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
+        Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
+    });
+
 });

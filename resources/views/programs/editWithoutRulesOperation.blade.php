@@ -2,7 +2,15 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Editar Programa")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+	@case(2)
+		@section('bodyMonitoreo')
+		@break
+	
+@endswitch
 
 <!-- Main-body start -->
 <div class="main-body">

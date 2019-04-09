@@ -15,7 +15,5 @@
 @endsection
 
 @section('navbar_back')
-    <li><a href="{{ route('dashboard') }}">Inicio</a></li>
-    <li><a href="{{ route('users.index') }}">Usuarios</a></li>
-    <li><a href="{{ route('users.create') }}">Crear Usuario</a></li>
+   
 @endsection

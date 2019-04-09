@@ -2,7 +2,15 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -81,7 +89,7 @@
 								<label class="col-sm-2 col-form-label" for="name">Elija componente o subcomponente:</label>
 								<div class="col-sm-10">
                   @if($flag==0)
-                  <select class="form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
+                  <select class="select2_basic form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
                     @foreach($components as $component)
                     @if($concept->component_id==$component->id)
                     <option value="component {{$component->id}}" selected>Componente - {{$component->name}}</option>
@@ -94,7 +102,7 @@
                     @endforeach
                   </select>
                   @else
-                  <select class="form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
+                  <select class="select2_basic form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
                     @foreach($components as $component)
                     <option value="component {{$component->id}}">Componente - {{$component->name}}</option>
                     @endforeach

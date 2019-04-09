@@ -377,6 +377,11 @@ class ProjectsController extends Controller
           ],[
             'folio.required'=>'* Este campo es obligatorio',
           ]);
+      
+      
+      $test_projects = DB::table("projects")->where("folio","=",Input::get("folio"))->count();
+      
+      if($test_projects != 0){
         $fecha_actual=date("Y-m-d");
         $visit_history= new Visit_History;  
         $visit_history->status_project_id=Input::get('status_project');
@@ -387,6 +392,9 @@ class ProjectsController extends Controller
         $visit_history->save();
         insertToLog(Auth::user()->id, 'added', $visit_history->id, "historial");
       
+      
+      
+      
         $projects=DB::table('projects')
           ->where('id',$id)
           ->update(['folio'=>Input::get('folio')]);
@@ -395,6 +403,12 @@ class ProjectsController extends Controller
         insertToLog(Auth::user()->id, 'updated', $id, "proyecto");
 
          return redirect()->route('projects.list');
+      }else{
+        Alert::error('El folio ingresado ya existe asignado a otro proyecto', 'Error')->autoclose(4000);
+            return redirect()->route('projects.list');
+      }
+      
+        
     }
     /**
      * Show the form for editing the specified resource.

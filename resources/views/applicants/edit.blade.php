@@ -2,7 +2,15 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Editar el Solicitante")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+	
+@endswitch
 
 <!-- Main-body start -->
 <div class="main-body">
@@ -80,7 +88,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="type">Tipo de Solicitante:</label>
 								<div class="col-sm-10">
-                  <select class="form-control" name="type"  value="{{ old('type',$id->type) }}" title="Tipo de solicitante">
+                  <select class="select2_basic form-control" name="type"  value="{{ old('type',$id->type) }}" title="Tipo de solicitante">
                     @if($id->type=="Fisico")
                     <option value="Fisico" selected>Persona Físico</option>
                       <option value="Moral">Persona Moral</option>

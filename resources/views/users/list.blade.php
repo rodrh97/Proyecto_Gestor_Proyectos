@@ -73,7 +73,7 @@
                         <td>Vinculación estratégica</td>
                         @break
                       @case(4)
-                        <td>Atención específica</td>
+                        <td>Atención especializada</td>
                         @break
                       @case(5)
                         <td>Atención general</td>

@@ -241,7 +241,7 @@ $.ajax({
                                             <span> Vinculación estratégica </span>
                                             @break
                                       @case(4)
-                                            <span> Atención específica </span>
+                                            <span> Atención especializada </span>
                                             @break
                                       @case(5)
                                             <span> Atención general </span>

@@ -273,7 +273,7 @@
                     
                     
 										<td>	
-											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" title="Borrar documento" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></a> </center>
+											<center><a href="{{ route('projects.deleteDocumento',['id' => $document->id])}}" class="btn btn-inverse col-lg-5" onclick="archiveFunction()" title="Borrar documento" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-delete"></span></a> </center>
 										</td>
                     
 									</tr>

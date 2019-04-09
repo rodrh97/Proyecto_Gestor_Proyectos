@@ -2,7 +2,15 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+	@case(4)
+		@section('bodyAtencionE')
+		@break
+
+@endswitch
 <!-- Main-body start -->
 <div class="main-body">
 	<!-- Page-header start -->
@@ -78,7 +86,7 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="type">Tipo de Solicitante:</label>
 								<div class="col-sm-10">
-                  <select class="form-control" name="type"  value="{{ old('type') }}" title="Tipo de solicitante">
+                  <select class="select2_basic form-control" name="type"  value="{{ old('type') }}" title="Tipo de solicitante">
                     <option value="Fisico">Persona Física</option>
                     <option value="Moral">Persona Moral</option>
                   </select>
@@ -162,6 +170,8 @@
 	</div>
 </div>
 @endsection
+
+
 
 @section('javascriptcode')
 	<script>

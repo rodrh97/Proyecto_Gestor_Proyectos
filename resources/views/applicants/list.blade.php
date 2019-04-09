@@ -59,7 +59,7 @@
 										<th class="all" scope="col">ID</th>
 										<th scope="col">Nombre Completo</th>
                     <th scope="col">Teléfono</th>
-                    <th scope="col">Ciudad</th>
+                    <th scope="col">Localidad</th>
                     <th scope="col">Tipo de solicitante</th>
 										<th class="all" style="width:40%;" scope="col">Acciones</th>
 									</tr>
@@ -70,7 +70,7 @@
 											<th scope="row">{{ $applicant->id }}</th>
 											<td>{{ $applicant->first_name }} {{ $applicant->last_name }} {{ $applicant->second_last_name }}</td>
                     <td>{{$applicant->phone}}</td>
-                    <td>{{$applicant->Ciudad}}</td>
+                    <td>{{$applicant->ejido}}</td>
 	                   <td>@if($applicant->type == "Fisico")
                        Persona Fisica
                         @else

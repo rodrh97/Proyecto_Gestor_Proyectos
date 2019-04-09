@@ -78,7 +78,7 @@ class ReportsController extends Controller
       $query = DB::table("programs")->join("projects","projects.program_id","=","programs.id")
         ->join("applicants","applicants.id","=","projects.applicant_id")
         ->join("status_projects","projects.status_project","=","status_projects.id")
-        ->select("programs.*","projects.requested_concept","projects.id as project_id","applicants.type","applicants.first_name","applicants.last_name","applicants.second_last_name","status_projects.name as status_name","projects.status_date");
+        ->select("programs.*","projects.requested_concept","projects.folio as folio","projects.id as project_id","applicants.type","applicants.first_name","applicants.last_name","applicants.second_last_name","status_projects.name as status_name","projects.status_date");
       
         if (!is_null($request->program_id)) { 
             $query->where('programs.id', '=', $request->program_id);

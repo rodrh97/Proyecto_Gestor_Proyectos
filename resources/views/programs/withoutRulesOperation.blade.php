@@ -2,7 +2,15 @@
 
 @section('title',"Sistema de Gestión de Proyectos")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+	@case(2)
+		@section('bodyMonitoreo')
+		@break
+	
+@endswitch
 
 <!-- Main-body start -->
 <div class="main-body">
@@ -239,7 +247,7 @@
              <div class="form-group row">
 								<label class="col-sm-4 col-form-label" >Cantidad de anexos que desea cargar:</label>
 								<div class="col-sm-3">
-                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="form-control">
+                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="select2_basic form-control">
                     <option value="0">Seleccionar cantidad</option>
                     <option value="1">1</option>
                     <option value="2">2</option>

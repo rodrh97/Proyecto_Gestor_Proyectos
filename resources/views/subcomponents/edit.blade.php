@@ -2,7 +2,14 @@
 
 @section('title',"Sistema de Gestión de Proyectos - Editar Subcomponente")
 
-@section('body')
+@switch(Auth::user()->type)
+	@case(1)
+		@section('body')
+		@break
+@case(2)
+		@section('bodyMonitoreo')
+		@break
+@endswitch
 
 <!-- Main-body start -->
 <div class="main-body">
@@ -50,7 +57,7 @@
 							 <div class="form-group row">
 								<label class="col-sm-2 col-form-label" >Pertenece al componente:</label>
 								<div class="col-sm-10">
-                  <select name="component" id="component" class="form-control" title="Componente">
+                  <select name="component" id="component"class="select2_basic form-control" title="Componente">
                     @foreach($components as $component)
                       <option value="{{$component->id}}">{{$component->name}}</option>
                     @endforeach
