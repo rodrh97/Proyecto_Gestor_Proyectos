@@ -1,8 +1,8 @@
-"use strict";
+/*"use strict";
 $(document).ready(function() {
     /*Line chart start*/
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
-    nv.addGraph(function() {
+    /*nv.addGraph(function() {
         var chart = nv.models.lineChart()
             .margin({ top: 50 })
             .margin({ left: 100 }) //Adjust chart margins to give the x-axis some breathing room.
@@ -21,7 +21,7 @@ $(document).ready(function() {
             .tickFormat(d3.format('.02f'));
 
         /* Done setting the chart up? Time to render it!*/
-        var myData = sinAndCos(); //You need data...
+      /*  var myData = sinAndCos(); //You need data...
 
         d3.select('#linechart').append('svg') //Select the <svg> element you want to render the chart in.
             .datum(myData) //Populate the <svg> element with chart data...
@@ -34,7 +34,7 @@ $(document).ready(function() {
     /**************************************
      * Simple test data generator
      */
-    function sinAndCos() {
+    /*function sinAndCos() {
         var sin = [],
             sin2 = [],
             cos = [];
@@ -64,7 +64,7 @@ $(document).ready(function() {
     }
 
     /*Bar chart start*/
-    nv.addGraph(function() {
+  /*  nv.addGraph(function() {
         var chart = nv.models.discreteBarChart()
             .x(function(d) {
                 return d.label }) //Specify the data accessors.
@@ -72,9 +72,9 @@ $(document).ready(function() {
                 return d.value })
             .staggerLabels(true) //Too many bars and not enough room? Try staggering labels.
             /* .tooltips(false)    */ //Don't show tooltips
-            .showValues(true) //...instead, show the bar value right on top of each bar.
+        /*    .showValues(true) //...instead, show the bar value right on top of each bar.
             /*     .transitionDuration(350)*/
-        ;
+        /*;
 
         d3.select('#barchart').append('svg')
             .datum(barData())
@@ -127,12 +127,12 @@ $(document).ready(function() {
     }
 
     /*Scatter chart start*/
-    nv.addGraph(function() {
+ /*   nv.addGraph(function() {
         var chart = nv.models.scatterChart()
             .showDistX(true) //showDist, when true, will display those little distribution lines on the axis.
             .showDistY(true)
             /* .transitionDuration(350)*/
-            .color(d3.scale.category10().range());
+   /*         .color(d3.scale.category10().range());
 
         //Configure how the tooltip looks.
         /* chart.tooltipContent(function(key) {
@@ -140,13 +140,13 @@ $(document).ready(function() {
          });*/
 
         //Axis settings
-        chart.xAxis.tickFormat(d3.format('.02f'));
-        chart.yAxis.tickFormat(d3.format('.02f'));
+     /*   chart.xAxis.tickFormat(d3.format('.02f'));
+     /*   chart.yAxis.tickFormat(d3.format('.02f'));
 
         //We want to show shapes other than circles.
         /*chart.scatter.onlyCircles(false);*/
 
-        var myData = randomData(4, 40);
+  /*      var myData = randomData(4, 40);
         d3.select('#scatterchart').append('svg')
             .datum(myData)
             .call(chart);
@@ -159,7 +159,7 @@ $(document).ready(function() {
     /**************************************
      * Simple test data generator
      */
-    function randomData(groups, points) { //# groups,# points per group
+/*    function randomData(groups, points) { //# groups,# points per group
         var data = [],
             shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
             random = d3.random.normal();
@@ -185,10 +185,10 @@ $(document).ready(function() {
     }
 
     /*Stacked/Group chart start*/
-    nv.addGraph(function() {
+   /* nv.addGraph(function() {
         var chart = nv.models.multiBarChart()
             /* .transitionDuration(350)*/
-            .reduceXTicks(true) //If 'false', every single x-axis tick label will be rendered.
+     /*       .reduceXTicks(true) //If 'false', every single x-axis tick label will be rendered.
             .rotateLabels(0) //Angle to rotate x-axis labels.
             .showControls(true) //Allow user to switch between 'Grouped' and 'Stacked' mode.
             .groupSpacing(0.1) //Distance between each group of bars.
@@ -220,7 +220,7 @@ $(document).ready(function() {
     }
 
     /*Regular Pie chart*/
-    nv.addGraph(function() {
+ /*   nv.addGraph(function() {
         var chart = nv.models.pieChart()
             .x(function(d) {
                 return d.label })
@@ -294,3 +294,4 @@ $(document).ready(function() {
     }
 
 });
+*/

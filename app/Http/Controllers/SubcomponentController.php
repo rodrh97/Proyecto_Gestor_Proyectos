@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Alert;
 use App\Sub_Components;
 use App\Components;
+use App\anexos_subcomponents;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Concepts;
@@ -53,11 +54,9 @@ class SubcomponentController extends Controller
     {
         $data = request()->validate([
             'name' => 'required|max:128',
-            'file' => 'required',
           ],[
             'name.required' => ' * Este campo es obligatorio.',
             'name.max' => ' * Este campo debe contener sólo 128 caracteres.',
-            'file.required' => '* Es necesario cargar los requisitos especificos para la alta de un subcomponente',
           ]);
           
           $component_id = DB::table("components")->where("id","=",Input::get("component"))->first();
@@ -80,10 +79,14 @@ class SubcomponentController extends Controller
             $subcomponent->finish_date = Input::get('finish_date');
             $subcomponent->component_id = Input::get("component");
             $subcomponent->program_id = $component_id->program_id;
+            $subcomponent->vinculo = Input::get("vinculo");
+            $subcomponent->description = Input::get("description");
           }else{
             $subcomponent->name = Input::get('name');
             $subcomponent->component_id = Input::get("component");
             $subcomponent->program_id = $component_id->program_id;
+            $subcomponent->vinculo = Input::get("vinculo");
+            $subcomponent->description = Input::get("description");
             
             $component = Components::find(Input::get("component"));
             if($component->start_date != null){
@@ -101,14 +104,51 @@ class SubcomponentController extends Controller
             //Almacenando la imagen del alumno
             $path=$request->file('file')->store('/public/subcomponents');
             $subcomponent->specific_requirements = 'storage/subcomponents/'.$request->file('file')->hashName();
-        }else{
-            Alert::error('Es necesario subir un archivo con los requisitos especificos', 'Error')->autoclose(4000);
-            return redirect()->route('subcomponents.create');
         }
 
           
           //Se almacena y se muestran mensajes en caos de registro exitoso
           if ($subcomponent->save()) {
+            
+            
+            $anexos_subcomponent = $request->anexos;
+            $nombres_anexos = $request->nombre;
+            $i = 0;
+            
+            //dd($anexos_subcomponent,$nombres_anexos);
+            if($anexos_subcomponent != null){
+
+              $posiciones = array_keys($anexos_subcomponent);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $subcomponent_anexos = new anexos_subcomponents();
+                  
+                  $subcomponent_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_subcomponent[$posiciones[$i]]->store('/public/anexos_subcomponents');
+                  $subcomponent_anexos->path = 'storage/anexos_subcomponents/'.$anexos_subcomponent[$posiciones[$i]]->hashName();
+
+                  $subcomponent_anexos->subcomponent_id = $subcomponent->id;
+                  $subcomponent_anexos->save();
+                }
+              }
+              
+              /*foreach ($anexos_subcomponent as $anexos) {
+                
+                  $subcomponent_anexos = new anexos_subcomponents();
+                  
+                  $subcomponent_anexos->name = $nombres_anexos[$i];
+
+                  $path=$anexos->store('/public/anexos_subcomponents');
+                  $subcomponent_anexos->path = 'storage/anexos_subcomponents/'.$anexos->hashName();
+
+                  $subcomponent_anexos->subcomponent_id = $subcomponent->id;
+                  $subcomponent_anexos->save();
+                
+                $i++;
+              }*/
+            }
             Alert::success('Exitosamente','Subcomponente Registrado')->autoclose(4000);
   
             insertToLog(Auth::user()->id, 'added', $subcomponent->id, "subcomponente");
@@ -124,9 +164,10 @@ class SubcomponentController extends Controller
   public function show($id){
       $subcomponent = DB::table('sub_components')->join('components','sub_components.component_id','=','components.id')
                             ->select("sub_components.*","components.name as component")->where("sub_components.id","=",$id)->first();
-
+    $anexos = DB::table("anexos_subcomponentes")->where("subcomponent_id","=",$id)->get();
         return view('subcomponents.show')
-          ->with('subcomponent',$subcomponent);
+          ->with('subcomponent',$subcomponent)
+          ->with('anexos',$anexos);
     }
     /**
     
@@ -148,7 +189,7 @@ class SubcomponentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Sub_Components $subcomponent)
+    public function update(Sub_Components $subcomponent, Request $request)
     {
         //Validaciones
         $data = request()->validate([
@@ -175,10 +216,14 @@ class SubcomponentController extends Controller
             $subcomponent->finish_date = Input::get('finish_date');
             $subcomponent->component_id = Input::get("component");
             $subcomponent->program_id = $component_id->program_id;
+            $subcomponent->vinculo = Input::get("vinculo");
+            $subcomponent->description = Input::get("description");
           }else{
             $subcomponent->name = Input::get('name');
             $subcomponent->component_id = Input::get("component");
             $subcomponent->program_id = $component_id->program_id;
+            $subcomponent->vinculo = Input::get("vinculo");
+            $subcomponent->description = Input::get("description");
             
             $component = Components::find(Input::get("component"));
             if($component->start_date != null){
@@ -195,8 +240,46 @@ class SubcomponentController extends Controller
         //Se almacena y se muestra mensaje de exito
         if ($subcomponent->update()) {
           
+          $anexos_subcomponent = $request->anexos;
+            $nombres_anexos = $request->nombre;
+            $i = 0;
+
+            if($anexos_subcomponent != null){
+              $posiciones = array_keys($anexos_subcomponent);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $subcomponent_anexos = new anexos_subcomponents();
+                  
+                  $subcomponent_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_subcomponent[$posiciones[$i]]->store('/public/anexos_subcomponents');
+                  $subcomponent_anexos->path = 'storage/anexos_subcomponents/'.$anexos_subcomponent[$posiciones[$i]]->hashName();
+
+                  $subcomponent_anexos->subcomponent_id = $subcomponent->id;
+                  $subcomponent_anexos->save();
+                }
+              }
+/*
+              foreach ($anexos_subcomponent as $anexos) {
+
+                $subcomponent_anexos = new anexos_subcomponents();
+                $subcomponent_anexos->name = $nombres_anexos[$i];
+
+                $path=$anexos->store('/public/anexos_subcomponents');
+                $subcomponent_anexos->path = 'storage/anexos_subcomponents/'.$anexos->hashName();
+
+                $subcomponent_anexos->subcomponent_id = $subcomponent->id;
+                $subcomponent_anexos->save();
+                $i++;
+              }*/
+            }
+          
+          
           if ($image!=null) {
+            if($image2 != null){
               unlink(public_path()."/".$image2);
+            }
               //Se realiza el almacenado de la nueva imagen(cargada en el file input)
               $path=Input::file('image')->store('/public/subcomponents');
               //Se obtiene el nombre de la imagen
@@ -217,6 +300,23 @@ class SubcomponentController extends Controller
           Alert::error('No se modifico el subcomponente', 'Error')->autoclose(4000);
           return redirect()->route('subcomponents.list');
         }
+    }
+  
+  
+  
+  public function deleteAnexo($id){
+      
+        $anexo = anexos_subcomponents::find($id);
+        $subcomponente_id = $anexo->subcomponent_id;
+       Alert::success('Exitosamente','Anexo Eliminado')->autoclose(4000);
+
+        insertToLog(Auth::user()->id, 'deleted', $id, "anexo");
+       
+       unlink(public_path()."/".$anexo->path);
+       
+        $anexo->delete();
+
+        return redirect()->route('subcomponents.show',['id'=>$subcomponente_id]);
     }
 
     /**
@@ -271,6 +371,16 @@ class SubcomponentController extends Controller
       ->where('id',$id)
       ->first();
     if(!$this->downloadFile($path->specific_requirements)){
+      return redirect()->back();
+    }
+  }
+  
+   public function downloadAnexo($id){
+    $path=DB::table('anexos_subcomponentes')
+      ->select('path')
+      ->where('id',$id)
+      ->first();
+    if(!$this->downloadFile($path->path)){
       return redirect()->back();
     }
   }

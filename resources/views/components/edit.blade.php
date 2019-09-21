@@ -99,6 +99,9 @@
 								<label class="col-sm-2 col-form-label">Archivo de Requerimientos Específicos:</label>
 								
 								<div style="margin-top:10px" class="col-sm-10">
+                  @if($component->path != null)
+                  <a href="{{asset($component->path)}}" target="_blank"><i class="fas fa-mouse-pointer"></i> Click aquí para ver el actual archivo de requerimientos específicos</a><br><br>
+                  @endif
 									<div class="file-upload">
 										<div class="image-upload-wrap">
 											<input id="image_input" class="file-upload-input" type='file' name="image" onchange="readURLForComponents(this);" accept="image/*" />
@@ -118,7 +121,17 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-form-label" style="align:justify;"> * Si desea cambiarla, agregue un nuevo archivo.</div>
+									<div class="col-form-label" style="align:justify;"> * Si desea cambiarlo, agregue un nuevo archivo.</div>
+								</div>
+							</div>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="vinculo">URL:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="vinculo" placeholder="Link" value="{{ old('vinculo',$component->vinculo) }}" title="Link" required>
+									@if ($errors->has('vinculo'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('vinculo')}}</div>
+									@endif
 								</div>
 							</div>
 							<br>
@@ -144,7 +157,7 @@
 		];
   
      document.ready = document.getElementById("program_id").value = "{{$component->program_id}}";
-
+      $('#program_id').val('{{$component->program_id}}').trigger('change.select2');
 		//checkIfChangesHaveBeenMadeIn(elements_id, unique_elements);
 	});
   
@@ -169,7 +182,7 @@
 
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<5242880){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -197,7 +210,7 @@
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 5 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }

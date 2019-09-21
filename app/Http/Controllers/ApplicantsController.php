@@ -30,8 +30,9 @@ class ApplicantsController extends Controller
           ->join('cities as c','c.id','a.city')
           ->select('a.*','c.name as city_name')
           ->where('a.id','=',$id)->first();//User::find($id);
-
-        return view('applicants.show', compact('applicant'));
+        $proyectos = DB::table("projects")->join("programs","projects.program_id","=","programs.id")
+            ->select("projects.*", "programs.name as name_program")->where("projects.applicant_id","=",$id)->get();
+        return view('applicants.show', compact('applicant',"proyectos"));
     }
    public function create()
     {

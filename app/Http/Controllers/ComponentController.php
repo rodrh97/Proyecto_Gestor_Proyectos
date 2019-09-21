@@ -46,11 +46,11 @@ class ComponentController extends Controller
     {
         $data = request()->validate([
             'name' => 'required|max:128',
-            'file' => 'required',
+            
           ],[
             'name.required' => ' * Este campo es obligatorio.',
             'name.max' => ' * Este campo debe contener sólo 128 caracteres.',
-            'file.required' => '* Se requiere del archivo de requisitos especificos para la alta de un componente',
+            
           ]);
           
             
@@ -71,7 +71,9 @@ class ComponentController extends Controller
             $components->start_date = Input::get('start_date');
             $components->finish_date = Input::get('finish_date');
             $components->program_id = Input::get("program");
+            $components->vinculo = Input::get("vinculo");
           }else{
+            $components->vinculo = Input::get("vinculo");
             $components->name = Input::get('name');
             $components->program_id = Input::get("program");
           }
@@ -85,9 +87,6 @@ class ComponentController extends Controller
             //Almacenando la imagen del alumno
             $path=$request->file('file')->store('/public/components');
             $components->path = 'storage/components/'.$request->file('file')->hashName();
-        }else{
-            Alert::error('Es necesario subir un archivo con los requisitos especificos', 'Error')->autoclose(4000);
-            return redirect()->route('components.create');
         }
 
   
@@ -136,21 +135,25 @@ class ComponentController extends Controller
             $component->start_date = Input::get('start_date');
             $component->finish_date = Input::get('finish_date');
             $component->program_id = Input::get("program");
+            $component->vinculo = Input::get("vinculo");
           }else{
             $component->name = Input::get('name');
             $component->program_id = Input::get("program");
+            $component->vinculo = Input::get("vinculo");
           }
           //Imagen nueva(mandada atraves del file input)
           $image = Input::file('image');
           //Imagen actual(registrada en la base de datos)
-          $image2 = $component->specific_requirements;
+          $image2 = $component->path;
 
           
         //Se almacena y se muestra mensaje de exito
         if ($component->update()) {
           
           if ($image!=null) {
+            if($image2 != null){
               unlink(public_path()."/".$image2);
+            }
               //Se realiza el almacenado de la nueva imagen(cargada en el file input)
               $path=Input::file('image')->store('/public/components');
               //Se obtiene el nombre de la imagen

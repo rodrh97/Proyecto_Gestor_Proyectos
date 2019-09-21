@@ -20,8 +20,8 @@
 				<div class="page-header-title">
 					<i class="fa fa-plus bg-success"></i>
 					<div class="d-inline">
-						<h4 style="text-transform: none;">Crear Concepto</h4>
-						<span style="text-transform: none;">Llene los campos en la parte inferior para registrar un nuevo concepto.</span>
+						<h4 style="text-transform: none;">Editar Concepto</h4>
+						<span style="text-transform: none;">Llene los campos en la parte inferior para modificar un concepto.</span>
 					</div>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 						</li>
 						<li class="breadcrumb-item"><a href="{{ route('concepts.list') }}">Conceptos</a>
 						</li>
-						<li class="breadcrumb-item">Crear Concepto
+						<li class="breadcrumb-item">Editar Concepto
 						</li>
 					</ul>
 				</div>
@@ -65,6 +65,15 @@
 							</div>	
 							<br>
               <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="description">Descripción:</label>
+								<div class="col-sm-10">
+                  <textarea type="text" rows="10" cols="50" class="form-control" name="description"   placeholder="Ej. Descripción del concepto." title="Descripción del concepto">{{ old('description',$concept->description) }}</textarea>
+									@if ($errors->has('description'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('description')}}</div>
+									@endif
+								</div>
+							</div>
+              <div class="form-group row">
 								<label class="col-sm-2 col-form-label" for="p_amount_max">Cantidad Máxima por Persona Física:</label>
 								<div class="col-sm-10">
                   <textarea type="text" rows="10" cols="50" class="form-control" name="p_amount_max"   placeholder="Ej. El monto máximo de apoyo federal por persona física será de hasta $500,000.00 (Quinientos mil pesos 00/100 M.N.)." title="Cantidad Máxima por Persona Física">{{ old('p_amount_max',$concept->p_amount_max) }}</textarea>
@@ -89,7 +98,7 @@
 								<label class="col-sm-2 col-form-label" for="name">Elija componente o subcomponente:</label>
 								<div class="col-sm-10">
                   @if($flag==0)
-                  <select class="select2_basic form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
+                  <select class="form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
                     @foreach($components as $component)
                     @if($concept->component_id==$component->id)
                     <option value="component {{$component->id}}" selected>Componente - {{$component->name}}</option>
@@ -102,7 +111,7 @@
                     @endforeach
                   </select>
                   @else
-                  <select class="select2_basic form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
+                  <select class="form-control" name="components"  value="{{ old('components') }}" title="Nombre del componente o subcomponente">
                     @foreach($components as $component)
                     <option value="component {{$component->id}}">Componente - {{$component->name}}</option>
                     @endforeach
@@ -126,6 +135,9 @@
               <div class="form-group row">
 								<label class="col-sm-2 col-form-label">Archivo de Requerimientos Específicos:</label>
 								<div class="col-sm-10">
+                  @if($concept->specific_requirements != null)
+                  <a href="{{asset($concept->specific_requirements)}}" target="_blank"><i class="fas fa-mouse-pointer"></i> Click aquí para ver el actual archivo de requerimientos específicos</a><br><br>
+                  @endif
 									<div class="file-upload">
 										<div class="image-upload-wrap">
 											<input id="image_input" class="file-upload-input" type='file' name="file" onchange="readURLForComponents(this);" accept="image/*" />
@@ -145,11 +157,54 @@
 											</div>
 										</div>
 									</div>
+                  <div class="col-form-label" style="align:justify;"> * Si desea cambiarlo, agregue un nuevo archivo.</div>
                   @if ($errors->has('file'))
 										<div class="col-form-label" style="color:red;">{{$errors->first('file')}}</div>
 									@endif
 								</div>
 							</div>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="vinculo">URL:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="vinculo" placeholder="Link" value="{{ old('vinculo',$concept->vinculo) }}" title="Link" required>
+									@if ($errors->has('vinculo'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('vinculo')}}</div>
+									@endif
+								</div>
+							</div>
+              
+              
+              <br><hr>
+              
+              <div class="row"><h5 class="col-sm-2"><strong>Anexos</strong> </h5></div><br>
+             
+             <div class="form-group row">
+								<label class="col-sm-4 col-form-label" >Cantidad de anexos que desea cargar:</label>
+								<div class="col-sm-3">
+                  <select name="num_anexos" id="num_anexos" onchange="cargarAnexos(this.value)" class="select2_basic form-control">
+                    <option value="0">Seleccionar cantidad</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                  </select>
+								</div>
+							</div>
+              <div id="archivos">
+              
+              </div>
               <br><br>
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
@@ -166,6 +221,70 @@
 
 @section('javascriptcode')
 	<script>
+    
+  
+    function cargarAnexos(cantidad){
+      if(cantidad != 0){
+        var i;
+        var div = document.getElementById("archivos");
+        /*while (div.hasChildNodes()){
+          div.removeChild(div.firstChild);
+        }*/
+
+        for(i = 0;i < cantidad; i++){
+          var div_group = document.createElement("div");
+          div_group.className = "form-group row";       
+
+          var label = document.createElement("label");
+          label.className = "col-sm-2 col-form-label";
+          label.append("Nombre de Anexo:");
+
+          var div_name = document.createElement("div");
+          div_name.className = "col-sm-4"
+
+          var input = document.createElement("input");
+          input.type = "text";
+          input.name = "nombre[]";
+          input.className = "form-control";
+
+          var label_file = document.createElement("label");
+          label_file.className = "col-sm-1 col-form-label";
+          label_file.append("Archivo:");
+
+          var div_file = document.createElement("div");
+          div_file.className = "col-sm-4"
+
+          var file = document.createElement("input");
+          file.type = "file";
+          file.name = "anexos[]";
+          file.accept = ".pdf,image/*";
+          file.className = "form-control";
+          
+         
+          
+          div_name.appendChild(input);
+          div_file.appendChild(file);
+          div_group.appendChild(label);
+          div_group.appendChild(div_name);
+          div_group.appendChild(label_file);
+          div_group.appendChild(div_file);
+          div.appendChild(div_group);
+        }
+        $('#num_anexos').val('0').trigger('change.select2');
+      }else{
+         var div = document.getElementById("archivos");
+          /*while (div.hasChildNodes()){
+            div.removeChild(div.firstChild);
+          }*/
+      }
+      
+    }
+    
+  
+    
+    
+    
+    
 		error_divs = [
 			$('#error_id'),
 		];
@@ -197,7 +316,7 @@
 
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<5242880){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -225,7 +344,7 @@
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 5 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }

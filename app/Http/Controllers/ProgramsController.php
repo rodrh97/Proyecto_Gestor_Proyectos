@@ -83,8 +83,22 @@ class ProgramsController extends Controller
         
         if($anexos_programs != null){
           
+            $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $program_anexos = new Anexos();
+                  
+                  $program_anexos->name = $nombres_anexos[$posiciones[$i]];
 
-          foreach ($anexos_programs as $anexos) {
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/anexos');
+                  $program_anexos->path = 'storage/anexos/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $program_anexos->program_id = $program->id;
+                  $program_anexos->save();
+                }
+              }
+          /*foreach ($anexos_programs as $anexos) {
 
             $program_anexos = new Anexos();
             $program_anexos->name = $nombres_anexos[$i];
@@ -95,7 +109,7 @@ class ProgramsController extends Controller
             $program_anexos->program_id = $program->id;
             $program_anexos->save();
             $i++;
-          }
+          }*/
         }
         Alert::success('Exitosamente','Programa Registrado')->autoclose(4000);
 
@@ -143,8 +157,22 @@ class ProgramsController extends Controller
         
         if($anexos_programs != null){
           
+            $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $program_anexos = new Anexos();
+                  
+                  $program_anexos->name = $nombres_anexos[$posiciones[$i]];
 
-          foreach ($anexos_programs as $anexos) {
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/anexos');
+                  $program_anexos->path = 'storage/anexos/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $program_anexos->program_id = $program->id;
+                  $program_anexos->save();
+                }
+              }
+          /*foreach ($anexos_programs as $anexos) {
 
             $program_anexos = new Anexos();
             $program_anexos->name = $nombres_anexos[$i];
@@ -155,7 +183,7 @@ class ProgramsController extends Controller
             $program_anexos->program_id = $program->id;
             $program_anexos->save();
             $i++;
-          }
+          }*/
         }
         Alert::success('Exitosamente','Programa Registrado')->autoclose(4000);
 
@@ -272,8 +300,22 @@ class ProgramsController extends Controller
 
             if($anexos_programs != null){
 
+              $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $program_anexos = new Anexos();
+                  
+                  $program_anexos->name = $nombres_anexos[$posiciones[$i]];
 
-              foreach ($anexos_programs as $anexos) {
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/anexos');
+                  $program_anexos->path = 'storage/anexos/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $program_anexos->program_id = $program->id;
+                  $program_anexos->save();
+                }
+              }
+              /*foreach ($anexos_programs as $anexos) {
 
                 $program_anexos = new Anexos();
                 $program_anexos->name = $nombres_anexos[$i];
@@ -284,7 +326,7 @@ class ProgramsController extends Controller
                 $program_anexos->program_id = $program->id;
                 $program_anexos->save();
                 $i++;
-              }
+              }*/
             }
             Alert::success('Exitosamente','Programa Modificado')->autoclose(4000);
 
@@ -325,8 +367,22 @@ class ProgramsController extends Controller
 
             if($anexos_programs != null){
 
+              $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $program_anexos = new Anexos();
+                  
+                  $program_anexos->name = $nombres_anexos[$posiciones[$i]];
 
-              foreach ($anexos_programs as $anexos) {
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/anexos');
+                  $program_anexos->path = 'storage/anexos/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $program_anexos->program_id = $program->id;
+                  $program_anexos->save();
+                }
+              }
+              /*foreach ($anexos_programs as $anexos) {
 
                 $program_anexos = new Anexos();
                 $program_anexos->name = $nombres_anexos[$i];
@@ -337,7 +393,7 @@ class ProgramsController extends Controller
                 $program_anexos->program_id = $program->id;
                 $program_anexos->save();
                 $i++;
-              }
+              }*/
             }
             Alert::success('Exitosamente','Programa Modificado')->autoclose(4000);
 

@@ -88,18 +88,6 @@
 
 @section('javascriptcode')
 	<script>
-		error_divs = [
-			$('#error_folio'),
-      
-		];
-    
-		verify_column($('#folio'), 'folio', 'projects', null, $('#error_folio'),
-			'* El folio que esta intentando ingresar esta disponible.');
-    
-		//* Se verifica que no se ingrese un registro repedito para columnas unicas
-		$('#folio').keyup(function(e) {
-			verify_column($('#folio'), 'folio', 'projects', null, $('#error_folio'),
-				'* El folio que esta intentando ingresar esta disponible.');
-		});
+		
 </script>
 @endsection

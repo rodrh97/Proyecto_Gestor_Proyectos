@@ -116,7 +116,18 @@
 										<div class="col-form-label" style="color:red;">{{$errors->first('file')}}</div>
 									@endif
 								</div>
-							</div><br><br>
+							</div>
+              
+              <div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="vinculo">URL:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="vinculo" placeholder="Link" value="{{ old('vinculo') }}" title="Link" required>
+									@if ($errors->has('vinculo'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('vinculo')}}</div>
+									@endif
+								</div>
+							</div>
+              <br><br>
               
 							<center>
 								<a style="color:white" onclick="returnURL('{{ url()->previous() }}')"  class="btn btn-primary"><i class="icofont icofont-arrow-left"></i>Regresar</a>
@@ -164,7 +175,7 @@
 
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<5242880){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -192,7 +203,7 @@
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 5 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }

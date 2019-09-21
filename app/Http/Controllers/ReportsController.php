@@ -33,6 +33,14 @@ class ReportsController extends Controller
                             ->with("projects",$projects);
     }
   
+    public function indexGraficas(){
+      $programas = DB::table("programs")->get();
+      $estatus = DB::table("status_projects")->get();
+      return view("reports.graficas")->with("programas",$programas)->with("estatus",$estatus);
+    }
+  
+  
+  
     public function ObtenerDatosSin(Request $request){
       $query = DB::table("programs")->join("projects","projects.program_id","=","programs.id")
         ->join("applicants","applicants.id","=","projects.applicant_id")
@@ -73,6 +81,62 @@ class ReportsController extends Controller
         $result = $query->orderBy("visit_histories.date")->get();
         return response()->json(['response'=>$result]);
     }
+  
+    public function graficar(Request $request){
+        $query = DB::table("projects");
+      
+        if (!is_null($request->program_id) && $request->program_id != 0) { 
+            $query->where('program_id', '=', $request->program_id);
+        }
+        
+        if (!is_null($request->status_id) && $request->status_id != 0) { 
+            $query->where('status_project', '=', $request->status_id);
+        }
+        
+       if (!is_null($request->start) && !is_null($request->end)) { 
+          if ($request->start == $request->end) {
+            $query->where('status_date',"=", $request->end);
+          }else{
+            $query->where('status_date',">=",$request->start)->where("status_date","<=",$request->end);
+          }
+        }
+      
+      if(!is_null($request->start) && is_null($request->end)) { 
+        $query->where('status_date',">=",$request->start);
+      }
+      
+      if(is_null($request->start) && !is_null($request->end)) { 
+        $query->where('status_date',"<=",$request->end);
+      }
+        $result = $query->orderBy("id")->get();
+        return response()->json(['response'=>$result]);
+    }
+  
+  
+    public function obtener_programas_estatus(){
+      $programas = DB::table("programs")->get();
+      $estados_proyectos = DB::table("status_projects")->get();
+      
+      return response()->json(['estados_proyectos'=>$estados_proyectos,'programas'=>$programas]);
+    }
+  
+    public function generarPDF_grafica(Request $request){
+      /*$programas = Input::get("programa");
+      $estatus = Input::get("estatus");
+      $start = Input::get("start");
+      $end = Input::get("end");*/
+      $file_name = "archivo.pdf";
+        $html = Input::get("hidden_html");
+      $pdf = new PDF();
+      $pdf->load_html($html);
+      $pdf->render();
+      $pdf->stream($file_name,array("Attachment"=>false));
+      /*$pdf = PDF::loadView("pdf.grafica",compact("programas","estatus","start","end"))->setPaper('letter', 'portrait');
+      $pdf->getDomPDF()->set_option("enable_php", true);
+      $pdf->getDomPDF()->set_option('isJavascriptEnabled', TRUE);*/
+      //return $pdf->download("grafica_estatus_proyectos.pdf");
+    }
+  
   
     public function ObtenerDatosCon(Request $request){
       $query = DB::table("programs")->join("projects","projects.program_id","=","programs.id")

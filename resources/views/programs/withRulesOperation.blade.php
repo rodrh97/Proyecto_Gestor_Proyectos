@@ -477,9 +477,9 @@
       if(cantidad != 0){
         var i;
         var div = document.getElementById("archivos");
-        while (div.hasChildNodes()){
+        /*while (div.hasChildNodes()){
           div.removeChild(div.firstChild);
-        }
+        }*/
 
         for(i = 0;i < cantidad; i++){
           var div_group = document.createElement("div");
@@ -496,7 +496,6 @@
           input.type = "text";
           input.name = "nombre[]";
           input.className = "form-control";
-          input.required = "true";
 
           var label_file = document.createElement("label");
           label_file.className = "col-sm-1 col-form-label";
@@ -510,7 +509,6 @@
           file.name = "anexos[]";
           file.className = "form-control";
           file.accept = ".pdf,image/*";
-          file.required = "true";
           file.id = "file"+i;
           div_name.appendChild(input);
           div_file.appendChild(file);
@@ -521,12 +519,12 @@
           div.appendChild(div_group);
           
         }
-
+        $('#num_anexos').val('0').trigger('change.select2');
       }else{
          var div = document.getElementById("archivos");
-          while (div.hasChildNodes()){
+         /* while (div.hasChildNodes()){
             div.removeChild(div.firstChild);
-          }
+          }*/
       }
       
     }
@@ -558,7 +556,7 @@
 
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<10485760){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -586,7 +584,7 @@
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 10 MB de tamaño, por favor seleccione un archivo que no sobrepase los 10 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }
@@ -637,7 +635,7 @@ $('#image-upload-wrap3').bind('dragleave', function() {
 
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<10485760){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -665,7 +663,7 @@ $('#image-upload-wrap3').bind('dragleave', function() {
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 10 MB de tamaño, por favor seleccione un archivo que no sobrepase los 10 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }

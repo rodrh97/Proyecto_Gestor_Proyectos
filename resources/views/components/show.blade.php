@@ -102,6 +102,15 @@
                               </h6>
 													</div>
 												</div>
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>URL:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30"><a href="{{ $component->vinculo }}" target="_blank">{{ $component->vinculo }}</a> </h6>
+													</div>
+												</div>
+                        
                             <div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-email"></i>Programa al que pertenece:</h6>
@@ -128,8 +137,10 @@
                                 @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
 																<a href="{{ route('components.edit', ['id' => $component->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
                                 @endif
+                                @if($component->path != null)
                                 <a target="_blank" href="{{asset($component->path)}}" class="btn btn-default" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/component/download',['id'=>$component->id])}}" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>
+                                @endif
                                 @if(Auth::user()->type == 1)
 																<button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
                                 @endif

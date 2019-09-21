@@ -165,7 +165,7 @@ class ProjectsController extends Controller
             'status_project'=>'required',
             
             'component'=>'required',
-            
+            'concepts'=>'required',
           ],[
             'applicant.required'=>'* Este campo es obligatorio.',
             
@@ -174,9 +174,17 @@ class ProjectsController extends Controller
             'status_project.required'=>'* Este campo es obligatorio',
             
             'component.required'=>'* Este campo es obligatorio',
+            'concepts.required'=>'       * Se necesita almenos un concepto',
           ]);
           
           
+          $verificacion_conceptos = $request->concepts;
+      
+          /*if($verificacion_conceptos == null){
+            Alert::error('No es posible realizar el registro porque el programa seleccionado no posee conceptos', 'Error')->autoclose(4000);
+            return redirect()->route('projects.list');
+          }*/
+      
           $fecha_actual=date("Y-m-d");
           $projects= new Projects;
           $projects->applicant_id=Input::get('applicant');
@@ -207,7 +215,23 @@ class ProjectsController extends Controller
             $i = 0;
             if($anexos_programs!=null){
             
-        foreach ($anexos_programs as $anexos) {
+              $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $project_anexos = new Documents();
+                  
+                  $project_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/documents');
+                  $project_anexos->path = 'storage/documents/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $project_anexos->project_id = $projects->id;
+                  $project_anexos->save();
+                  insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
+                }
+              }
+        /*foreach ($anexos_programs as $anexos) {
           
           $project_anexos = new Documents();
           $project_anexos->name = $nombres_anexos[$i];
@@ -219,7 +243,7 @@ class ProjectsController extends Controller
           $project_anexos->save();
           insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
           $i++;
-        }
+        }*/
             }
             $concepts= $request->concepts;
             $i = 0;
@@ -379,9 +403,9 @@ class ProjectsController extends Controller
           ]);
       
       
-      $test_projects = DB::table("projects")->where("folio","=",Input::get("folio"))->count();
+      $test_projects = DB::table("projects")->where("id","!=",$id)->where("folio","=",Input::get("folio"))->count();
       
-      if($test_projects != 0){
+      if($test_projects == 0){
         $fecha_actual=date("Y-m-d");
         $visit_history= new Visit_History;  
         $visit_history->status_project_id=Input::get('status_project');
@@ -477,7 +501,25 @@ class ProjectsController extends Controller
             $i = 0;
             if($anexos_programs!=null){
             
-        foreach ($anexos_programs as $anexos) {
+              $posiciones = array_keys($anexos_programs);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $project_anexos = new Documents();
+                  
+                  $project_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_programs[$posiciones[$i]]->store('/public/documents');
+                  $project_anexos->path = 'storage/documents/'.$anexos_programs[$posiciones[$i]]->hashName();
+
+                  $project_anexos->project_id = $projects->id;
+                  $project_anexos->save();
+                  insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
+                }
+              }
+              
+              
+        /*foreach ($anexos_programs as $anexos) {
           
               $project_anexos = new Documents();
               $project_anexos->name = $nombres_anexos[$i];
@@ -489,7 +531,7 @@ class ProjectsController extends Controller
               $project_anexos->save();
               insertToLog(Auth::user()->id, 'added', $project_anexos->id, "documentos");
               $i++;
-          }
+          }*/
         
             }
             Alert::success('Exitosamente','Proyecto Modificado')->autoclose(4000);

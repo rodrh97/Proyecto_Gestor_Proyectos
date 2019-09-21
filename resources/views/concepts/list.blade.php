@@ -99,7 +99,7 @@
 												<center>
                           <!--<a target="_blank" href="{{asset($concept->specific_requirements)}}" class="btn btn-inverse" title="Visualizar archivo" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/concept/download',['id'=>$concept->id])}}" class="btn btn-warning" title="Descargar archivo de requerimientos especificos"><span class="fas fa-download"></span></a>-->
-													<a href="{{ route('concepts.show', ['id' => $concept->id]) }}" class="btn btn-success" title="Detalles del concepto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="fas fa-eye"></span></a>
+													<a href="{{ route('concepts.show', ['id' => $concept->id]) }}" class="btn btn-warning" title="Detalles del concepto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="fas fa-eye"></span></a>
                           @if(Auth::user()->type == 1 || Auth::user()->type == 2 )
 													<a href="{{ route('concepts.edit', ['id' => $concept->id]) }}" class="btn btn-primary" title="Editar concepto" style="margin: 3px;" data-toggle="tooltip" data-placement="top"><span class="icofont icofont-ui-edit"></span></a>
 
@@ -120,7 +120,7 @@
 										<th style="padding-right: 2.8%" scope="col">Nombre del concepto</th>
                     <th style="padding-right: 2.8%" scope="col">Pertenece al subcomponente</th>
                     <th style="padding-right: 2.8%" scope="col">Pertenece al componente</th>
-										<th style="padding-left: 1.2%" scope="col" style="width:0%;"></th>
+										<th style="padding-left: 1.2%" scope="col" style="width:0%;">Acciones</th>
 									</tr>
 								</tfoot>
 								@else

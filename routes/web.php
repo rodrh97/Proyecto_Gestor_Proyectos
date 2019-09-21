@@ -44,8 +44,14 @@ Route::group(['middleware'=>['auth']], function () {
     /*******************************************
      * Rutas para para las operaciones AJAX    *
      *******************************************/
+     Route::post('/operations/ajax/home/buscar', 'HomeController@buscar')->name('home.buscar');
+  
      Route::post('/operations/ajax/reports/ObtenerDatosSin', 'ReportsController@ObtenerDatosSin')->name('reports.ObtenerDatosSin');
      Route::post('/operations/ajax/reports/ObtenerDatosCon', 'ReportsController@ObtenerDatosCon')->name('reports.ObtenerDatosCon');
+  
+      Route::post('/operations/ajax/reports/generar_grafica', 'ReportsController@graficar')->name('reports.graficar');
+      Route::post('/operations/ajax/reports/obtener_programas_estatus', 'ReportsController@obtener_programas_estatus')->name('reports.obtener_programas_estatus');
+      Route::post('/reports/generarPDF_grafica', 'ReportsController@generarPDF_grafica')->name('reports.generarPDF_grafica');
    
         Route::get('/cities/{id}', 'ApplicantsController@getCities');
         Route::get('/components/getComponents/{id}', 'ProjectsController@getComponents');
@@ -54,7 +60,9 @@ Route::group(['middleware'=>['auth']], function () {
         Route::get('/programs/getPrograms/{id}', 'ProjectsController@getPrograms');
         Route::get('/concepts/getConcepts_com/{id}', 'ProjectsController@getConcepts_com');
   
-          
+        Route::get('subcomponents/downloadAnexo/{id}','SubcomponentController@downloadAnexo');            
+        Route::get('concepts/downloadAnexo/{id}','ConceptsController@downloadAnexo');
+  
         Route::get('programs/downloadAnexo/{id}','ProgramsController@downloadAnexo');      
         Route::get('programs/downloadGeneral/{id}','ProgramsController@downloadGeneral');
         Route::get('programs/downloadSpecific/{id}','ProgramsController@downloadSpecific');
@@ -127,6 +135,9 @@ Route::group(['middleware'=>['access:1,2,4,5']], function(){
         Route::get('/programs/new', 'ProgramsController@create')->name('programs.create');
         
         Route::get('/programs/{id}/deleteAnexo', 'ProgramsController@deleteAnexo')->name('programs.deleteAnexo');
+  Route::get('/subcomponents/{id}/deleteAnexo', 'SubcomponentController@deleteAnexo')->name('subcomponents.deleteAnexo');
+  Route::get('/concepts/{id}/deleteAnexo', 'ConceptsController@deleteAnexo')->name('concepts.deleteAnexo');
+  
         Route::get('/programs/WithRulesOperation/new', 'ProgramsController@createWithRulesOperation')->name('programs.createWithRulesOperation');
         Route::get('/programs/WithoutRulesOperation/new', 'ProgramsController@createWithoutRulesOperation')->name('programs.createWithoutRulesOperation');
         
@@ -187,6 +198,8 @@ Route::group(['middleware'=>['access:1,3,4,5']], function(){
     Route::group(['middleware'=>['access:1,2']], function(){
        Route::get('/reports/SRO/new', 'ReportsController@indexSinReglasOperacion')->name('reports.createSin');
         Route::get('/reports/RO/new', 'ReportsController@indexConReglasOperacion')->name('reports.createCon');
+      
+      Route::get('/reports/graficas', 'ReportsController@indexGraficas')->name('reports.graficas');
     });
 
 });

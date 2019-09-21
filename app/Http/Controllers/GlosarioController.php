@@ -61,7 +61,17 @@ class GlosarioController extends Controller
           //Se obtienen los valores de la vista
           $palabra->word = Input::get('name');
           $palabra->definition = Input::get('definicion');
-
+          
+          $palabra_repetida1 = strtolower(Input::get("name"));
+            
+          $palabras = Glosary::all();
+          foreach($palabras as $p){
+            $palabra_repetida2 = strtolower($p->word);
+            if($palabra_repetida1 == $palabra_repetida2){
+              Alert::error('La palabra deseada ya se encuentra registrada', 'Palabra duplicada')->autoclose(5000);
+              return redirect()->route('glosario.create');
+            }
+          }
   
           //Se almacena y se muestran mensajes en caos de registro exitoso
           if ($palabra->save()) {

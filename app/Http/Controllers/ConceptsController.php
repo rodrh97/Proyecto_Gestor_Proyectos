@@ -6,6 +6,7 @@ use Alert;
 use App\Concepts;
 use App\Components;
 use App\Http\Requests;
+use App\anexos_conceptos;
 use Illuminate\Http\Request;
 use App\Helpers\DeleteHelper;
 use Illuminate\Support\Facades\DB;
@@ -52,11 +53,10 @@ class ConceptsController extends Controller
     {
         $data = request()->validate([
             'name' => 'required|max:500',
-            'file' =>'required',
+            
           ],[
             'name.required' => ' * Este campo es obligatorio.',
             'name.max' => ' * Este campo debe contener sólo 500 caracteres.',
-            'file.required' => ' * Se requiere de un archivo de identificación para registrar el solicitante.',
           ]);
            $division = preg_split("/[\s,]+/", Input::get('components'));
            $opcion=$division[0];
@@ -65,6 +65,8 @@ class ConceptsController extends Controller
            $concepts->name = Input::get('name');
            $concepts->p_amount_max = Input::get('p_amount_max');
            $concepts->m_amount_max = Input::get('m_amount_max');
+           $concepts->vinculo = Input::get("vinculo");
+            $concepts->description = Input::get("description");
            
            if($opcion=="component"){
              $concepts->sub_component_id=null;
@@ -84,13 +86,38 @@ class ConceptsController extends Controller
             //Almacenando la imagen del alumno
             $path=$request->file('file')->store('/public/concepts');
             $concepts->specific_requirements = 'storage/concepts/'.$request->file('file')->hashName();
-        }else{
-            Alert::error('Es necesario subir un archivo con los requisitos especificos', 'Error')->autoclose(4000);
-            return redirect()->route('concepts.create');
         }
       
           //Se almacena y se muestran mensajes en caos de registro exitoso
           if ($concepts->save()) {
+            
+            
+            $anexos_subcomponent = $request->anexos;
+            $nombres_anexos = $request->nombre;
+            $i = 0;
+            
+            //dd($anexos_subcomponent,$nombres_anexos);
+            if($anexos_subcomponent != null){
+
+              $posiciones = array_keys($anexos_subcomponent);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $subcomponent_anexos = new anexos_conceptos();
+                  
+                  $subcomponent_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_subcomponent[$posiciones[$i]]->store('/public/anexos_concepts');
+                  $subcomponent_anexos->path = 'storage/anexos_concepts/'.$anexos_subcomponent[$posiciones[$i]]->hashName();
+
+                  $subcomponent_anexos->concept_id = $concepts->id;
+                  $subcomponent_anexos->save();
+                }
+              }
+            }
+            
+            
+            
             Alert::success('Exitosamente','Concepto Registrado')->autoclose(4000);
   
             insertToLog(Auth::user()->id, 'added', $concepts->id, "concepto");
@@ -142,8 +169,9 @@ class ConceptsController extends Controller
           ->where('c.id','=',$id)
           ->count();
       }
-
-        return view('concepts.show', compact('concept','concept_count_1','concept_count_2'));
+      
+      $anexos = DB::table("anexos_conceptos")->where("concept_id","=",$id)->get();
+        return view('concepts.show', compact('concept','concept_count_1','concept_count_2','anexos'));
     }
   
     public function edit($id)
@@ -169,7 +197,7 @@ class ConceptsController extends Controller
                                       ->with('sub_components',$sub_components)->with('flag',$flag);
     }
   
-    public function update($concept)
+    public function update($concept,Request $request)
     { 
         $concepts=DB::table('concepts')
           ->where('id',$concept)
@@ -206,7 +234,9 @@ class ConceptsController extends Controller
         //Se almacena y se muestra mensaje de exito
         
           if ($image!=null) {
+            if($image2 != null){
               unlink(public_path()."/".$image2);
+            }
               //Se realiza el almacenado de la nueva imagen(cargada en el file input)
               $path=Input::file('file')->store('/public/concepts');
               //Se obtiene el nombre de la imagen
@@ -216,10 +246,36 @@ class ConceptsController extends Controller
             
               DB::update('UPDATE concepts SET specific_requirements = ? WHERE id = ?', [$image_url, $concepts->id]);
           }
+      
       $concepts=DB::table('concepts')
           ->where('id',$concept)
-          ->update(['name'=>Input::get('name'),'p_amount_max'=>Input::get('p_amount_max'),'m_amount_max'=>Input::get('m_amount_max'),'component_id'=>$concepts->component_id,'sub_component_id'=>$concepts->sub_component_id]);
+          ->update(['name'=>Input::get('name'),'description'=>Input::get("description"),'vinculo'=>Input::get("vinculo"),'p_amount_max'=>Input::get('p_amount_max'),'m_amount_max'=>Input::get('m_amount_max'),'component_id'=>$concepts->component_id,'sub_component_id'=>$concepts->sub_component_id]);
           
+      
+          $anexos_subcomponent = $request->anexos;
+            $nombres_anexos = $request->nombre;
+            $i = 0;
+            
+            //dd($anexos_subcomponent,$nombres_anexos);
+            if($anexos_subcomponent != null){
+
+              $posiciones = array_keys($anexos_subcomponent);
+              
+              for($i=0;$i<sizeof($posiciones);$i++){
+                if($nombres_anexos[$posiciones[$i]] != null){
+                  $subcomponent_anexos = new anexos_conceptos();
+                  
+                  $subcomponent_anexos->name = $nombres_anexos[$posiciones[$i]];
+
+                  $path=$anexos_subcomponent[$posiciones[$i]]->store('/public/anexos_concepts');
+                  $subcomponent_anexos->path = 'storage/anexos_concepts/'.$anexos_subcomponent[$posiciones[$i]]->hashName();
+
+                  $subcomponent_anexos->concept_id = $concept;
+                  $subcomponent_anexos->save();
+                }
+              }
+            }
+      
           Alert::success('Exitosamente','Concepto Modificado')->autoclose(4000);
 
           insertToLog(Auth::user()->id, 'updated', $concept, "concepto");
@@ -228,6 +284,22 @@ class ConceptsController extends Controller
       
         
     }
+  
+  public function deleteAnexo($id){
+      
+        $anexo = anexos_conceptos::find($id);
+        $concepto_id = $anexo->concept_id;
+       Alert::success('Exitosamente','Anexo Eliminado')->autoclose(4000);
+
+        insertToLog(Auth::user()->id, 'deleted', $id, "anexo");
+       
+       unlink(public_path()."/".$anexo->path);
+       
+        $anexo->delete();
+
+        return redirect()->route('concepts.show',['id'=>$concepto_id]);
+    }
+  
   
      public function destroy($concepts)
     {
@@ -272,6 +344,17 @@ class ConceptsController extends Controller
       ->where('id',$id)
       ->first();
     if(!$this->downloadFile($path->specific_requirements)){
+      return redirect()->back();
+    }
+  }
+  
+  
+  public function downloadAnexo($id){
+    $path=DB::table('anexos_conceptos')
+      ->select('path')
+      ->where('id',$id)
+      ->first();
+    if(!$this->downloadFile($path->path)){
       return redirect()->back();
     }
   }

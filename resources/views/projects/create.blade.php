@@ -149,8 +149,8 @@
 								<div id="concept" class="col-sm-10" style="display:none;">
 									 
                   </div>
-                  @if ($errors->has('concept'))
-										<div class="col-form-label" style="color:red;">{{$errors->first('concept')}}</div>
+                  @if ($errors->has('concepts'))
+										<div class="col-form-label" style="color:red;">{{$errors->first('concepts')}}</div>
 									@endif
 								
 							</div>	
@@ -253,10 +253,10 @@
         //document.getElementById("guardar").style.display="inline";
         var i;
         var div = document.getElementById("archivos");
-        while (div.hasChildNodes()){
+        /*while (div.hasChildNodes()){
           div.removeChild(div.firstChild);
           
-        }
+        }*/
         
 
         for(i = 0;i < cantidad; i++){
@@ -274,7 +274,6 @@
           input.type = "text";
           input.name = "nombre[]";
           input.className = "form-control";
-          input.required = "true";
 
           var label_file = document.createElement("label");
           label_file.className = "col-sm-1 col-form-label";
@@ -288,7 +287,6 @@
           file.name = "anexos[]";
           file.accept = ".pdf,image/*";
           file.className = "form-control";
-          file.required = "true";
           div_name.appendChild(input);
           div_file.appendChild(file);
           div_group.appendChild(label);
@@ -298,13 +296,13 @@
           div.appendChild(div_group);
           
         }
-        
+        $('#num_anexos').val('0').trigger('change.select2');
       }else{
         //document.getElementById("guardar").style.display="none";
          var div = document.getElementById("archivos");
-          while (div.hasChildNodes()){
+          /*while (div.hasChildNodes()){
             div.removeChild(div.firstChild);
-          }
+          }*/
         
       }
       

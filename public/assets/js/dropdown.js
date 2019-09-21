@@ -122,7 +122,7 @@ $("#component").change(event =>{
                     barrer.removeChild(barrer.firstChild);
                   }
              Object.keys(res).forEach(element => {
-                    $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id} required> ${res[element].name}<hr> 
+                    $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id}> ${res[element].name}<hr> 
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Física</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].p_amount_max} </textarea></div>
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Moral</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].m_amount_max} </textarea></div>
                                     </br><hr>`);
@@ -141,7 +141,7 @@ $("#component").change(event =>{
                     barrer.removeChild(barrer.firstChild);
                   }
              Object.keys(res).forEach(element => {
-                    $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id} required> ${res[element].name}<hr> 
+                    $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id}> ${res[element].name}<hr> 
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Física</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].p_amount_max} </textarea></div>
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Moral</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].m_amount_max} </textarea></div>
                                     </br><hr>`);
@@ -175,7 +175,7 @@ $("#component").change(event =>{
         document.getElementById("labelconcept").style.display="inline";
         document.getElementById("guardar").style.display="inline";
         Object.keys(res).forEach(element => {
-            $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id} required> ${res[element].name}<hr> 
+            $("#concept").append(`<input class=border-checkbox type=checkbox name=concepts[] value=${res[element].id}> ${res[element].name}<hr> 
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Física</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].p_amount_max} </textarea></div>
                                     <div class=col-sm-10><label>*Cantidad Máxima por Persona Moral</label> <textarea style=border:none; rows="4" cols="50" disabled> ${res[element].m_amount_max} </textarea></div>
                                     </br><hr>`);

@@ -72,7 +72,14 @@
 														<h6 class="m-b-30"> {{ $subcomponent->name }} </h6>
 													</div>
 												</div>
-												
+												<div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>Descripción:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30"> {{ $subcomponent->description }} </h6>
+													</div>
+												</div>
 												<div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>Fecha de inicio:</h6>
@@ -101,6 +108,16 @@
                               </h6>
 													</div>
 												</div>
+                        
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>URL:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30"><a href="{{$subcomponent->vinculo}}" target="_blank">{{ $subcomponent->vinculo }}</a> </h6>
+													</div>
+												</div>
+                        
                             <div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-email"></i>Componente al que pertenece:</h6>
@@ -111,7 +128,50 @@
 												</div>
                        
                     
-												
+												<br><br>
+                        <h6><strong> Anexos</strong></h6><br>
+                        
+                        @if($anexos->isNotEmpty())
+                        <div class="card-block table-border-style">
+                          <div class="table-responsive">
+                              <table style="width:100%;" class="table table-striped table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th>Nombre</th>
+                                          <th>Ver</th>
+                                          <th>Descargar</th>
+                                          <th>Borrar</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      
+                                          @foreach($anexos as $anexo)
+                                    <tr>
+                                        <td>{{$anexo->name}}</td>
+                                        
+                                          <td><center><a target="_blank" href="{{asset($anexo->path)}}" class="btn btn-inverse col-lg-5" title="Visualizar anexo" ><span class="fas fa-eye"></span></a> </center></td>
+                                          <td><center><a href="{{url('/subcomponents/downloadAnexo',['id'=>$anexo->id])}}" class="btn btn-warning col-lg-5" title="Descargar anexo"><span class="fas fa-download"></span></a></center></td>
+                                          <td><center><a href="{{ route('subcomponents.deleteAnexo',['id' => $anexo->id])}}" class="btn btn-inverse col-lg-5" title="Borrar anexo" ><span class="icofont icofont-ui-delete"></span></a> </center></td>
+                                        
+                                      </tr>
+                                         @endforeach
+                                      
+                                      
+                                  </tbody>
+                              </table>
+                          </div>
+                        </div>
+                        @else
+                        <center>
+                          <div class="alert alert-warning icons-alert">
+                            <strong>Sin anexos</strong>
+                            <p>Este subcomponente no posee anexos.</p>
+                          </div>
+                        </center>
+                        @endif
+
+                        
+                        
 												
 											</div>
                       <br><br><br>
@@ -127,8 +187,11 @@
 																@if(Auth::user()->type == 1 || Auth::user()->type == 2 )
                                 <a href="{{ route('subcomponents.edit', ['id' => $subcomponent->id]) }}"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="icofont icofont-edit m-0"></i></button></a>
                                 @endif
+                                
+                                @if($subcomponent->specific_requirements != null)
                                 <a target="_blank" href="{{asset($subcomponent->specific_requirements)}}" class="btn btn-default" title="Visualizar requerimientos especificos" ><span class="fas fa-eye"></span></a> 
                           <a href="{{url('/subcomponent/download',['id'=>$subcomponent->id])}}" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Descargar requerimientos especificos"><span class="fas fa-download"></span></a>
+                                @endif
 																@if(Auth::user()->type == 1 )
                                 <button  onclick="archiveFunction()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" type="submit" title="Eliminar"><span class="icofont icofont-ui-delete"></span></button>
                                 @endif

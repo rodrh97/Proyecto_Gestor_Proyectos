@@ -500,7 +500,8 @@ $(document).ready(function() {
     // Styling js start
     $('#base-style').DataTable();
     $('#no-style').DataTable();
-    $('#compact').DataTable();
+    
+  
     $('#table-style-hover').DataTable();
     // Styling js end
 

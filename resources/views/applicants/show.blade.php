@@ -62,6 +62,15 @@
 										<div class="row">
 											<div class="col-sm-12 user-detail">
 												
+                        <div class="row">
+													<div class="col-sm-4">
+														<h6 class="f-w-400 m-b-30"><i class="fas fa-hashtag"></i>ID:</h6>
+													</div>
+													<div class="col-sm-8">
+														<h6 class="m-b-30">{{ $applicant->id }}</h6>
+													</div>
+												</div>
+												
 												<div class="row">
 													<div class="col-sm-4">
 														<h6 class="f-w-400 m-b-30"><i class="icofont icofont-ui-user"></i>Nombre Completo:</h6>
@@ -144,8 +153,57 @@
 													</div>
 												</div>
 												
-												
+                        <br><br><br>
+                        <h5><strong>Proyectos</strong></h5><br>
+                        
+                        @if($proyectos->isNotEmpty())
+                      <div class="card-block">
+                        <div class="dt-responsive table-responsive">
+                            <table id="base-style" class="table table-striped table-bordered ">
+                       
+                                  <thead>
+                                      <tr>
+                                          <th style="width:30%">Ver</th>
+                                          <th style="width:50%">Solicitado en el programa</th>
+                                          <th style="width:20%">Ver</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      
+                                          @foreach($proyectos as $proyecto)
+                                    <tr>
+                                      @if($proyecto->folio == null)
+                                        <td>Folio externo no ingresado</td> 
+                                      @else
+                                      <td>{{$proyecto->folio}}</td>
+                                      @endif
+                                     
+                                        <td>{{$proyecto->name_program}}</td>
+                                        
+                                          <td><center><a href="{{ route('projects.show',['id'=>$proyecto->id])}}" class="btn btn-inverse col-lg-5" title="Visualizar información del proyecto" ><span class="fas fa-eye"></span></a> </center></td>
+                                        
+                                      </tr>
+                                         @endforeach
+                                      
+                                      
+                                  </tbody>
+                              </table>
+                          </div>
+                        </div>
+                        @else
+                        <center>
+                          <div class="alert alert-warning icons-alert">
+                            <strong>Sin proyectos</strong>
+                            <p>El solicitante no posee proyectos.</p>
+                          </div>
+                        </center>
+                        @endif
+                        
 											</div>
+                      
+                      
+                      <br><br>
+
                       
                       <div class="col-sm-12">
 												<center>

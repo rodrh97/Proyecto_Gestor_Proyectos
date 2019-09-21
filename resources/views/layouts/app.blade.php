@@ -61,7 +61,7 @@ $.ajax({
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
     <!-- Google font-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">-->
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/bootstrap/css/bootstrap.min.css') }}">
     <!-- themify-icons line icon -->
@@ -72,7 +72,7 @@ $.ajax({
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/pages/menu-search/css/component.css') }}">
     <!-- Select 2 css -->
     <link rel="stylesheet" href="{{asset('bower_components/select2/css/select2.min.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/pages/j-pro/css/j-forms.css')}}">
+    <!--<link rel="stylesheet" type="text/css" href="{{asset('assets/pages/j-pro/css/j-forms.css')}}">-->
     <!--forms-wizard css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/jquery.steps/css/jquery.steps.css')}}">
     <!-- Data Table Css -->
@@ -108,7 +108,7 @@ $.ajax({
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/pages/list-scroll/list.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/stroll/css/stroll.css')}}">
 
-  
+  <link rel="stylesheet" href="{{ asset('bower_components/nvd3/css/nv.d3.css')}}" type="text/css" media="all">
   @yield('style')
 
     </head>
@@ -178,6 +178,14 @@ $.ajax({
                             <li>
                                 <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
                             </li>
+                          @if(Auth::user()->type == 1 || Auth::user()->type == 2 || Auth::user()->type == 4 || Auth::user()->type == 5)
+                          <li>
+                                <a class="main-search morphsearch-search" href="#">
+                                    <!-- themify icon -->
+                                    <i class="ti-search"></i>
+                                </a>
+                            </li>
+                          @endif
                             <li>
                                 <a href="#!" onclick="javascript:toggleFullScreen();">
                                     <i class="ti-fullscreen"></i>
@@ -214,6 +222,29 @@ $.ajax({
                                 </ul>
                             </li>
                         </ul>
+              
+              
+              
+              
+              
+              
+              
+                       <div id="morphsearch" class="morphsearch">
+                            <form class="morphsearch-form" >
+                                <input style="font-size:25px;" class="morphsearch-input" type="search" oninput="realizarBusqueda(this.value)" placeholder="Buscar" />
+                                <button class="morphsearch-submit" type="submit">Buscar</button>
+                            </form>
+                            <div class="morphsearch-content" id="busqueda_contenido" style="width:95%;
+                                                                                           height:80%;
+                                                                                           overflow:auto;">
+                                
+                            </div>
+                            <!-- /morphsearch-content -->
+                            <span class="morphsearch-close"><i class="icofont icofont-search-alt-1"></i></span>
+                        </div>
+              
+              
+              
                     </div>
                 </div>
             </nav>
@@ -478,6 +509,145 @@ $.ajax({
 
 
     <script>
+      
+      
+      function realizarBusqueda(palabra){
+        
+        if(palabra != ""){
+            $.ajaxSetup({
+              headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+              }
+            });
+            $.ajax({
+              url: '{{ route('home.buscar') }}',
+              method: 'post',
+              data: {
+                word: palabra,
+              },
+              success: function(result) {
+                programas_sin_reglas = result['programas_sin_reglas'];
+                programas_con_reglas = result['programas_con_reglas'];
+                componentes = result["componentes"];
+                subcomponentes = result["subcomponentes"];
+                conceptos = result["conceptos"];
+
+               if(Object.keys(programas_con_reglas).length != 0 || Object.keys(programas_sin_reglas).length != 0 || Object.keys(componentes).length != 0 || Object.keys(subcomponentes).length != 0 || Object.keys(conceptos).length != 0){
+                      var contenido = document.getElementById("busqueda_contenido");
+                      while (contenido.hasChildNodes()){
+                          contenido.removeChild(contenido.firstChild);
+                      }
+                    
+                      
+                      programas_sin_reglas.forEach(function (programa_sin){
+                        var label = document.createElement("h6");
+                        var h5 = document.createElement("a");
+                        var strong = document.createElement("strong");
+                        strong.append("Programa sin reglas de operación: ");
+                        h5.appendChild(strong);
+                        h5.href = "/programs/"+programa_sin.id;
+                        h5.append(programa_sin.name);
+                        h5.style ="color:black;";
+                        label.appendChild(h5);
+                        contenido.appendChild(label);
+                      });
+                      
+                      programas_con_reglas.forEach(function (programa_con){
+                        var label = document.createElement("h6"); 
+                        var h5 = document.createElement("a");
+                        var strong = document.createElement("strong");
+                        strong.append("Programa con reglas de operación: ");
+                        h5.appendChild(strong);
+                        h5.href = "/programs/"+programa_con.id;
+                        h5.append(programa_con.name);
+                        h5.style ="color:black;";
+                        label.appendChild(h5);
+                        contenido.appendChild(label);
+                      });
+                 
+                      componentes.forEach(function (componente){
+                        var label = document.createElement("h6"); 
+                        var h5 = document.createElement("a");
+                        var strong = document.createElement("strong");
+                        strong.append("Componente: ");
+                        h5.appendChild(strong);
+                        h5.href = "/components/"+componente.id;
+                        h5.append(componente.name);
+                        h5.style ="color:black;";
+                        label.appendChild(h5);
+                        contenido.appendChild(label);
+                      });
+                 
+                      subcomponentes.forEach(function (subcomponente){
+                        var label = document.createElement("h6"); 
+                        var h5 = document.createElement("a");
+                        var strong = document.createElement("strong");
+                        strong.append("Subcomponente: ");
+                        h5.appendChild(strong);
+                        h5.href = "/subcomponents/"+subcomponente.id;
+                        h5.append(subcomponente.name);
+                        h5.style ="color:black;";
+                        label.appendChild(h5);
+                        contenido.appendChild(label);
+                      });
+                 
+                      conceptos.forEach(function (concepto){
+                        var label = document.createElement("h6"); 
+                        var h5 = document.createElement("a");
+                        var strong = document.createElement("strong");
+                        strong.append("Concepto: ");
+                        h5.appendChild(strong);
+                        h5.href = "/concepts/"+concepto.id;
+                        h5.append(concepto.name);
+                        h5.style ="color:black;";
+                        label.appendChild(h5);
+                        contenido.appendChild(label);
+                      });
+                      
+                 
+               }else{
+                    var contenido = document.getElementById("busqueda_contenido");
+                    while (contenido.hasChildNodes()){
+                        contenido.removeChild(contenido.firstChild);
+                    }
+
+                    var label = document.createElement("h2");
+                    label.append("Sin resultados");
+
+                    contenido.appendChild(label);
+                 
+               }
+                
+
+              }
+            });  
+        }else{
+            var contenido = document.getElementById("busqueda_contenido");
+            while (contenido.hasChildNodes()){
+                contenido.removeChild(contenido.firstChild);
+            }
+          
+            var label = document.createElement("h2");
+            label.append("Sin resultados");
+
+            contenido.appendChild(label);
+        }
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
 
         //Url base de una imagen

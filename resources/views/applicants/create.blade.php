@@ -205,7 +205,7 @@
     console.log(input.files);
     if (accepted_file) {
         if (input.files && input.files[0]) {
-            if(input.files[0]['size']<4194304){
+            if(input.files[0]['size']<5242880){
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
@@ -233,7 +233,7 @@
                 swal({
                     icon: 'error',
                     title: 'Archivo demasiado grande',
-                    text: 'El archivo supera los 4 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
+                    text: 'El archivo supera los 5 MB de tamaño, por favor seleccione un archivo que no sobrepase los 4 MB de tamaño.',
                     buttons: 'Aceptar',
                 });
             }

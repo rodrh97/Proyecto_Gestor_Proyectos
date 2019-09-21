@@ -183,7 +183,7 @@
 														<h6 class="f-w-400 m-b-30"><i class="fas fa-cube"></i>URL de la convocatoria:</h6>
 													</div>
 													<div class="col-sm-8">
-														<h6 class="m-b-30">{{ $program->vinculo }}</h6>
+														<h6 class="m-b-30"><a href="{{ $program->vinculo }}" target="_blank">{{ $program->vinculo }}</a> </h6>
 													</div>
 												</div>
                         
